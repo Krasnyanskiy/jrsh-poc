@@ -1,9 +1,10 @@
-package ua.krasnyanskiy.jrsh.evaluation.strategy;
+package ua.krasnyanskiy.jrsh.evaluation;
 
 import jline.console.ConsoleReader;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -20,13 +21,17 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
     }
 
     @SneakyThrows
-    public void eval(@NonNull String... args) {
+    public void eval(@NonNull String[] args) {
         if (args.length == 0) {
             console.println("Hello, Sir! Need help? Better call Saul!");
-            console.flush();
         } else {
             console.println("This version doesn't support that yet. Hasta la vista!");
-            console.flush();
         }
+        console.flush();
+    }
+
+    @Override
+    public void setOperationParser(OperationParser parser) {
+
     }
 }

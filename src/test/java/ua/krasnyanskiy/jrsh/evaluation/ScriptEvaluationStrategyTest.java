@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.evaluation.strategy;
+package ua.krasnyanskiy.jrsh.evaluation;
 
 import org.junit.Test;
 

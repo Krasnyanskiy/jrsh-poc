@@ -1,129 +1,34 @@
 package ua.krasnyanskiy.jrsh.operation.impl;
 
-import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter;
-import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportService;
-import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportTaskAdapter;
-import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
-import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import jline.console.ConsoleReader;
-import jline.console.completer.AggregateCompleter;
-import jline.console.completer.ArgumentCompleter;
-import jline.console.completer.Completer;
-import jline.console.completer.NullCompleter;
-import lombok.NonNull;
-import lombok.Setter;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import ua.krasnyanskiy.jrsh.common.SessionFactory;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.Parameters;
 import ua.krasnyanskiy.jrsh.operation.grammar.FileToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
+import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.RepositoryPathToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.Token;
 import ua.krasnyanskiy.jrsh.operation.grammar.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.TokenEdgeFactory;
+import ua.krasnyanskiy.jrsh.operation.parameter.ExportOperationParameters;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter.INCLUDE_ACCESS_EVENTS;
-import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter.INCLUDE_AUDIT_EVENTS;
-import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter.INCLUDE_MONITORING_EVENTS;
-import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter.REPOSITORY_PERMISSIONS;
-import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter.ROLE_USERS;
-import static ua.krasnyanskiy.jrsh.common.FileUtil.createFile;
-
 @SuppressWarnings("unchecked")
-public class ExportOperation implements Operation {
+public class ExportOperation implements Operation<Boolean, ExportOperationParameters> {
 
-    private ConsoleReader console;
     private Grammar grammar;
 
     @Override
-    public Callable<Boolean> perform(@NonNull final Parameters parameters) {
-
-        final Session session = SessionFactory.getSharedSession();
-        String repository = parameters.get("repository");
-        final String repositoryPath = parameters.get("repositoryPath");
-        final String to = parameters.get("to");
-        final String filePath = parameters.get("filePath");
-        final List<String> arguments = new ArrayList<>();
-
-        String a1 = parameters.get("with-repository-permissions");
-        String a2 = parameters.get("with-role-users");
-        String a3 = parameters.get("with-include-access-events");
-        String a4 = parameters.get("with-include-audit-events");
-        String a5 = parameters.get("with-include-monitoring-events");
-        String a6 = parameters.get("with-repository-permissions");
-
-        if (a1 != null) arguments.add(a1);
-        if (a2 != null) arguments.add(a2);
-        if (a3 != null) arguments.add(a3);
-        if (a4 != null) arguments.add(a4);
-        if (a5 != null) arguments.add(a5);
-        if (a6 != null) arguments.add(a6);
-
-        ExportService exportService = session.exportService();
-        final ExportTaskAdapter task = exportService.newTask();
-
-        if (repository != null) {
-            if (repositoryPath != null) {
-                task.uri(repositoryPath);
-            }
-        }
-
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                StateDto state = task
-                        .uri(repositoryPath)
-                        .parameters(convert(arguments))
-                        .create()
-                        .getEntity();
-
-                InputStream entity = session.exportService()
-                        .task(state.getId())
-                        .fetch()
-                        .getEntity();
-
-                if (to != null) {
-                    return (filePath != null) && createFile(filePath, entity);
-                } else {
-                    return createFile("export.zip", entity);
-                }
-            }
-        };
-    }
-
-    protected List<ExportParameter> convert(List<String> arguments) {
-        List<ExportParameter> params = new ArrayList<>();
-        for (String par : arguments) {
-            switch (par) {
-                case "with-repository-permissions":
-                    params.add(REPOSITORY_PERMISSIONS);
-                    break;
-                case "with-role-users":
-                    params.add(ROLE_USERS);
-                    break;
-                case "with-include-access-events":
-                    params.add(INCLUDE_ACCESS_EVENTS);
-                    break;
-                case "with-include-audit-events":
-                    params.add(INCLUDE_AUDIT_EVENTS);
-                    break;
-                case "with-include-monitoring-events":
-                    params.add(INCLUDE_MONITORING_EVENTS);
-                    break;
-            }
-        }
-        return params;
+    public Callable<Boolean> perform(ExportOperationParameters parameters) {
+        return null;
     }
 
     @Override
@@ -133,9 +38,9 @@ public class ExportOperation implements Operation {
             return grammar;
         }
 
-        DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
+        Graph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
 
-        Grammar grammar = new ExportOperationGrammar();
+        Grammar grammar = new OperationSimpleGrammar();
         Rule rule = new Rule();
 
         Token v1 = new StringToken("export", true);
@@ -275,76 +180,17 @@ public class ExportOperation implements Operation {
     }
 
     @Override
-    public Parameters getParameters(String... args) {
-        Parameters params = new Parameters();
-        Grammar grammar = getGrammar();
-        Collection<Rule> rules = grammar.getRules();
-
-        for (Rule rule : rules) {
-            List<Token> tokens = rule.getTokens();
-            boolean isMatchingRule = true;
-
-            if (args.length == tokens.size()) {
-                for (int i = 0; i < tokens.size(); i++) {
-                    if (!tokens.get(i).match(args[i])) {
-                        isMatchingRule = false;
-                    }
-                }
-
-                if (isMatchingRule) {
-                    for (int i = 0; i < tokens.size(); i++) {
-                        Token token = tokens.get(i);
-                        params.put(token.getName(), args[i]);
-                    }
-                }
-            }
-
-        }
-
-        if (params.isEmpty()) {
-            throw new RuntimeException("There is no matched rule");
-        }
-
-        return params;
-    }
-
-    @Override
     public String getDescription() {
         return "This is Export";
     }
 
     @Override
+    public Class<ExportOperationParameters> getParametersType() {
+        return ExportOperationParameters.class;
+    }
+
+    @Override
     public void setConsole(ConsoleReader console) {
-        this.console = console;
+        // TODO
     }
-
-    protected static class ExportOperationGrammar implements Grammar {
-        @Setter
-        private Collection<Rule> rules = new ArrayList<>();
-        @Override
-        public Collection<Rule> getRules() {
-            return rules;
-        }
-        @Override
-        public void addRule(Rule rule) {
-            rules.add(rule);
-        }
-        @Override
-        public Completer getCompleter() {
-            AggregateCompleter operation = new AggregateCompleter();
-            ArgumentCompleter arg = new ArgumentCompleter();
-            for (Rule rule : rules) {
-                List<Token> tokens = rule.getTokens();
-                for (Token token : tokens) {
-                    Completer fromToken = token.getCompleter();
-                    arg.getCompleters().add(fromToken);
-                }
-                arg.getCompleters().add(new NullCompleter());
-                operation.getCompleters().add(arg);
-                arg = new ArgumentCompleter();
-            }
-            return operation;
-        }
-    }
-
 }

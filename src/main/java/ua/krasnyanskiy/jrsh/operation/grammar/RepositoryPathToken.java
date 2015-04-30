@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.common.RepositoryCompleter;
+import ua.krasnyanskiy.jrsh.common.MockRepositoryCompleter;
 
 public class RepositoryPathToken implements Token {
 
@@ -15,8 +15,9 @@ public class RepositoryPathToken implements Token {
 
     @Override
     public Completer getCompleter() {
-        return new RepositoryCompleter();
+        //return new RepositoryCompleter();
         //return new EmptyCompleter();
+        return new MockRepositoryCompleter();
     }
 
     @Override

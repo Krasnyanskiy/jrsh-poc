@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation;
 
-import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 import java.util.concurrent.Callable;
 
@@ -9,12 +9,15 @@ import java.util.concurrent.Callable;
  * Base interface for all operations in the application.
  *
  * @author Alexander Krasnyanskiy
+ * @since 1.0
  */
-public interface Operation extends ParameterParser, ConsoleAware {
+public interface Operation<R, E extends OperationParameters> extends ConsoleAware {
 
-    <R> Callable<R> perform(@NonNull Parameters parameters); // String? Really?
+    Callable<R> perform(E parameters);
 
     Grammar getGrammar();
 
     String getDescription();
+
+    Class<E> getParametersType();
 }

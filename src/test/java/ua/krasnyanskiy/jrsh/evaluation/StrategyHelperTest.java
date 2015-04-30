@@ -1,7 +1,8 @@
-package ua.krasnyanskiy.jrsh.evaluation.strategy;
+package ua.krasnyanskiy.jrsh.evaluation;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.krasnyanskiy.jrsh.evaluation.helper.StrategyHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
