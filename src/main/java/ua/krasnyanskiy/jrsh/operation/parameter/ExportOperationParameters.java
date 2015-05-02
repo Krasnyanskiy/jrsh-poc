@@ -29,8 +29,8 @@ public class ExportOperationParameters extends OperationParameters {
 
     // User
     @Parameter(dependsOn = "user"/*, ambivalent = true*/)
-                                    // TODO: бля, а как это проверять?
-                                    // => export user [joeuser, superuser, jasperadmin, bob, max, friz]
+                                    // TODO: ух, а как это проверять?
+                                    // => export user [joeuser, bob]
                                     // - - - - - - - - - - - - - - - -
     private List<String> users; // names
 
