@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
 import lombok.NonNull;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -9,13 +9,17 @@ import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
  */
 public class ScriptEvaluationStrategy implements EvaluationStrategy {
 
-    @Override
-    public void eval(@NonNull String[] args) {
+    private OperationParser parser;
 
+    @Override
+    public void eval(@NonNull String[] tokens) {
+        // TODO:
+        // 1) read file line by line
+        // 2) parse line and execute
     }
 
     @Override
     public void setOperationParser(OperationParser parser) {
-
+        this.parser = parser;
     }
 }

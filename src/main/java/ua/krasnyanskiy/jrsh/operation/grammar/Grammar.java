@@ -6,6 +6,7 @@ import java.util.Collection;
 
 /**
  * @author Alexander Krasnyanskiy
+ * @since 1.0
  */
 public interface Grammar {
 

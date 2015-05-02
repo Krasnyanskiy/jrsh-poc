@@ -1,6 +1,7 @@
-package ua.krasnyanskiy.jrsh.operation.grammar;
+package ua.krasnyanskiy.jrsh.operation.grammar.edge;
 
 import org.jgrapht.graph.DefaultEdge;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 
 /**
  * Simple Token Edge implementation.

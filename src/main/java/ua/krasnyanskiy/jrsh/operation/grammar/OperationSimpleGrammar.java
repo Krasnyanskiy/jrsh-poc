@@ -5,11 +5,16 @@ import jline.console.completer.ArgumentCompleter;
 import jline.console.completer.Completer;
 import jline.console.completer.NullCompleter;
 import lombok.Setter;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @author Alexander Krasnyanskiy
+ * @since 1.0
+ */
 public class OperationSimpleGrammar implements Grammar {
 
     @Setter

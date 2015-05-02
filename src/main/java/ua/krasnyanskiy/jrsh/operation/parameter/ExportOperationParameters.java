@@ -3,42 +3,52 @@ package ua.krasnyanskiy.jrsh.operation.parameter;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Interconnected;
-import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Master;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.FileToken;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.RepositoryPathToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
+import ua.krasnyanskiy.jrsh.operation.parameter.converter.ExportParameterConverter;
 
 import java.util.List;
 
+/**
+ * This class is a simple combination of operation
+ * metadata and DTO.
+ *
+ * @author Alexander Krasnyanskiy
+ * @since 1.0
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ExportOperationParameters extends OperationParameters {
 
-    @Master
-    private final String name = "export";
+    @Parameter(value = "export", mandatory = true)
+    private String operationName;
 
-    @Parameter(dependsOn = "name")
-    private boolean role;
+    @Parameter(dependsOn = "export", value = {"all", "role", "user", "repository"}, mandatory = true)
+    private String context;
 
-    @Parameter(dependsOn = "name")
-    private boolean user;
+    // User
+    @Parameter(dependsOn = "user"/*, ambivalent = true*/)
+                                    // TODO: бля, а как это проверять?
+                                    // => export user [joeuser, superuser, jasperadmin, bob, max, friz]
+                                    // - - - - - - - - - - - - - - - -
+    private List<String> users; // names
 
-    @Parameter(dependsOn = "name")
-    private boolean all;
+    // Role
+    @Parameter(dependsOn = "role")
+    private List<String> roles;
 
-    @Parameter(dependsOn = "name")
-    private boolean repository;
-
-    @Parameter(dependsOn = "repositoryPath")
-    private Boolean to;
-
-    @Parameter(dependsOn = "repository")
+    // Repository
+    @Parameter(dependsOn = "repository", token = RepositoryPathToken.class, mandatory = true)
     private String repositoryPath;
 
-    @Parameter(mandatory = true, dependsOn = "to")
+    @Parameter(dependsOn = "repositoryPath", value = "to")
+    private Boolean to;
+
+    @Parameter(dependsOn = "to", token = FileToken.class, mandatory = true)
     private String filePath;
 
-    @Interconnected
-    @Parameter(dependsOn = {"repository", "filePath"})
+    @Parameter(interconnected = true, dependsOn = {"repository", "filePath"}, value = {"with-repository-permissions", "with-role-users", "with-include-access-events", "with-include-audit-events", "with-include-monitoring-events", "with-repository-permissions"}, converter = ExportParameterConverter.class)
     private List<ExportParameter> exportParameters;
 
 }

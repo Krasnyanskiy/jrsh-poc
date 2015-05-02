@@ -6,15 +6,13 @@ import jline.console.completer.Completer;
 import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.OperationFactory;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import static ua.krasnyanskiy.jrsh.operation.OperationFactory.getOperations;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -26,12 +24,14 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     private OperationParser parser;
 
     public ShellEvaluationStrategy() throws IOException {
-        this.console = getConsole();
+        this.console = createConsole();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void eval(@NonNull String[] args) throws Exception {
+    public void eval(@NonNull String[] tokens) throws Exception {
+
+        // make a session from the tokens;
+
         while (true) {
             String input = console.readLine();
             if (input.isEmpty()) {
@@ -39,18 +39,21 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
                 continue;
             }
 
-            String[] tokens = input.split("\\s+");
-            String operationName = tokens[0];
+            Operation op = parser.parse(input);
+            Callable job = op.execute();
+            String result = job.call().toString();
 
-            Operation operation = parser.parseOperation(operationName);
-            OperationParameters parameters = parser.parseParameters(operation, tokens);
-            operation.setConsole(console);
+            console.println(result);
 
-            Callable c = operation.perform(parameters);
-            c.call();
         }
     }
 
+    /**
+     * Add parser. For more details please see
+     * {@link EvaluationStrategy#setOperationParser(OperationParser)}
+     *
+     * @param parser operation parser
+     */
     @Override
     public void setOperationParser(OperationParser parser) {
         this.parser = parser;
@@ -62,13 +65,13 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
      * @return console
      * @throws IOException
      */
-    protected ConsoleReader getConsole() throws IOException {
+    protected ConsoleReader createConsole() throws IOException {
         ConsoleReader console = new ConsoleReader();
         console.setPrompt("\u001B[1m>>> \u001B[0m");
         console.setCompletionHandler(new CandidatesCustomCompletionHandler());
         List<Completer> list = new ArrayList<>();
 
-        for (Operation o : getOperations()) {
+        for (Operation o : OperationFactory.getOperations()) {
             Completer completer = o.getGrammar().getCompleter();
             list.add(completer);
         }

@@ -48,7 +48,7 @@ public final class ResourcesUtil {
     /**
      * Searches strings which start with source.
      * <p/>
-     * Example: ex => example/ (root: ex)
+     * Example: ex => example/ (operationName: ex)
      *
      * @param src        source
      * @param collection content

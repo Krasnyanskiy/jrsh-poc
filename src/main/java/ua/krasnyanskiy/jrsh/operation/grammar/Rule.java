@@ -1,12 +1,17 @@
 package ua.krasnyanskiy.jrsh.operation.grammar;
 
+import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
 /**
+ * A grammar rule.
+ *
  * @author Alexander Krasnyanskiy
+ * @since 1.0
  */
 public class Rule {
 

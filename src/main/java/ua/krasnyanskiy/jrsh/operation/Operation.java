@@ -11,13 +11,16 @@ import java.util.concurrent.Callable;
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
-public interface Operation<R, E extends OperationParameters> extends ConsoleAware {
+public interface Operation<P extends OperationParameters> extends ConsoleAware {
 
-    Callable<R> perform(E parameters);
+    Callable<String> execute();
 
     Grammar getGrammar();
 
     String getDescription();
 
-    Class<E> getParametersType();
+    Class<P> getParametersType();
+
+    void setOperationParameters(P parameters);
+
 }

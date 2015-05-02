@@ -9,17 +9,22 @@ import java.util.Map;
 
 public class OperationFactory {
 
-    private static final Map<String, Operation> operations = new HashMap<>();
+    private static final Map<String, Operation> operations;
 
     static {
-        operations.put("export", new ExportOperation());
+        operations = new HashMap<String, Operation>() {{
+            put("help", new ExportOperation());
+            put("login", new ExportOperation());
+            put("export", new ExportOperation());
+            put("import", new ExportOperation());
+        }};
     }
 
     public static Operation getOperation(String operationName) {
         return operations.get(operationName);
     }
 
-    public static List<Operation> getOperations(){
+    public static List<Operation> getOperations() {
         return new ArrayList<>(operations.values());
     }
 }

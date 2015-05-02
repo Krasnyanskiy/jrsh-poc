@@ -4,7 +4,7 @@ import jline.console.ConsoleReader;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -13,6 +13,7 @@ import ua.krasnyanskiy.jrsh.operation.parameter.OperationParser;
 public class ToolEvaluationStrategy implements EvaluationStrategy {
 
     private ConsoleReader console;
+    private OperationParser parser;
 
     @SneakyThrows
     public ToolEvaluationStrategy() {
@@ -21,8 +22,8 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
     }
 
     @SneakyThrows
-    public void eval(@NonNull String[] args) {
-        if (args.length == 0) {
+    public void eval(@NonNull String[] tokens) {
+        if (tokens.length == 0) {
             console.println("Hello, Sir! Need help? Better call Saul!");
         } else {
             console.println("This version doesn't support that yet. Hasta la vista!");
@@ -32,6 +33,6 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
 
     @Override
     public void setOperationParser(OperationParser parser) {
-
+        this.parser = parser;
     }
 }

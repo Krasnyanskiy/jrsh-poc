@@ -69,7 +69,7 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
                 }
             }
         }
-        // copy the values and make them distinct, without otherwise affecting the ordering.
+        // copy the value and make them distinct, without otherwise affecting the ordering.
         // Only do it if the sizes differ.
         if (distinct.size() != candidates.size()) {
             Collection<CharSequence> copy = new ArrayList<>();
@@ -97,7 +97,7 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
     }
 
     /**
-     * Returns a root that matches all the {@link String} elements of the specified {@link List},
+     * Returns a operationName that matches all the {@link String} elements of the specified {@link List},
      * or null if there are no commonalities. For example, if the list contains
      * <i>foobar</i>, <i>foobaz</i>, <i>foobuz</i>, the method will return <i>foob</i>.
      */

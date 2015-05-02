@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -8,8 +8,8 @@ import ua.krasnyanskiy.jrsh.evaluation.ToolEvaluationStrategy;
 
 import java.io.IOException;
 
-import static ua.krasnyanskiy.jrsh.common.TokenUtil.isLoginToken;
-import static ua.krasnyanskiy.jrsh.common.TokenUtil.isScriptNameToken;
+import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenUtil.isLoginToken;
+import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenUtil.isScriptNameToken;
 
 /**
  * Strategy Helper defines the appropriate {@link EvaluationStrategy}.

@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.operation.grammar;
+package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
