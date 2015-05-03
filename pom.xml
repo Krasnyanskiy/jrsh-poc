@@ -113,4 +113,16 @@
         </plugins>
     </build>
 
+    <developers>
+        <developer>
+            <id>Krasnyanskiy</id>
+            <name>Alexander Krasnyanskiy</name>
+            <email>krasnyanskiy.alex@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+
 </project>
