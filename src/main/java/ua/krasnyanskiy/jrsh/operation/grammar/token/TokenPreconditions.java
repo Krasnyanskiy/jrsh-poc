@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 
-public class TokenUtil {
+public class TokenPreconditions {
 
     public static boolean isLoginToken(String token) {
         Pattern pattern = compile("(\\w+[|])?\\w+[%]\\w+[@]\\w(.)+");

@@ -1,6 +1,8 @@
 package ua.krasnyanskiy.jrsh.operation;
 
 import ua.krasnyanskiy.jrsh.operation.impl.ExportOperation;
+import ua.krasnyanskiy.jrsh.operation.impl.HelpOperation;
+import ua.krasnyanskiy.jrsh.operation.impl.LoginOperation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +15,10 @@ public class OperationFactory {
 
     static {
         operations = new HashMap<String, Operation>() {{
-            put("help", new ExportOperation());
-            put("login", new ExportOperation());
+            put("help", new HelpOperation());
+            put("login", new LoginOperation());
             put("export", new ExportOperation());
-            put("import", new ExportOperation());
+            //put("import", new ImportOperation());
         }};
     }
 

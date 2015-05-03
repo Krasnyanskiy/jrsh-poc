@@ -32,6 +32,7 @@ public class ExportParameterConverter implements ParameterConverter<ExportParame
                 return INCLUDE_MONITORING_EVENTS;
             default:
                 return null;
+                //throw new RuntimeException(format("Wrong parameter (%s)", param));
         }
     }
 }

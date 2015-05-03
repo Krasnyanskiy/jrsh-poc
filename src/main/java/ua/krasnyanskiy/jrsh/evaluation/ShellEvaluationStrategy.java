@@ -7,6 +7,7 @@ import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
+import ua.krasnyanskiy.jrsh.operation.OperationResult;
 import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 import java.io.IOException;
@@ -14,10 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import static java.lang.System.exit;
+import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.FAILED;
+
 /**
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public class ShellEvaluationStrategy implements EvaluationStrategy {
 
     private ConsoleReader console;
@@ -30,32 +35,52 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     @Override
     public void eval(@NonNull String[] tokens) throws Exception {
 
-        // make a session from the tokens;
 
-        while (true) {
+        // make session from the tokens
+
+        Operation login = parser.parse(tokens);
+        Callable<OperationResult> task_ = login.execute();
+        OperationResult result = task_.call();
+
+
+
+        if (result.getCode() == FAILED){
+            console.println(result.getMessage());
+            console.flush();
+            exit(FAILED.getCode());
+        } else {
+            console.println(result.getMessage());
+            console.flush();
+        }
+
+
+
+        for (;;) {
             String input = console.readLine();
             if (input.isEmpty()) {
                 console.print("");
-                continue;
+                continue; // skip
             }
-
-            Operation op = parser.parse(input);
-            Callable job = op.execute();
-            String result = job.call().toString();
-
-            console.println(result);
-
+            try {
+                Operation op = parser.parse(input);
+                Callable<OperationResult> task = op.execute();
+                OperationResult res = task.call();
+                console.println(res.getMessage());
+            } catch (Exception err) {
+                console.println("error: " + err.getMessage());
+            } finally {
+                console.flush();
+            }
         }
     }
 
     /**
-     * Add parser. For more details please see
-     * {@link EvaluationStrategy#setOperationParser(OperationParser)}
+     * See {@link EvaluationStrategy#setOperationParser(OperationParser)}.
      *
      * @param parser operation parser
      */
     @Override
-    public void setOperationParser(OperationParser parser) {
+    public void setOperationParser(@NonNull OperationParser parser) {
         this.parser = parser;
     }
 

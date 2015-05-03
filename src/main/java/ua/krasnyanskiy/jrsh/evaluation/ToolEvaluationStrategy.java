@@ -10,6 +10,7 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public class ToolEvaluationStrategy implements EvaluationStrategy {
 
     private ConsoleReader console;

@@ -8,6 +8,7 @@ import ua.krasnyanskiy.jrsh.operation.grammar.token.RepositoryPathToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 import ua.krasnyanskiy.jrsh.operation.parameter.converter.ExportParameterConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +30,9 @@ public class ExportOperationParameters extends OperationParameters {
 
     // User
     @Parameter(dependsOn = "user"/*, ambivalent = true*/)
-                                    // TODO: ух, а как это проверять?
-                                    // => export user [joeuser, bob]
-                                    // - - - - - - - - - - - - - - - -
+                                    // TODO: how to fix this?
+                                    // export user [joeuser, bob]
+                                    // - - - - - - - - - - - -
     private List<String> users; // names
 
     // Role
@@ -39,16 +40,16 @@ public class ExportOperationParameters extends OperationParameters {
     private List<String> roles;
 
     // Repository
-    @Parameter(dependsOn = "repository", token = RepositoryPathToken.class, mandatory = true)
+    @Parameter(dependsOn = "repository", value = "repositoryPath", token = RepositoryPathToken.class, mandatory = true)
     private String repositoryPath;
 
     @Parameter(dependsOn = "repositoryPath", value = "to")
-    private Boolean to;
+    private boolean to;
 
-    @Parameter(dependsOn = "to", token = FileToken.class, mandatory = true)
+    @Parameter(dependsOn = "to", value = "filePath", token = FileToken.class, mandatory = true)
     private String filePath;
 
-    @Parameter(interconnected = true, dependsOn = {"repository", "filePath"}, value = {"with-repository-permissions", "with-role-users", "with-include-access-events", "with-include-audit-events", "with-include-monitoring-events", "with-repository-permissions"}, converter = ExportParameterConverter.class)
-    private List<ExportParameter> exportParameters;
+    @Parameter(interconnected = true, dependsOn = {"repository", "filePath"}, value = {"with-repository-permissions", "with-user-roles", "with-include-access-events", "with-include-audit-events", "with-include-monitoring-events", "with-repository-permissions"}, converter = ExportParameterConverter.class)
+    private List<ExportParameter> exportParameters = new ArrayList<>();
 
 }

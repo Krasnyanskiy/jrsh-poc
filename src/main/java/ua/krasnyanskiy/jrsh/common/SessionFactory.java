@@ -65,6 +65,7 @@ public class SessionFactory {
     private static Session createSession(@NonNull String url, @NonNull String username,
                                          @NonNull String password, String organization) {
         username = organization == null ? username : username.concat("|").concat(organization);
+        url = url.startsWith("http") ? url : "http://".concat(url);
         return new Session(
                 new SessionStorage(
                         new RestClientConfiguration(url),
