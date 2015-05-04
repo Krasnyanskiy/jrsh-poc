@@ -4,7 +4,7 @@ import jline.console.ConsoleReader;
 import jline.console.completer.AggregateCompleter;
 import jline.console.completer.Completer;
 import lombok.NonNull;
-import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
+import ua.krasnyanskiy.jrsh.completion.CandidatesCustomCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.OperationResult;

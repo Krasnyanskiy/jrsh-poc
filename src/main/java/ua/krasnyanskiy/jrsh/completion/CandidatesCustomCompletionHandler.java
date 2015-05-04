@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.completion;
 
 import jline.console.ConsoleReader;
 import jline.console.CursorBuffer;
@@ -85,7 +85,7 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
 
 
 
-        // <START>
+        // skip new line
         if (candidates.size() > 1) {
             reader.println();
             reader.printColumns(candidates);
@@ -93,7 +93,6 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         } else {
             reader.print("\r");
         }
-        // <END>
     }
 
     /**

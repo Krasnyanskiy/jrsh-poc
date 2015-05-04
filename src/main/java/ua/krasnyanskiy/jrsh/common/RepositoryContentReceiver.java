@@ -1,28 +1,26 @@
 package ua.krasnyanskiy.jrsh.common;
 
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.BadRequestException;
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.IllegalParameterValueException;
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.ResourceNotFoundException;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.resources.ResourceSearchParameter.FOLDER_URI;
+import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.resources.ResourceSearchParameter.LIMIT;
 import static com.jaspersoft.jasperserver.jaxrs.client.apiadapters.resources.ResourceSearchParameter.RECURSIVE;
 
 /**
  * @author Alexander Krasnyanskiy
  */
 public class RepositoryContentReceiver {
-
-    private Connector connector;
-
-    public RepositoryContentReceiver() {
-        this.connector = new Connector();
-    }
 
     /**
      * Downloads resources.
@@ -41,8 +39,7 @@ public class RepositoryContentReceiver {
                 lookups.put(uri, resType.equals("folder"));
             }
             resp.setSuccess(true);
-        } catch (IllegalParameterValueException | NullPointerException |
-                BadRequestException | ResourceNotFoundException e1) {
+        } catch (IllegalParameterValueException | NullPointerException | BadRequestException | ResourceNotFoundException e1) {
             resp.setSuccess(false);
             try {
                 if (e1 instanceof ResourceNotFoundException) {
@@ -58,9 +55,7 @@ public class RepositoryContentReceiver {
                         lookups.put(uri, resType.equals("folder"));
                     }
                 }
-            } catch (IllegalParameterValueException | NullPointerException |
-                    BadRequestException | ResourceNotFoundException ignored) {
-                /* BadRequestException => when input equals to >>> export /organizations/org) */
+            } catch (IllegalParameterValueException | NullPointerException | BadRequestException | ResourceNotFoundException ignored) {
             }
         }
         resp.setLookups(lookups);
@@ -70,7 +65,7 @@ public class RepositoryContentReceiver {
 
     public boolean isSessionAccessible() {
         try {
-            connector.connect();
+            new Connector().connect();
             return true;
         } catch (Exception e) {
             return false;
@@ -84,7 +79,7 @@ public class RepositoryContentReceiver {
      * @return resources
      */
     protected List<ClientResourceLookup> getResourceLookups(String path) {
-        return connector
+        return new Connector()
                 .connect()
                 .resourcesService()
                 .resources()
@@ -94,4 +89,33 @@ public class RepositoryContentReceiver {
                 .getEntity()
                 .getResourceLookups();
     }
+
+    public List<String> receiveAsList() {
+        List<String> list = new ArrayList<>();
+        List<ClientResourceLookup> lookups = new Connector().connect()
+                .resourcesService()
+                .resources()
+                .parameter(FOLDER_URI, "/")
+                .parameter(LIMIT, "2500")
+                .search()
+                .getEntity()
+                .getResourceLookups();
+        for (ClientResourceLookup lookup : lookups) {
+            list.add(lookup.getUri());
+        }
+        return list;
+    }
+
+    @Data
+    public class Response {
+        private boolean success;
+        private Map<String, Boolean> lookups;
+    }
+
+    public class Connector {
+        public Session connect() {
+            return SessionFactory.getSharedSession();
+        }
+    }
+
 }

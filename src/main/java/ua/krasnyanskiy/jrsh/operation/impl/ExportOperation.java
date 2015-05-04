@@ -36,7 +36,7 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
 
     private final static String EXPORT_OK = "Export status: SUCCESS (file was created)";
     private final static String EXPORT_FAIL = "Export status: FAILED";
-    private final static String EXPORT_FAIL_MSG = "Export status: FAILED (%s)";
+    //private final static String EXPORT_FAIL_MSG = "Export status: FAILED (%s)";
 
     private ConsoleReader console;
     private ExportOperationParameters parameters;

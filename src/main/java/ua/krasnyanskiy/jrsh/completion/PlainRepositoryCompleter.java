@@ -2,7 +2,6 @@ package ua.krasnyanskiy.jrsh.completion;
 
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.common.RepositoryContentReceiver;
-import ua.krasnyanskiy.jrsh.common.Response;
 
 import java.util.List;
 import java.util.Map;
@@ -15,11 +14,11 @@ import static ua.krasnyanskiy.jrsh.common.ResourcesUtil.process;
 /**
  * @author Alexander Krasnyanskiy
  */
-public class RepositoryCompleter implements Completer {
+public class PlainRepositoryCompleter implements Completer {
 
     private RepositoryContentReceiver receiver;
 
-    public RepositoryCompleter() {
+    public PlainRepositoryCompleter() {
         this.receiver = new RepositoryContentReceiver();
     }
 
@@ -30,7 +29,7 @@ public class RepositoryCompleter implements Completer {
             return path == null ? -1 : path.length();
         }
 
-        Response resp;
+        RepositoryContentReceiver.Response resp;
         List<String> filtered;
         List<String> processedResources;
         Map<String, Boolean> resources;

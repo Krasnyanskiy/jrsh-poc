@@ -3,7 +3,7 @@ package ua.krasnyanskiy.jrsh.evaluation;
 import jline.console.ConsoleReader;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import ua.krasnyanskiy.jrsh.common.CandidatesCustomCompletionHandler;
+import ua.krasnyanskiy.jrsh.completion.CandidatesCustomCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 /**
