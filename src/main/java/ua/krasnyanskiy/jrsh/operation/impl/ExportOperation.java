@@ -36,6 +36,7 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
 
     private final static String EXPORT_OK = "Export status: SUCCESS (file was created)";
     private final static String EXPORT_FAIL = "Export status: FAILED";
+    private final static String EXPORT_FAIL_MSG = "Export status: FAILED (%s)";
 
     private ConsoleReader console;
     private ExportOperationParameters parameters;
@@ -70,15 +71,26 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
                     task.users(parameters.getUsers());
                 }
 
-                StateDto state = task
-                        .parameters(parameters.getExportParameters())
-                        .create()
-                        .getEntity();
+                StateDto state;
+                InputStream entity;
 
-                InputStream entity = session.exportService()
-                        .task(state.getId())
-                        .fetch()
-                        .getEntity();
+                // maybe we should leave it to strategy (without try-catch block)?
+                // because strategy is able to handle (print) any error.
+                try {
+                    state = task
+                            .parameters(parameters.getExportParameters())
+                            .create()
+                            .getEntity();
+                    entity = session.exportService()
+                            .task(state.getId())
+                            .fetch()
+                            .getEntity();
+                } catch (Exception err) {
+                    // (i.e it could be wrong repository path)
+                    //return new OperationResult(format(EXPORT_FAIL_MSG, err.getMessage()), FAILED);
+                    return new OperationResult(EXPORT_FAIL, FAILED);
+                }
+
 
                 if (parameters.isTo()) {
                     if (parameters.getFilePath() != null) {
@@ -105,7 +117,7 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
 //            grammar = new ExportOperationGrammar();
 //            return grammar;
 //        }
-        
+
 
         DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
 
@@ -246,11 +258,6 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
         }
 
         return this.grammar = grammar;
-
-        
-
-        
-        //return null;
     }
 
     @Override
@@ -274,7 +281,6 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
             this.console = console;
         }
     }
-
 
 //    protected static class ExportOperationGrammar implements Grammar {
 //

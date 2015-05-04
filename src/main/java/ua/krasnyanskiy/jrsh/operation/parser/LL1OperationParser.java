@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import ua.krasnyanskiy.jrsh.common.NoSuchOperationException;
 import ua.krasnyanskiy.jrsh.common.ReflectionUtil;
+import ua.krasnyanskiy.jrsh.common.SessionFactory;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
@@ -23,8 +24,11 @@ public class LL1OperationParser implements OperationParser {
     @SuppressWarnings("unchecked")
     public Operation parse(@NonNull String[] tokens) {
 
+        // fixme
         // Special case for Login
-        if (TokenPreconditions.isLoginToken(tokens[0])) {
+        // get session - to prevent building of login if we use shell mode
+        // (>>> superuser%superuser@localhost:8080/jasperserver-pro)
+        if (TokenPreconditions.isLoginToken(tokens[0]) && SessionFactory.getSharedSession() == null) {
             Operation login = OperationFactory.getOperation("login");
             login.setOperationParameters(new LoginOperationParameters(tokens[0]));
             return login;
@@ -38,7 +42,7 @@ public class LL1OperationParser implements OperationParser {
         }
 
         OperationParameters parameters = getParameters(operation, tokens);
-        operation.setOperationParameters(parameters); // TODO: проверить типы
+        operation.setOperationParameters(parameters); // TODO: need type check
         return operation;
     }
 

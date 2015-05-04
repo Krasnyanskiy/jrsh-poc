@@ -44,7 +44,7 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
                             parameters.getOrganization());
                     return new OperationResult(format(LOGIN_OK, parameters.getUsername()), SUCCESS);
                 } catch (Exception e) {
-                    return new OperationResult(format(LOGIN_FAIL, e.getMessage()), FAILED);
+                    return new OperationResult(format(LOGIN_FAIL, e.getMessage().equals("Not Found") ? "Wrong parameters" : e.getMessage()), FAILED);
                 }
             }
         };

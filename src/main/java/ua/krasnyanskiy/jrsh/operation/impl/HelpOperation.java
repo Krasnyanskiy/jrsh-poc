@@ -130,7 +130,7 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
 
     @Override
     public String getDescription() {
-        return "\t\u001B[1mHelp\u001B[0m shows information about JRSH and its operations.\n\tUsage: \u001B[37mhelp\u001B[0m <operation>\n";
+        return "\t\u001B[1mHelp\u001B[0m shows information about JRSH and its operations.\n\tUsage: \u001B[37mhelp\u001B[0m <operation>";
     }
 
     @Override
