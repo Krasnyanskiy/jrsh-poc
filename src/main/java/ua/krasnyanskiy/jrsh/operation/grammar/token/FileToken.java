@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.common.CustomFileCompleter;
+import ua.krasnyanskiy.jrsh.completion.CustomFileCompleter;
 
 public class FileToken implements Token {
 

@@ -1,6 +1,8 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.completion;
 
 import jline.console.completer.Completer;
+import ua.krasnyanskiy.jrsh.common.RepositoryContentReceiver;
+import ua.krasnyanskiy.jrsh.common.Response;
 
 import java.util.List;
 import java.util.Map;

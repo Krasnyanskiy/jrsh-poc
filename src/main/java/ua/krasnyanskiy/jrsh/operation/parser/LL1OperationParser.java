@@ -71,9 +71,8 @@ public class LL1OperationParser implements OperationParser {
                 if (isMatchingRule) { // Bingo!
                     for (int i = 0; i < tokens_.size(); i++) {
                         Token token = tokens_.get(i);
-
                         if (token.isValueToken()) {
-                            // login -s localhost
+                            // login -s localhost (value)
                             //          ^^^^^^^^^
                             continue;
                         }

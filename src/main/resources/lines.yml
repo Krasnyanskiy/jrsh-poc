@@ -6,4 +6,5 @@ line_4_ok:    help export
 line_5_ok:    help
 line_6_ok:    wrong_operation
 line_7_ok:    login --server http://localhost:8080/jasperserver-pro --username superuser --password superuser
-line_7_ok:    login --password chechen --server http://localhost:8080/jasperserver-pro --username chechen
+line_8_ok:    login --password chechen --server http://localhost:8080/jasperserver-pro --username chechen
+line_9_fail:  login --server asdasd --password asdsa --username sdsds

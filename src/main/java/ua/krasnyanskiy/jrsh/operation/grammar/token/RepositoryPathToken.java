@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.common.MockRepositoryCompleter;
+import ua.krasnyanskiy.jrsh.completion.MockRepositoryCompleter;
 
 public class RepositoryPathToken implements Token {
 

@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.completion;
 
 import jline.console.completer.Completer;
 import jline.internal.Configuration;

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.LogManager;
 
 import static java.lang.System.exit;
 import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.FAILED;
@@ -30,6 +31,7 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
 
     public ShellEvaluationStrategy() throws IOException {
         this.console = createConsole();
+        LogManager.getLogManager().reset(); // turn off Jersey default logger for shell mode
     }
 
     @Override
@@ -43,9 +45,7 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
         Callable<OperationResult> task_ = login.execute();
         OperationResult result = task_.call();
 
-
-
-        if (result.getCode() == FAILED){
+        if (result.getCode() == FAILED) {
             console.println(result.getMessage());
             console.flush();
             exit(FAILED.getCode());
@@ -53,7 +53,6 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
             console.println(result.getMessage());
             console.flush();
         }
-
 
 
         for (;;) {

@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.common.EmptyCompleter;
+import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
 
 public class StringValueToken extends StringToken {
 
