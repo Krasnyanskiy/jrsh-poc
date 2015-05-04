@@ -41,7 +41,7 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
                     // fixme -> move to cfg file
                     builder.append("\nUsage (Tool):   \u001B[37mjrsh\u001B[0m username%password@url <operation> <parameters>\n");
                     builder.append("Usage (Shell):  \u001B[37mjrsh\u001B[0m username%password@url\n");
-                    builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m yourScript.jrs\n");
+                    builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m script.jrs\n");
                     builder.append("\nAvailable operations: \n");
 
                     List<Operation> operations = OperationFactory.getOperations();
@@ -69,18 +69,16 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
         Token v1 = new StringToken("help", true);
         Token v2 = new StringToken("export", false);
         Token v3 = new StringToken("login", false);
-        //Token v4 = new StringToken("help", false);
 
         // Vertexes
         graph.addVertex(v1);
         graph.addVertex(v2);
         graph.addVertex(v3);
-        //graph.addVertex(v4);
 
         // Edges
+        // graph.addEdge(v1, v1);
         graph.addEdge(v1, v2);
         graph.addEdge(v1, v3);
-        //graph.addEdge(v1, v4);
 
         KShortestPaths<Token, TokenEdge<Token>> paths = new KShortestPaths<>(graph, v1, 1000);
         Set<Token> vertexes = graph.vertexSet();
@@ -89,7 +87,6 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
             if (!endPoint.equals(v1)) {
 
                 Set<TokenEdge<Token>> edgesOfEndPoint = graph.edgesOf(endPoint);
-
                 boolean hasMandatoryNeighbours = false;
 
                 for (TokenEdge<Token> edge : edgesOfEndPoint) {
@@ -118,6 +115,13 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
                     grammar.addRule(rule);
                     rule = new Rule();
                 }
+            } else {
+
+                // help -> help
+
+                rule.addToken(v1);
+                grammar.addRule(rule);
+                rule = new Rule();
             }
         }
 

@@ -32,5 +32,10 @@ public class FileToken implements Token {
     public boolean isMandatory() {
         return mandatory;
     }
+
+    @Override
+    public boolean isValueToken() {
+        return false;
+    }
 }
 

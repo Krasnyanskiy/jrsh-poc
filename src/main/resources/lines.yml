@@ -1,7 +1,9 @@
 ---
 line_1_ok:    export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources/export.zip with-include-monitoring-events with-repository-permissions with-include-audit-events
-line_2_ok:    superuser%superuser@localhost:8080/jasperserver-pro export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources with-role-users with-include-monitoring-events
+line_2_fail:    superuser%superuser@localhost:8080/jasperserver-pro export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources with-role-users with-include-monitoring-events
 line_3_fail:  export repository /public/Samples/Reports/06g.ProfitDetailReport with-repository-permissions with-include-audit-events2
 line_4_ok:    help export
 line_5_ok:    help
 line_6_ok:    wrong_operation
+line_7_ok:    login --server http://localhost:8080/jasperserver-pro --username superuser --password superuser
+line_7_ok:    login --password chechen --server http://localhost:8080/jasperserver-pro --username chechen

@@ -48,7 +48,9 @@ public class LL1OperationParser implements OperationParser {
 
     @SneakyThrows
     protected OperationParameters getParameters(@NonNull Operation operation, @NonNull String[] tokens) {
-        OperationParameters parameters = null;
+
+        OperationParameters parameters = null; // empty
+
         Grammar grammar = operation.getGrammar();
         Collection<Rule> rules = grammar.getRules();
 
@@ -62,20 +64,37 @@ public class LL1OperationParser implements OperationParser {
                         isMatchingRule = false;
                     }
                 }
-                if (isMatchingRule) {
+                if (isMatchingRule) { // Bingo!
                     for (int i = 0; i < tokens_.size(); i++) {
                         Token token = tokens_.get(i);
-                        if (parameters == null){
+
+                        if (token.isValueToken()) {
+                            // login -s localhost
+                            //          ^^^^^^^^^
+                            continue;
+                        }
+                        if (parameters == null) {
                             parameters = (OperationParameters) operation.getParametersType().newInstance();
                         }
-                        ReflectionUtil.setParameterValue(parameters, token.getName(), tokens[i]);
+                        // reflection contains ugly workarounds - fixme
+                        String val;
+                        if (i + 1 < tokens.length) {
+                            if (tokens_.get(i + 1).isValueToken()) {
+                                val = tokens[i+1];
+                            } else {
+                                val = tokens[i];
+                            }
+                        } else {
+                            val = tokens[i];
+                        }
+                        ReflectionUtil.setParameterValue(parameters, token.getName(), val);
                     }
                 }
             }
         }
 
-        if (parameters == null) {
-            throw new RuntimeException(format("Cannot parse parameters for (\u001B[1m%s\u001B[0m)", tokens[0]) );
+        if (parameters == null) { // there are no proper parameters
+            throw new RuntimeException(format("Cannot parse parameters for (\u001B[1m%s\u001B[0m)", tokens[0]));
         }
 
         return parameters;

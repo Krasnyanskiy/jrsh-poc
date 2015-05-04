@@ -32,4 +32,9 @@ public class StringValueToken extends StringToken {
     public boolean match(String tName) {
         return true;
     }
+
+    @Override
+    public boolean isValueToken() {
+        return true;
+    }
 }

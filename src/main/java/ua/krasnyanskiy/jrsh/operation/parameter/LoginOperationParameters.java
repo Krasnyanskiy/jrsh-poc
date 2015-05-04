@@ -26,16 +26,16 @@ public class LoginOperationParameters extends OperationParameters {
     @Parameter(value = "login", mandatory = true)
     private String operationName;
 
-    @Parameter(value = "--server", dependsOn = "login", ambivalent = true, dependencies = @Dependency("server-value"), mandatory = true)
+    @Parameter(value = "--server", dependsOn = {"login", "-", "-", "-"}, ambivalent = true, dependencies = @Dependency("server-value"), mandatory = true)
     private String server;
 
-    @Parameter(value = "--username", dependsOn = "login", ambivalent = true, dependencies = @Dependency("username-value"), mandatory = true)
+    @Parameter(value = "--username", dependsOn = {"login", "-", "-", "-"}, ambivalent = true, dependencies = @Dependency("username-value"), mandatory = true)
     private String username;
 
-    @Parameter(value = "--password", dependsOn = "login", ambivalent = true, dependencies = @Dependency("password-value"), mandatory = true)
+    @Parameter(value = "--password", dependsOn = {"login", "password-value", "server-value", "username-value"}, ambivalent = true, dependencies = @Dependency("password-value"), mandatory = true)
     private String password;
 
-    @Parameter(value = "--organization", dependsOn = "login", ambivalent = true, dependencies = @Dependency("organization-value"))
+    @Parameter(value = "--organization", dependsOn = {"login", "-", "-", "-"}, ambivalent = true, dependencies = @Dependency("organization-value"))
     private String organization;
 
     @Data

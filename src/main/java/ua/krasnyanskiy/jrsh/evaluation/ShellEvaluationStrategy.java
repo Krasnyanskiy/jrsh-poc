@@ -38,6 +38,7 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
 
         // make session from the tokens
 
+
         Operation login = parser.parse(tokens);
         Callable<OperationResult> task_ = login.execute();
         OperationResult result = task_.call();

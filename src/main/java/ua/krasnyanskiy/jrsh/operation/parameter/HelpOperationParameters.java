@@ -11,10 +11,10 @@ public class HelpOperationParameters extends OperationParameters {
     @Parameter(value = "help", mandatory = true)
     private String operationName;
 
-    @Parameter(dependsOn = "help", value = {"export", "import", "help", "login"})
+    @Parameter(dependsOn = "help", value = {"export", "login"})
     private String context;
 
-    // fixme
+    // fixme (lombok doesn't work)
     public String getContext() {
         return context;
     }

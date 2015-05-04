@@ -40,6 +40,11 @@ public class StringToken implements Token {
     }
 
     @Override
+    public boolean isValueToken() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return tknName;
     }

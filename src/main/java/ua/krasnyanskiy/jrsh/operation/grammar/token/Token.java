@@ -16,4 +16,5 @@ public interface Token {
 
     boolean isMandatory();
 
+    boolean isValueToken();
 }

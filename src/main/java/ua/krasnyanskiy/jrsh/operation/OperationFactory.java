@@ -18,7 +18,6 @@ public class OperationFactory {
             put("help", new HelpOperation());
             put("login", new LoginOperation());
             put("export", new ExportOperation());
-            //put("import", new ImportOperation());
         }};
     }
 
