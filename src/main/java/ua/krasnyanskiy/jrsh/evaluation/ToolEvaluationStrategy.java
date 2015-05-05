@@ -3,7 +3,7 @@ package ua.krasnyanskiy.jrsh.evaluation;
 import jline.console.ConsoleReader;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import ua.krasnyanskiy.jrsh.completion.CandidatesCustomCompletionHandler;
+import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 /**
@@ -19,7 +19,7 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
     @SneakyThrows
     public ToolEvaluationStrategy() {
         this.console = new ConsoleReader();
-        this.console.setCompletionHandler(new CandidatesCustomCompletionHandler());
+        this.console.setCompletionHandler(new JrshCompletionHandler());
     }
 
     @SneakyThrows

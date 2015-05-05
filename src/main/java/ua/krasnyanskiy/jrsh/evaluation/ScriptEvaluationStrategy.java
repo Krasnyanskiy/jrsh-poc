@@ -15,7 +15,7 @@ public class ScriptEvaluationStrategy implements EvaluationStrategy {
     public void eval(@NonNull String[] tokens) {
         // TODO:
         // 1) read file line by line
-        // 2) parse line and execute
+        // 2) parse line and eval
     }
 
     @Override

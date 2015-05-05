@@ -9,7 +9,7 @@ import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 public class HelpOperationParameters extends OperationParameters {
 
     @Parameter(value = "help", mandatory = true)
-    private String operationName;
+    private String operationName = "help";
 
     @Parameter(dependsOn = "help", value = {"export", "login"})
     private String context;

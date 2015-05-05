@@ -25,7 +25,7 @@ public class StrategyHelper {
      * @param tokens tokens
      * @return strategy
      */
-    public EvaluationStrategy define(@NonNull String... tokens) throws IOException {
+    public static EvaluationStrategy define(@NonNull String... tokens) throws IOException {
         EvaluationStrategy strategy;
         switch (tokens.length) {
 

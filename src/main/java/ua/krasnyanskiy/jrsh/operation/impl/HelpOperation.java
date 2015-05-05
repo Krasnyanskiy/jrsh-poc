@@ -6,7 +6,7 @@ import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
-import ua.krasnyanskiy.jrsh.operation.OperationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
@@ -20,18 +20,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.SUCCESS;
+import static ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode.SUCCESS;
 
 public class HelpOperation implements Operation<HelpOperationParameters> {
 
     private HelpOperationParameters parameters;
     private Grammar grammar;
 
+    public HelpOperation() {
+    }
+
+    public HelpOperation(HelpOperationParameters parameters) {
+        this.parameters = parameters;
+    }
+
     @Override
-    public Callable<OperationResult> execute() {
-        return new Callable<OperationResult>() {
+    public Callable<EvaluationResult> eval() {
+        return new Callable<EvaluationResult>() {
             @Override
-            public OperationResult call() throws Exception {
+            public EvaluationResult call() throws Exception {
                 StringBuilder builder = new StringBuilder();
                 String context = parameters.getContext();
                 if (context != null) {
@@ -49,7 +56,7 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
                         builder.append(op.getDescription()).append("\n");
                     }
                 }
-                return new OperationResult(builder.toString(), SUCCESS);
+                return new EvaluationResult(builder.toString(), SUCCESS);
             }
         };
     }

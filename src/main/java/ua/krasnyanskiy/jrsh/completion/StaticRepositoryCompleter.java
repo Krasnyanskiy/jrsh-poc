@@ -60,7 +60,11 @@ public class StaticRepositoryCompleter implements Completer {
 
         if (!cuts.isEmpty()) {
             candidates.clear();
-            candidates.addAll(cuts);
+            if (cuts.contains("/")) {
+                candidates.add("/");
+            } else {
+                candidates.addAll(cuts);
+            }
         }
 
         return translated.length();

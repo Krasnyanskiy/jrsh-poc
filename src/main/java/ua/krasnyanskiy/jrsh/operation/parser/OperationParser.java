@@ -1,6 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.parser;
 
 import ua.krasnyanskiy.jrsh.operation.Operation;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -8,7 +9,6 @@ import ua.krasnyanskiy.jrsh.operation.Operation;
  */
 public interface OperationParser {
 
-    Operation parse(String[] tokens);
+    Operation<? extends OperationParameters> parse(String line);
 
-    Operation parse(String tokens);
 }

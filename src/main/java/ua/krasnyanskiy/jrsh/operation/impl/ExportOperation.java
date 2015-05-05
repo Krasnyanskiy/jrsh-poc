@@ -11,7 +11,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import ua.krasnyanskiy.jrsh.common.FileUtil;
 import ua.krasnyanskiy.jrsh.common.SessionFactory;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.OperationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.FAILED;
-import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.SUCCESS;
+import static ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode.FAILED;
+import static ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode.SUCCESS;
 
 @SuppressWarnings("unchecked")
 public class ExportOperation implements Operation<ExportOperationParameters> {
@@ -43,10 +43,10 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
     private Grammar grammar;
 
     @Override
-    public Callable<OperationResult> execute() {
-        return new Callable<OperationResult>() {
+    public Callable<EvaluationResult> eval() {
+        return new Callable<EvaluationResult>() {
             @Override
-            public OperationResult call() throws Exception {
+            public EvaluationResult call() throws Exception {
                 String resultMessage = EXPORT_FAIL;
 
                 Session session = SessionFactory.getSharedSession();
@@ -88,7 +88,7 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
                 } catch (Exception err) {
                     // (i.e it could be wrong repository path)
                     //return new OperationResult(format(EXPORT_FAIL_MSG, err.getMessage()), FAILED);
-                    return new OperationResult(EXPORT_FAIL, FAILED);
+                    return new EvaluationResult(EXPORT_FAIL, FAILED);
                 }
 
 
@@ -101,7 +101,7 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
                     resultMessage = FileUtil.createFile("export.zip", entity)
                             ? EXPORT_OK : EXPORT_FAIL;
 
-                return new OperationResult(resultMessage,
+                return new EvaluationResult(resultMessage,
                         resultMessage.equals(EXPORT_OK) ? SUCCESS : FAILED);
 
             }

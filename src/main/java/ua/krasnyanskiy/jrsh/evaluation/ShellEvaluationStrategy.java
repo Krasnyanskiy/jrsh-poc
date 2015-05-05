@@ -1,13 +1,15 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
 import jline.console.ConsoleReader;
-import jline.console.completer.AggregateCompleter;
 import jline.console.completer.Completer;
 import lombok.NonNull;
-import ua.krasnyanskiy.jrsh.completion.CandidatesCustomCompletionHandler;
+import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
+import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
-import ua.krasnyanskiy.jrsh.operation.OperationResult;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 
 import java.io.IOException;
@@ -17,58 +19,70 @@ import java.util.concurrent.Callable;
 import java.util.logging.LogManager;
 
 import static java.lang.System.exit;
-import static ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode.FAILED;
 
 /**
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
-@SuppressWarnings("unchecked")
 public class ShellEvaluationStrategy implements EvaluationStrategy {
 
     private ConsoleReader console;
     private OperationParser parser;
 
     public ShellEvaluationStrategy() throws IOException {
-        this.console = createConsole();
-        LogManager.getLogManager().reset(); // turn off Jersey default logger for shell mode
+        this.console = new ConsoleBuilder()
+                .withPrompt("\u001B[1m>>> \u001B[0m")
+                .withHandler(new JrshCompletionHandler())
+                .withCompleters(getCompleters())
+                .build();
+
+        LogManager.getLogManager().reset();
     }
 
     @Override
-    public void eval(@NonNull String[] tokens) throws Exception {
+    public void eval(@NonNull String[] args) throws Exception {
+        /** log in to be able to evaluate operations in the interactive mode **/
+        Operation<? extends OperationParameters> operation = parser.parse(args[0]); // login
+        evalLogin(operation);
 
-
-        // make session from the tokens
-
-
-        Operation login = parser.parse(tokens);
-        Callable<OperationResult> task_ = login.execute();
-        OperationResult result = task_.call();
-
-        if (result.getCode() == FAILED) {
-            console.println(result.getMessage());
-            console.flush();
-            exit(FAILED.getCode());
-        } else {
-            console.println(result.getMessage());
-            console.flush();
-        }
-
-
-        for (;;) {
-            String input = console.readLine();
-            if (input.isEmpty()) {
+        // infinite loop
+        while (true) {
+            String line = console.readLine();
+            if (line.isEmpty()) {
                 console.print("");
                 continue; // skip
             }
             try {
-                Operation op = parser.parse(input);
-                Callable<OperationResult> task = op.execute();
-                OperationResult res = task.call();
-                console.println(res.getMessage());
+                operation = parser.parse(line);
+                Callable<EvaluationResult> task = operation.eval();
+                EvaluationResult result = task.call();
+                console.println(result.getMessage());
             } catch (Exception err) {
                 console.println("error: " + err.getMessage());
             } finally {
+                console.flush();
+            }
+        }
+    }
+
+    /**
+     * Evaluates login operation and prints result.
+     *
+     * @param login login operation
+     * @throws Exception
+     */
+    protected void evalLogin(Operation<? extends OperationParameters> login) throws Exception {
+        Callable<EvaluationResult> task = login.eval();
+        EvaluationResult res = task.call();
+
+        switch (res.getCode()) {
+            case FAILED: {
+                console.println(res.getMessage());
+                console.flush();
+                exit(ResultCode.FAILED.getCode());
+            }
+            case SUCCESS: {
+                console.println(res.getMessage());
                 console.flush();
             }
         }
@@ -85,22 +99,19 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     }
 
     /**
-     * Create a new configured {@link ConsoleReader}
+     * Retrieves completers of the operations. Each operation has only one
+     * aggregated grammar completer. which is used to parse operation or
+     * to configure the console.
      *
-     * @return console
-     * @throws IOException
+     * @return completers
      */
-    protected ConsoleReader createConsole() throws IOException {
-        ConsoleReader console = new ConsoleReader();
-        console.setPrompt("\u001B[1m>>> \u001B[0m");
-        console.setCompletionHandler(new CandidatesCustomCompletionHandler());
-        List<Completer> list = new ArrayList<>();
-
-        for (Operation o : OperationFactory.getOperations()) {
-            Completer completer = o.getGrammar().getCompleter();
-            list.add(completer);
+    protected List<Completer> getCompleters() {
+        List<Completer> completers = new ArrayList<>();
+        for (Operation op : OperationFactory.getOperations()) {
+            Completer cmpltr = op.getGrammar().getCompleter();
+            completers.add(cmpltr);
         }
-        console.addCompleter(new AggregateCompleter(list));
-        return console;
+        return completers;
     }
+
 }

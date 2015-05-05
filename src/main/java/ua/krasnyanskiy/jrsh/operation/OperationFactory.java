@@ -3,6 +3,7 @@ package ua.krasnyanskiy.jrsh.operation;
 import ua.krasnyanskiy.jrsh.operation.impl.ExportOperation;
 import ua.krasnyanskiy.jrsh.operation.impl.HelpOperation;
 import ua.krasnyanskiy.jrsh.operation.impl.LoginOperation;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class OperationFactory {
         }};
     }
 
-    public static Operation getOperation(String operationName) {
+    public static Operation<OperationParameters> getOperation(String operationName) {
         return operations.get(operationName);
     }
 

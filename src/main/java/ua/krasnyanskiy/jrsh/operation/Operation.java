@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
  */
 public interface Operation<P extends OperationParameters> extends ConsoleAware {
 
-    Callable<OperationResult> execute();
+    Callable<EvaluationResult> eval();
 
     Grammar getGrammar();
 

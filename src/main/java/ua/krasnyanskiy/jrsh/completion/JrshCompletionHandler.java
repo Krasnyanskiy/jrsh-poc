@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CandidatesCustomCompletionHandler implements CompletionHandler {
+public class JrshCompletionHandler implements CompletionHandler {
 
     public boolean complete(final ConsoleReader reader, final List<CharSequence> candidates, final int pos) throws IOException {
         CursorBuffer buf = reader.getCursorBuffer();
@@ -31,31 +31,20 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         return true;
     }
 
-    public static void setBuffer(final ConsoleReader reader, final CharSequence value,
-                                 final int offset) throws IOException {
-        while ((reader.getCursorBuffer().cursor > offset) && reader.backspace()) {
-            // empty
-        }
+    public static void setBuffer(final ConsoleReader reader, final CharSequence value, final int offset) throws IOException {
+        while ((reader.getCursorBuffer().cursor > offset) && reader.backspace()) {}
         reader.putString(value);
         reader.setCursorPosition(offset + value.length());
     }
 
-    /**
-     * Print out the candidates. If the size of the candidates is greater than the
-     * {@link ConsoleReader#getAutoprintThreshold}, they prompt with a warning.
-     *
-     * @param candidates the list of candidates to print
-     */
-    public static void printCandidates(final ConsoleReader reader,
-                                       Collection<CharSequence> candidates) throws IOException {
+    public static void printCandidates(final ConsoleReader reader, Collection<CharSequence> candidates) throws IOException {
         Set<CharSequence> distinct = new HashSet<>(candidates);
         if (distinct.size() > reader.getAutoprintThreshold()) {
-            //noinspection StringConcatenation
-            reader.print(String.format("Display all %d possibilities? (y or n)", candidates.size())/*Messages.DISPLAY_CANDIDATES.format(candidates.size())*/);
+            reader.print(String.format("Display all %d possibilities? (y or n)", candidates.size()));
             reader.flush();
             int c;
-            String noOpt = /*Messages.DISPLAY_CANDIDATES_NO.format()*/ "y";
-            String yesOpt = /*Messages.DISPLAY_CANDIDATES_YES.format()*/ "n";
+            String noOpt = "y";
+            String yesOpt = "n";
             char[] allowed = {yesOpt.charAt(0), noOpt.charAt(0)};
             while ((c = reader.readCharacter(allowed)) != -1) {
                 String tmp = new String(new char[]{(char) c});
@@ -69,8 +58,6 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
                 }
             }
         }
-        // copy the value and make them distinct, without otherwise affecting the ordering.
-        // Only do it if the sizes differ.
         if (distinct.size() != candidates.size()) {
             Collection<CharSequence> copy = new ArrayList<>();
             for (CharSequence next : candidates) {
@@ -83,8 +70,6 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         }
 
 
-
-
         // skip new line
         if (candidates.size() > 1) {
             reader.println();
@@ -95,16 +80,10 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         }
     }
 
-    /**
-     * Returns a operationName that matches all the {@link String} elements of the specified {@link List},
-     * or null if there are no commonalities. For example, if the list contains
-     * <i>foobar</i>, <i>foobaz</i>, <i>foobuz</i>, the method will return <i>foob</i>.
-     */
     private String getUnambiguousCompletions(final List<CharSequence> candidates) {
         if (candidates == null || candidates.isEmpty()) {
             return null;
         }
-        // convert to an array for speed
         String[] strings = candidates.toArray(new String[candidates.size()]);
 
         String first = strings[0];
@@ -121,9 +100,6 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         return candidate.toString();
     }
 
-    /**
-     * @return true is all the elements of <i>candidates</i> start with <i>starts</i>
-     */
     private boolean startsWith(final String starts, final String[] candidates) {
         for (String candidate : candidates) {
             if (!candidate.startsWith(starts)) {
@@ -132,22 +108,4 @@ public class CandidatesCustomCompletionHandler implements CompletionHandler {
         }
         return true;
     }
-
-//    private enum Messages {
-//        DISPLAY_CANDIDATES,
-//        DISPLAY_CANDIDATES_YES,
-//        DISPLAY_CANDIDATES_NO,;
-//        private static final ResourceBundle bundle =
-//                ResourceBundle.getBundle(CandidatesCustomCompletionHandler.class.getName(),
-//                        Locale.getDefault());
-//
-//        public String format(final Object... args) {
-//            if (bundle == null) {
-//                return "";
-//            } else {
-//                return String.format(bundle.getString(name()), args);
-//            }
-//        }
-//    }
-
 }

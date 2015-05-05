@@ -3,8 +3,8 @@ package ua.krasnyanskiy.jrsh.operation.impl;
 import jline.console.ConsoleReader;
 import ua.krasnyanskiy.jrsh.common.SessionFactory;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.OperationResult;
-import ua.krasnyanskiy.jrsh.operation.OperationResult.ResultCode;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
@@ -24,27 +24,26 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
 
     private LoginOperationParameters parameters;
     private Grammar grammar;
-    //private ConsoleReader console;
 
     @Override
-    public Callable<OperationResult> execute() {
+    public Callable<EvaluationResult> eval() {
 
-        return new Callable<OperationResult>() {
+        return new Callable<EvaluationResult>() {
             @Override
-            public OperationResult call() throws Exception {
+            public EvaluationResult call() throws Exception {
                 try {
                     SessionFactory.createSharedSession(
                             parameters.getServer(),
                             parameters.getUsername(),
                             parameters.getPassword(),
                             parameters.getOrganization());
-                    return new OperationResult(format(LOGIN_OK, parameters.getUsername()), ResultCode.SUCCESS);
+                    return new EvaluationResult(format(LOGIN_OK, parameters.getUsername()), ResultCode.SUCCESS);
                 } catch (Exception err) {
                     String message = err.getMessage();
                     if (message.contains("UnknownHostException")) { // don't want to parse it
                         message = "Wrong server URL";
                     }
-                    return new OperationResult(format(LOGIN_FAIL,
+                    return new EvaluationResult(format(LOGIN_FAIL,
                             message.equals("Not Found") ? "Wrong parameters" : message),
                             ResultCode.FAILED);
                 }
