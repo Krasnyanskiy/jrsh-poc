@@ -5,10 +5,23 @@ import ua.krasnyanskiy.jrsh.operation.impl.LoginOperation;
 import ua.krasnyanskiy.jrsh.operation.parameter.LoginOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
-public class PlainLoginOperationParser implements OperationParser {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class LoginOperationParser implements OperationParser {
 
     @Override
     public Operation<? extends OperationParameters> parse(String line) {
+
+        Pattern pattern = Pattern.compile("(login(\\s+)) ?(\\w+[|])?\\w+[%]\\w+[@]\\w(.)+");
+        Matcher m = pattern.matcher(line);
+
+        if (m.matches()){
+            line = line.replace("login", "").trim();
+        } else {
+            return null;
+        }
+
         String[] parts = line.split("[@]");
 
         String server = null;

@@ -6,7 +6,6 @@ import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
 import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
-import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.LogManager;
 
-import static java.lang.System.exit;
+import static ua.krasnyanskiy.jrsh.common.Separator.WHITE_SPACE;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -40,19 +39,12 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     }
 
     @Override
-    public void eval(@NonNull String[] args) throws Exception {
-        /** log in to be able to evaluate operations in the interactive mode **/
-        //Operation<? extends OperationParameters> operation = parser.parse(args[0]); // login
-        //evalLogin(operation);
-
-        String line = "login ".concat(args[0]);
-
-        // infinite loop
+    public void eval(@NonNull String[] args) throws IOException {
+        String line = "login".concat(WHITE_SPACE).concat(args[0]);
         while (true) {
-
-            if (line == null) {
+            if (line == null)
                 line = console.readLine();
-            }
+
             if (line.isEmpty()) {
                 console.print("");
                 continue; // skip
@@ -72,29 +64,6 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     }
 
     /**
-     * Evaluates login operation and prints result.
-     *
-     * @param login login operation
-     * @throws Exception
-     */
-    protected void evalLogin(Operation<? extends OperationParameters> login) throws Exception {
-        Callable<EvaluationResult> task = login.eval();
-        EvaluationResult res = task.call();
-
-        switch (res.getCode()) {
-            case FAILED: {
-                console.println(res.getMessage());
-                console.flush();
-                exit(ResultCode.FAILED.getCode());
-            }
-            case SUCCESS: {
-                console.println(res.getMessage());
-                console.flush();
-            }
-        }
-    }
-
-    /**
      * See {@link EvaluationStrategy#setOperationParser(OperationParser)}.
      *
      * @param parser operation parser
@@ -106,8 +75,8 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
 
     /**
      * Retrieves completers of the operations. Each operation has only one
-     * aggregated grammar completer. which is used to parse operation or
-     * to configure the console.
+     * aggregated grammar completer which is used to parse operation or
+     * to configure console.
      *
      * @return completers
      */

@@ -27,17 +27,16 @@ public class LL1OperationParser implements OperationParser {
      * @return configured operation
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Operation<? extends OperationParameters> parse(String line) {
 
         String[] tokens = line.split("\\s+"); // mini lexer
 
         String operationName = tokens[0];
-        //Operation<? extends OperationParameters> operation = OperationFactory.getOperation(operationName);
         Operation<OperationParameters> operation = (Operation<OperationParameters>) OperationFactory.getOperation(operationName);
 
-        if (operation == null) {
+        if (operation == null)
             throw new NoSuchOperationException();
-        }
 
         OperationParameters parameters = getParameters(operation, tokens);
         operation.setOperationParameters(parameters);
@@ -46,7 +45,6 @@ public class LL1OperationParser implements OperationParser {
 
     @SneakyThrows
     protected OperationParameters getParameters(@NonNull Operation operation, @NonNull String[] tokens) {
-
         OperationParameters parameters = null; // empty
         Grammar grammar = operation.getGrammar();
         Collection<Rule> rules = grammar.getRules();

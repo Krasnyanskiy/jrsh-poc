@@ -23,7 +23,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class ExportOperationParameters extends OperationParameters {
 
-    @Master @Parameter(
+    @Master
+    @Parameter(
             value = "export",
             mandatory = true)
     private String operationName;
@@ -34,7 +35,7 @@ public class ExportOperationParameters extends OperationParameters {
             mandatory = true)
     private String context;
 
-    // TODO: in the next iteration
+    // TODO: handle it in the next iteration
     @Parameter(dependsOn = "user") // what about values?
     private List<String> users;
     @Parameter(dependsOn = "role")
@@ -65,8 +66,7 @@ public class ExportOperationParameters extends OperationParameters {
                     "with-repository-permissions",
                     "with-include-access-events",
                     "with-include-audit-events",
-                    "with-include-monitoring-events",
-                    "with-repository-permissions"
+                    "with-include-monitoring-events"
             },
             interconnected = true,
             dependsOn = {"repository", "filePath"},
@@ -74,4 +74,71 @@ public class ExportOperationParameters extends OperationParameters {
             endPoint = true)
     private List<ExportParameter> exportParameters = new ArrayList<>();
 
+
+    /*
+    @Parameter(
+            value = "with-user-roles",
+            dependsOn = {
+                    "repository",
+                    "filePath",
+                    "with-repository-permissions",
+                    "with-include-access-events",
+                    "with-include-monitoring-events",
+                    "with-include-audit-events"},
+            endPoint = true,
+            token = StringToken.class)
+    private String withUserRoles;
+
+    @Parameter(
+            value = "with-repository-permissions",
+            dependsOn = {
+                    "repository",
+                    "filePath",
+                    "with-user-roles",
+                    "with-include-access-events",
+                    "with-include-monitoring-events",
+                    "with-include-audit-events"},
+            endPoint = true,
+            token = StringToken.class)
+    private String withRepositoryPermissions;
+
+    @Parameter(
+            value = "with-include-access-events",
+            dependsOn = {
+                    "repository",
+                    "filePath",
+                    "with-repository-permissions",
+                    "with-include-access-events",
+                    "with-include-monitoring-events",
+                    "with-user-roles"},
+            endPoint = true,
+            token = StringToken.class)
+    private String withIncludeAccessEvents;
+
+    @Parameter(
+            value = "with-include-audit-events",
+            dependsOn = {
+                    "repository",
+                    "filePath",
+                    "with-repository-permissions",
+                    "with-include-access-events",
+                    "with-include-monitoring-events",
+                    "with-user-roles"},
+            endPoint = true,
+            token = StringToken.class)
+    private String withIncludeAuditEvents;
+
+    @Parameter(
+            value = "with-include-monitoring-events",
+            dependsOn = {
+                    "repository",
+                    "filePath",
+                    "with-repository-permissions",
+                    "with-include-access-events",
+                    "with-user-roles",
+                    "with-include-audit-events"},
+            endPoint = true,
+            token = StringToken.class)
+    private String withIncludeMonitoringEvents;
+    */
 }

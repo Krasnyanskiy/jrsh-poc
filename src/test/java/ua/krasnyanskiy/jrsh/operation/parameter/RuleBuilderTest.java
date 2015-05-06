@@ -49,22 +49,14 @@ public class RuleBuilderTest {
     public void after() {
         builder = null;
     }
-}
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-class Fake1OperationParameters extends OperationParameters {
-    @Master @Parameter(value = "super", mandatory = true, endPoint = true)
-    private String status;
-    @Prefix("--what?") @Parameter(value = "some", dependsOn = "super", mandatory = true, endPoint = true)
-    private String some;
-}
 
-/*
-@Data
-@EqualsAndHashCode(callSuper = false)
-class Fake2OperationParameters extends OperationParameters {
-    @Master @Parameter(value = "super", mandatory = true, endPoint = true)
-    private String status;
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    private class Fake1OperationParameters extends OperationParameters {
+        @Master @Parameter(value = "super", mandatory = true, endPoint = true)
+        private String status;
+        @Prefix("--what?") @Parameter(value = "some", dependsOn = "super", mandatory = true, endPoint = true)
+        private String some;
+    }
 }
-*/

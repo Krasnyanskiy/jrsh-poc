@@ -2,15 +2,16 @@ package ua.krasnyanskiy.jrsh.operation.impl;
 
 import jline.console.ConsoleReader;
 import ua.krasnyanskiy.jrsh.common.SessionFactory;
-import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
+import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.SshLoginToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.ValueToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.ValueToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.LoginOperationParameters;
 
 import java.util.concurrent.Callable;
@@ -61,6 +62,7 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
 
             // hardcode
 
+            Token sshLogin = new SshLoginToken("login-value", true);
             Token login = new StringToken("login", true);
             Token url = new StringToken("--server", true);
             Token urlValue = new ValueToken("server-value", true);
@@ -69,6 +71,7 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
             Token password = new StringToken("--password", true);
             Token passwordValue = new ValueToken("password-value", true);
 
+            grammar.addRule(new Rule(login, sshLogin));
             grammar.addRule(new Rule(login, url, urlValue, username, usernameValue, password, passwordValue));
             grammar.addRule(new Rule(login, url, urlValue, password, passwordValue, username, usernameValue));
             grammar.addRule(new Rule(login, username, usernameValue, url, urlValue, password, passwordValue));
