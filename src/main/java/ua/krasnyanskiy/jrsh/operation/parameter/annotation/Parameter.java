@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.parameter.annotation;
 
-import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.ValueToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.converter.ParameterConverter;
 import ua.krasnyanskiy.jrsh.operation.parameter.converter.StringParameterConverter;
 
@@ -15,20 +15,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Parameter {
 
-    boolean ambivalent() default false;
-
     boolean mandatory() default false;
 
     String[] dependsOn() default {};
 
-    Class<? extends Token> token() default StringToken.class;
+    Class<? extends Token> token() default ValueToken.class;
 
     Class<? extends ParameterConverter> converter() default StringParameterConverter.class;
 
     String[] value() default {};
 
-    boolean interconnected() default false;
+    boolean endPoint() default false;
 
-    Dependency[] dependencies() default {};
+    boolean interconnected() default false;
 
 }

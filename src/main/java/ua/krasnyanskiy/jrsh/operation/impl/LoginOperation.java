@@ -9,7 +9,7 @@ import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.StringValueToken;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.ValueToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 import ua.krasnyanskiy.jrsh.operation.parameter.LoginOperationParameters;
 
@@ -63,11 +63,11 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
 
             Token login = new StringToken("login", true);
             Token url = new StringToken("--server", true);
-            Token urlValue = new StringValueToken("server-value", true);
+            Token urlValue = new ValueToken("server-value", true);
             Token username = new StringToken("--username", true);
-            Token usernameValue = new StringValueToken("username-value", true);
+            Token usernameValue = new ValueToken("username-value", true);
             Token password = new StringToken("--password", true);
-            Token passwordValue = new StringValueToken("password-value", true);
+            Token passwordValue = new ValueToken("password-value", true);
 
             grammar.addRule(new Rule(login, url, urlValue, username, usernameValue, password, passwordValue));
             grammar.addRule(new Rule(login, url, urlValue, password, passwordValue, username, usernameValue));

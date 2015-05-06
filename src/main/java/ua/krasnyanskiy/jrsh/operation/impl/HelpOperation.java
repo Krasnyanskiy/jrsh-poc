@@ -15,6 +15,7 @@ import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 import ua.krasnyanskiy.jrsh.operation.parameter.HelpOperationParameters;
+import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 import java.util.List;
 import java.util.Set;
@@ -51,7 +52,8 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
                     builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m script.jrs\n");
                     builder.append("\nAvailable operations: \n");
 
-                    List<Operation> operations = OperationFactory.getOperations();
+                    List<Operation<? extends OperationParameters>> operations =
+                            OperationFactory.getOperations();
                     for (Operation op : operations) {
                         builder.append(op.getDescription()).append("\n");
                     }

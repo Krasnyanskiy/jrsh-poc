@@ -42,18 +42,23 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     @Override
     public void eval(@NonNull String[] args) throws Exception {
         /** log in to be able to evaluate operations in the interactive mode **/
-        Operation<? extends OperationParameters> operation = parser.parse(args[0]); // login
-        evalLogin(operation);
+        //Operation<? extends OperationParameters> operation = parser.parse(args[0]); // login
+        //evalLogin(operation);
+
+        String line = "login ".concat(args[0]);
 
         // infinite loop
         while (true) {
-            String line = console.readLine();
+
+            if (line == null) {
+                line = console.readLine();
+            }
             if (line.isEmpty()) {
                 console.print("");
                 continue; // skip
             }
             try {
-                operation = parser.parse(line);
+                Operation<? extends OperationParameters> operation = parser.parse(line);
                 Callable<EvaluationResult> task = operation.eval();
                 EvaluationResult result = task.call();
                 console.println(result.getMessage());
@@ -62,6 +67,7 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
             } finally {
                 console.flush();
             }
+            line = null;
         }
     }
 

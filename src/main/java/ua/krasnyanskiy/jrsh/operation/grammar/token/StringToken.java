@@ -9,6 +9,7 @@ public class StringToken implements Token {
 
     private String tknName;
     private boolean mandatory;
+    private boolean endPoint;
 
     public StringToken(String tknName) {
         this.tknName = tknName;
@@ -17,6 +18,12 @@ public class StringToken implements Token {
     public StringToken(String tknName, boolean mandatory) {
         this.tknName = tknName;
         this.mandatory = mandatory;
+    }
+
+    public StringToken(String tknName, boolean mandatory, boolean endPoint) {
+        this.tknName = tknName;
+        this.mandatory = mandatory;
+        this.endPoint = endPoint;
     }
 
     @Override
@@ -42,6 +49,11 @@ public class StringToken implements Token {
     @Override
     public boolean isValueToken() {
         return false;
+    }
+
+    @Override
+    public boolean isEndPoint() {
+        return endPoint;
     }
 
     @Override

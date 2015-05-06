@@ -12,21 +12,21 @@ import java.util.Map;
 
 public class OperationFactory {
 
-    private static final Map<String, Operation> operations;
+    private static final Map<String, Operation<? extends OperationParameters>> operations;
 
     static {
-        operations = new HashMap<String, Operation>() {{
+        operations = new HashMap<String, Operation<? extends OperationParameters>>() {{
             put("help", new HelpOperation());
             put("login", new LoginOperation());
             put("export", new ExportOperation());
         }};
     }
 
-    public static Operation<OperationParameters> getOperation(String operationName) {
+    public static Operation<? extends OperationParameters> getOperation(String operationName) {
         return operations.get(operationName);
     }
 
-    public static List<Operation> getOperations() {
+    public static List<Operation<? extends OperationParameters>> getOperations() {
         return new ArrayList<>(operations.values());
     }
 }

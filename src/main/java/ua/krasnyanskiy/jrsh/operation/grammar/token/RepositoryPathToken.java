@@ -7,9 +7,16 @@ public class RepositoryPathToken implements Token {
 
     private String tokenName = "repositoryPath";
     private boolean mandatory;
+    private boolean endPoint;
 
     public RepositoryPathToken(String tokenName, boolean mandatory) {
         this.tokenName = tokenName;
+        this.mandatory = mandatory;
+    }
+
+    public RepositoryPathToken(String tknName, boolean mandatory, boolean endPoint) {
+        this.endPoint = endPoint;
+        this.tokenName = tknName;
         this.mandatory = mandatory;
     }
 
@@ -39,6 +46,11 @@ public class RepositoryPathToken implements Token {
     @Override
     public boolean isValueToken() {
         return false;
+    }
+
+    @Override
+    public boolean isEndPoint() {
+        return endPoint;
     }
 }
 

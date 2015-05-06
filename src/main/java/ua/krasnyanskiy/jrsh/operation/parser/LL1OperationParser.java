@@ -29,10 +29,11 @@ public class LL1OperationParser implements OperationParser {
     @Override
     public Operation<? extends OperationParameters> parse(String line) {
 
-        String[] tokens = line.split("\\s+"); // tokenize
+        String[] tokens = line.split("\\s+"); // mini lexer
 
         String operationName = tokens[0];
-        Operation<OperationParameters> operation = OperationFactory.getOperation(operationName);
+        //Operation<? extends OperationParameters> operation = OperationFactory.getOperation(operationName);
+        Operation<OperationParameters> operation = (Operation<OperationParameters>) OperationFactory.getOperation(operationName);
 
         if (operation == null) {
             throw new NoSuchOperationException();

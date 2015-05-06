@@ -9,10 +9,7 @@ public class EvaluationResult {
     private String message;
     private ResultCode code;
 
-
-
     public enum ResultCode {
-
         FAILED(1),
         SUCCESS(0);
 

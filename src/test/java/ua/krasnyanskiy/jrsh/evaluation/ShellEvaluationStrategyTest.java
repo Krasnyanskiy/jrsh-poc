@@ -67,7 +67,6 @@ public class ShellEvaluationStrategyTest {
         final String USER_EXPORT_INPUT = "export repository /public/Samples";
         final String EXPORT_RESULT_MESSAGE = "I'm fine too, thanks!";
 
-
         Mockito.when(parserMock.parse(USER_LOGIN_INPUT)).thenReturn(loginMock);
         Mockito.when(parserMock.parse(USER_EXPORT_INPUT)).thenReturn(exportMock);
         Mockito.when(loginMock.eval()).thenReturn(loginTaskMock);
@@ -78,14 +77,15 @@ public class ShellEvaluationStrategyTest {
         Mockito.when(loginResultMock.getMessage()).thenReturn(LOGIN_RESULT_MESSAGE);
         Mockito.when(exportResultMock.getMessage()).thenReturn(EXPORT_RESULT_MESSAGE);
         Mockito.when(consoleMock.readLine()).thenReturn(USER_EXPORT_INPUT);
-        Mockito.doNothing().doThrow(new IllegalArgumentException("exit loop")).when(consoleMock).flush();
+        Mockito.doNothing().doThrow(new IllegalArgumentException("exit_flag")).when(consoleMock).flush();
 
         /** When **/
         try {
             strategySpy.eval(new String[]{USER_LOGIN_INPUT});
         } catch (Exception e) {
             // Then
-            Assertions.assertThat(e.getMessage()).isEqualTo("exit loop");
+            // (we should use the exit flag to stop infinite loop and verify result)
+            Assertions.assertThat(e.getMessage()).isEqualTo("exit_flag");
         }
 
         /** Then **/

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.FileToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.RepositoryPathToken;
+import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Master;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 import ua.krasnyanskiy.jrsh.operation.parameter.converter.ExportParameterConverter;
 
@@ -22,34 +23,55 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class ExportOperationParameters extends OperationParameters {
 
-    @Parameter(value = "export", mandatory = true)
+    @Master @Parameter(
+            value = "export",
+            mandatory = true)
     private String operationName;
 
-    @Parameter(dependsOn = "export", value = {"all", "role", "user", "repository"}, mandatory = true)
+    @Parameter(
+            value = {"all", "role", "user", "repository"},
+            dependsOn = "export",
+            mandatory = true)
     private String context;
 
-    // User
-    @Parameter(dependsOn = "user"/*, ambivalent = true*/)
-                                    // TODO: how to fix this?
-                                    // export user [joeuser, bob]
-                                    // - - - - - - - - - - - -
-    private List<String> users; // names
-
-    // Role
+    // TODO: in the next iteration
+    @Parameter(dependsOn = "user") // what about values?
+    private List<String> users;
     @Parameter(dependsOn = "role")
     private List<String> roles;
 
-    // Repository
-    @Parameter(dependsOn = "repository", value = "repositoryPath", token = RepositoryPathToken.class, mandatory = true)
+    @Parameter(
+            value = "repositoryPath",
+            dependsOn = "repository",
+            token = RepositoryPathToken.class,
+            endPoint = true)
     private String repositoryPath;
 
-    @Parameter(dependsOn = "repositoryPath", value = "to")
+    @Parameter(
+            value = "to",
+            dependsOn = "repositoryPath")
     private boolean to;
 
-    @Parameter(dependsOn = "to", value = "filePath", token = FileToken.class, mandatory = true)
+    @Parameter(
+            value = "filePath",
+            dependsOn = "to",
+            token = FileToken.class,
+            endPoint = true)
     private String filePath;
 
-    @Parameter(interconnected = true, dependsOn = {"repository", "filePath"}, value = {"with-repository-permissions", "with-user-roles", "with-include-access-events", "with-include-audit-events", "with-include-monitoring-events", "with-repository-permissions"}, converter = ExportParameterConverter.class)
+    @Parameter(
+            value = {
+                    "with-user-roles",
+                    "with-repository-permissions",
+                    "with-include-access-events",
+                    "with-include-audit-events",
+                    "with-include-monitoring-events",
+                    "with-repository-permissions"
+            },
+            interconnected = true,
+            dependsOn = {"repository", "filePath"},
+            converter = ExportParameterConverter.class,
+            endPoint = true)
     private List<ExportParameter> exportParameters = new ArrayList<>();
 
 }

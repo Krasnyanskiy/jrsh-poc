@@ -281,22 +281,4 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
             this.console = console;
         }
     }
-
-//    protected static class ExportOperationGrammar implements Grammar {
-//
-//        @Override
-//        public Collection<Rule> getRules() {
-//            return Collections.emptyList();
-//        }
-//
-//        @Override
-//        public void addRule(Rule rule) {
-//            // NOP
-//        }
-//
-//        @Override
-//        public Completer getCompleter() {
-//            return null; // NOP
-//        }
-//    }
 }

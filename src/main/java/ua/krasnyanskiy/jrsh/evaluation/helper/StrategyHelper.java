@@ -22,12 +22,12 @@ public class StrategyHelper {
     /**
      * Parses tokens and return appropriate strategy.
      *
-     * @param tokens tokens
+     * @param args tokens
      * @return strategy
      */
-    public static EvaluationStrategy define(@NonNull String... tokens) throws IOException {
+    public static EvaluationStrategy define(@NonNull String[] args) throws IOException {
         EvaluationStrategy strategy;
-        switch (tokens.length) {
+        switch (args.length) {
 
             case 0: {
                 strategy = new ToolEvaluationStrategy();
@@ -35,11 +35,11 @@ public class StrategyHelper {
             }
 
             case 1: {
-                if (isLoginToken(tokens[0])) {
+                if (isLoginToken(args[0])) {
                     strategy = new ShellEvaluationStrategy();
                     break;
                 }
-                if (isScriptNameToken(tokens[0])) {
+                if (isScriptNameToken(args[0])) {
                     strategy = new ScriptEvaluationStrategy();
                     break;
                 }
@@ -48,8 +48,8 @@ public class StrategyHelper {
             }
 
             case 2: {
-                if ("--script".equals(tokens[0]) || "eval".equals(tokens[0])
-                        && isScriptNameToken(tokens[1])) {
+                if ("--script".equals(args[0]) || "eval".equals(args[0])
+                        && isScriptNameToken(args[1])) {
                     strategy = new ScriptEvaluationStrategy();
                 } else {
                     strategy = new ToolEvaluationStrategy();

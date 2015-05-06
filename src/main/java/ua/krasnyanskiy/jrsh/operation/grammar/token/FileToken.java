@@ -7,10 +7,17 @@ public class FileToken implements Token {
 
     private String tokenName = "filePath";
     private boolean mandatory;
+    private boolean endPoint;
 
     public FileToken(String tokenName, boolean mandatory) {
         this.tokenName = tokenName;
         this.mandatory = mandatory;
+    }
+
+    public FileToken(String tokenName, boolean mandatory, boolean endPoint) {
+        this.tokenName = tokenName;
+        this.mandatory = mandatory;
+        this.endPoint = endPoint;
     }
 
     @Override
@@ -36,6 +43,11 @@ public class FileToken implements Token {
     @Override
     public boolean isValueToken() {
         return false;
+    }
+
+    @Override
+    public boolean isEndPoint() {
+        return endPoint;
     }
 }
 

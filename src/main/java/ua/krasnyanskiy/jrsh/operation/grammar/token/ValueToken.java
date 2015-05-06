@@ -3,14 +3,18 @@ package ua.krasnyanskiy.jrsh.operation.grammar.token;
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
 
-public class StringValueToken extends StringToken {
+public class ValueToken extends StringToken {
 
-    public StringValueToken(String tknName) {
+    public ValueToken(String tknName) {
         super(tknName);
     }
 
-    public StringValueToken(String tknName, boolean mandatory) {
+    public ValueToken(String tknName, boolean mandatory) {
         super(tknName, mandatory);
+    }
+
+    public ValueToken(String tknName, boolean mandatory, boolean endPoint) {
+        super(tknName, mandatory, endPoint);
     }
 
     @Override
@@ -36,5 +40,10 @@ public class StringValueToken extends StringToken {
     @Override
     public boolean isValueToken() {
         return true;
+    }
+
+    @Override
+    public boolean isEndPoint() {
+        return super.isEndPoint();
     }
 }
