@@ -52,11 +52,12 @@ public class RuleBuilderTest {
 
 
     @Data
+    @Master("super")
     @EqualsAndHashCode(callSuper = false)
     private class Fake1OperationParameters extends OperationParameters {
-        @Master @Parameter(value = "super", mandatory = true, endPoint = true)
-        private String status;
-        @Prefix("--what?") @Parameter(value = "some", dependsOn = "super", mandatory = true, endPoint = true)
+        //@Parameter(value = "", mandatory = true, terminal = true)
+        //private String status;
+        @Prefix("--what?") @Parameter(value = "some", dependsOn = "super", mandatory = true, terminal = true)
         private String some;
     }
 }

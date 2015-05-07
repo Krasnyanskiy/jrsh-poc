@@ -17,7 +17,7 @@ public class SessionFactory {
     private static Session SHARED_SESSION;
 
     /**
-     * Returns shared session
+     * Returns the shared session.
      *
      * @return session
      */
@@ -26,7 +26,7 @@ public class SessionFactory {
     }
 
     /**
-     * Creates a new nonshared session
+     * Creates a new unshared session.
      *
      * @param url          server URL
      * @param username     username
@@ -34,13 +34,13 @@ public class SessionFactory {
      * @param organization organization
      * @return non shared session
      */
-    public static Session createNewSession(@NonNull String url, @NonNull String username,
-                                           @NonNull String password, String organization) {
+    public static Session createUnsharedSession(@NonNull String url, @NonNull String username,
+                                                @NonNull String password, String organization) {
         return createSession(url, username, password, organization);
     }
 
     /**
-     * Creates a new session and shares it among consumers
+     * Creates a new session and shares it among consumers.
      *
      * @param url          server URL
      * @param username     username
@@ -54,7 +54,7 @@ public class SessionFactory {
     }
 
     /**
-     * Makes REST call and returns created brand new session
+     * Makes REST call and returns created brand new session.
      *
      * @param url          server URL
      * @param username     username
@@ -74,4 +74,46 @@ public class SessionFactory {
         );
     }
 
+    /**
+     * Useful {@link Session} builder. It allows you to simplify the process
+     * of creating the session.
+     *
+     * @author Alexander Krasnyanskiy
+     * @see 1.0
+     */
+    public static class SessionBuilder {
+
+        private String server, username, password, organization;
+
+        public SessionBuilder withServer(String server) {
+            this.server = server;
+            return this;
+        }
+
+        public SessionBuilder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public SessionBuilder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public SessionBuilder withOrganization(String organization) {
+            this.organization = organization;
+            return this;
+        }
+
+        public Session buildSharedSession(){
+            SHARED_SESSION = createSharedSession(server, username,
+                    password, organization);
+            return SHARED_SESSION;
+        }
+
+        public Session buildUnsharedSession(){
+            return createSharedSession(server, username, password,
+                    organization);
+        }
+    }
 }

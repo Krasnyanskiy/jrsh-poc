@@ -31,8 +31,8 @@ public class ExportParameterConverter implements ParameterConverter<ExportParame
             case "with-include-monitoring-events":
                 return INCLUDE_MONITORING_EVENTS;
             default:
-                return null;
-                //throw new RuntimeException(format("Wrong parameter (%s)", param));
+                //return null;
+                throw new RuntimeException(String.format("Wrong parameter (%s)", param));
         }
     }
 }

@@ -13,7 +13,7 @@ import ua.krasnyanskiy.jrsh.common.SessionFactory;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
+import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
@@ -36,7 +36,6 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
 
     private final static String EXPORT_OK = "Export status: SUCCESS (file was created)";
     private final static String EXPORT_FAIL = "Export status: FAILED";
-    //private final static String EXPORT_FAIL_MSG = "Export status: FAILED (%s)";
 
     private ConsoleReader console;
     private ExportOperationParameters parameters;
@@ -74,36 +73,22 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
                 StateDto state;
                 InputStream entity;
 
-                // maybe we should leave it to strategy (without try-catch block)?
-                // because strategy is able to handle (print) any error.
                 try {
-                    state = task
-                            .parameters(parameters.getExportParameters())
-                            .create()
-                            .getEntity();
-                    entity = session.exportService()
-                            .task(state.getId())
-                            .fetch()
-                            .getEntity();
+                    state = task.parameters(parameters.getExportParameters()).create().getEntity();
+                    entity = session.exportService().task(state.getId()).fetch().getEntity();
                 } catch (Exception err) {
-                    // (i.e it could be wrong repository path)
-                    //return new OperationResult(format(EXPORT_FAIL_MSG, err.getMessage()), FAILED);
                     return new EvaluationResult(EXPORT_FAIL, FAILED);
                 }
 
-
                 if (parameters.isTo()) {
                     if (parameters.getFilePath() != null) {
-                        resultMessage = FileUtil.createFile(parameters.getFilePath(), entity)
-                                ? EXPORT_OK : EXPORT_FAIL;
+                        resultMessage = FileUtil.createFile(parameters.getFilePath(), entity) ? EXPORT_OK : EXPORT_FAIL;
                     }
-                } else
-                    resultMessage = FileUtil.createFile("export.zip", entity)
-                            ? EXPORT_OK : EXPORT_FAIL;
+                } else {
+                    resultMessage = FileUtil.createFile("export.zip", entity) ? EXPORT_OK : EXPORT_FAIL;
+                }
 
-                return new EvaluationResult(resultMessage,
-                        resultMessage.equals(EXPORT_OK) ? SUCCESS : FAILED);
-
+                return new EvaluationResult(resultMessage, resultMessage.equals(EXPORT_OK) ? SUCCESS : FAILED);
             }
         };
     }
@@ -113,15 +98,9 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
         if (grammar != null) {
             return grammar;
         }
-//        else {
-//            grammar = new ExportOperationGrammar();
-//            return grammar;
-//        }
-
 
         DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
-
-        Grammar grammar = new OperationSimpleGrammar();
+        Grammar grammar = new SimpleOperationGrammar();
         Rule rule = new Rule();
 
         Token v1 = new StringToken("export", true);
@@ -262,7 +241,8 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
 
     @Override
     public String getDescription() {
-        return "\t\u001B[1mExport\u001B[0m downloads resources from JRS and saves them to zip.\n\tUsage: \u001B[37mexport\u001B[0m repository /path/to/repository";
+        return "\t\u001B[1mExport\u001B[0m downloads resources from JRS and saves them to zip." +
+                "\n\tUsage: \u001B[37mexport\u001B[0m repository /path/to/repository";
     }
 
     @Override
@@ -273,6 +253,11 @@ public class ExportOperation implements Operation<ExportOperationParameters> {
     @Override
     public void setOperationParameters(ExportOperationParameters parameters) {
         this.parameters = parameters;
+    }
+
+    @Override
+    public void parseParameters(String line) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
