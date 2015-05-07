@@ -5,7 +5,7 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 /**
  * All plug-in execution strategy classes should implement
  * this interface. Strategy is responsible for operation
- * evaluation and handling the result of evaluation.
+ * evaluation and handling the result.
  *
  * @author Alexander Krasnyanskiy
  * @since 1.0
