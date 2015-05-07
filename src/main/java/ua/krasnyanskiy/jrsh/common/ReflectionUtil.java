@@ -9,6 +9,7 @@ import ua.krasnyanskiy.jrsh.operation.parameter.converter.ExportParameterConvert
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -28,24 +29,22 @@ public class ReflectionUtil {
     public static void setParameterValue(OperationParameters param, String key, String value) {
         Class<? extends OperationParameters> clazz = param.getClass();
         Field[] fields = clazz.getDeclaredFields();
-
         for (Field field : fields) {
             Parameter meta = field.getAnnotation(Parameter.class);
-
-            if (meta != null) { // exclude $this
+            if (meta != null) {
                 String[] tokens = meta.value();
-
-                if (asList(tokens).contains(key)) {
+                if (asList(tokens).contains(key) || key.equals(field.getName())) {
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
-
-                    if (fieldType == boolean.class) { // for [private Boolean to;] in ExportOperationParameters
+                    if (fieldType == boolean.class) {
                         field.set(param, true);
-                    } else if (fieldType == List.class) { // yet another dirty trick
-                        // get type variable of generic
+                    } else if (fieldType == List.class) {
                         if ((((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0] == ExportParameter.class)) {
                             ExportParameter convertedVal = converter.convert(value);
-                            ((ExportOperationParameters) param).getExportParameters().add(convertedVal); // very dirty!
+                            if (field.get(param) == null) {
+                                field.set(param, new ArrayList<ExportParameter>());
+                            }
+                            ((ExportOperationParameters) param).getExportParameters().add(convertedVal);
                         }
                     } else {
                         field.set(param, value);

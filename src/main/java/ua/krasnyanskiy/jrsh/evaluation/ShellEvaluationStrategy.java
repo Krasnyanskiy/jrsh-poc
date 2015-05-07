@@ -6,6 +6,7 @@ import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
 import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
@@ -14,7 +15,6 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.logging.LogManager;
 
 import static ua.krasnyanskiy.jrsh.common.Separator.WHITE_SPACE;
@@ -39,27 +39,42 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     }
 
     @Override
-    public void eval(@NonNull String[] args) throws IOException {
-        String line = "login".concat(WHITE_SPACE).concat(args[0]);
-        while (true) {
-            if (line == null)
-                line = console.readLine();
+    public void eval(@NonNull String[] args) throws Exception {
 
+        ////////////////////////////////////////////////
+        //                   Login                    //
+        ////////////////////////////////////////////////
+        String line = "login".concat(WHITE_SPACE).concat(args[0]);
+        EvaluationResult result = parser.parse(line).eval().call();
+
+        if (result.getCode() == ResultCode.FAILED) {
+            console.println(result.getMessage());
+            console.flush();
+            System.exit(ResultCode.FAILED.getCode());
+        } else {
+            console.println(result.getMessage());
+            console.flush();
+        }
+
+
+        ////////////////////////////////////////////////
+        //                    REPL                    //
+        ////////////////////////////////////////////////
+        while (true) {
+            line = console.readLine();
             if (line.isEmpty()) {
                 console.print("");
                 continue; // skip
             }
             try {
                 Operation<? extends OperationParameters> operation = parser.parse(line);
-                Callable<EvaluationResult> task = operation.eval();
-                EvaluationResult result = task.call();
+                result = operation.eval().call();
                 console.println(result.getMessage());
             } catch (Exception err) {
                 console.println("error: " + err.getMessage());
             } finally {
                 console.flush();
             }
-            line = null;
         }
     }
 
@@ -83,8 +98,8 @@ public class ShellEvaluationStrategy implements EvaluationStrategy {
     protected List<Completer> getCompleters() {
         List<Completer> completers = new ArrayList<>();
         for (Operation op : OperationFactory.getOperations()) {
-            Completer cmpltr = op.getGrammar().getCompleter();
-            completers.add(cmpltr);
+            Completer cmt = op.getGrammar().getCompleter();
+            completers.add(cmt);
         }
         return completers;
     }

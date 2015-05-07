@@ -3,7 +3,7 @@ package ua.krasnyanskiy.jrsh.evaluation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParserFacade;
+import ua.krasnyanskiy.jrsh.operation.parser.LL1OperationParser;
 
 public class ToolEvaluationStrategyTest {
 
@@ -12,7 +12,7 @@ public class ToolEvaluationStrategyTest {
     @Before
     public void before() {
         strategy = new ToolEvaluationStrategy();
-        strategy.setOperationParser(new OperationParserFacade());
+        strategy.setOperationParser(new LL1OperationParser());
     }
 
     @Test

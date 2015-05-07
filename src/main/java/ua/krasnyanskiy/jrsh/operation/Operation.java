@@ -23,4 +23,6 @@ public interface Operation<P extends OperationParameters> extends ConsoleAware {
 
     void setOperationParameters(P parameters);
 
+    void parseParameters(String line);
+
 }

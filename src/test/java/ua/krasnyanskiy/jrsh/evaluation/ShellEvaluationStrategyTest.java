@@ -18,7 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParserFacade;
+import ua.krasnyanskiy.jrsh.operation.parser.LL1OperationParser;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -36,7 +36,7 @@ public class ShellEvaluationStrategyTest {
 
     @Mock private Operation loginMock;
     @Mock private Operation exportMock;
-    @Mock private OperationParserFacade parserMock;
+    @Mock private LL1OperationParser parserMock;
     @Mock private Callable<EvaluationResult> loginTaskMock;
     @Mock private Callable<EvaluationResult> exportTaskMock;
     @Mock private EvaluationResult loginResultMock;

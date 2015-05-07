@@ -11,41 +11,24 @@ import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Prefix;
  * @since 1.0
  */
 @Data
+@Master("login")
 @EqualsAndHashCode(callSuper = false)
 public class LoginOperationParameters extends OperationParameters {
 
-    @Master @Parameter(value = "login", mandatory = true)
-    private String operationName = "login";
-
     @Prefix("--server")
-    @Parameter(
-            value = "server",
-            dependsOn = {"login", "username", "password", "organization"},
-            mandatory = true,
-            endPoint = true)
+    @Parameter(name = "server", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
     private String server;
 
     @Prefix("--username")
-    @Parameter(
-            value = "username",
-            dependsOn = {"login", "server", "password", "organization"},
-            mandatory = true,
-            endPoint = true)
+    @Parameter(name = "username", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
     private String username;
 
     @Prefix("--password")
-    @Parameter(
-            value = "password",
-            dependsOn = {"login", "server", "username", "organization"},
-            mandatory = true,
-            endPoint = true)
+    @Parameter(name = "password", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
     private String password;
 
     @Prefix("--organization")
-    @Parameter(
-            value = "organization",
-            dependsOn = {"login", "server", "username", "password"},
-            endPoint = true)
+    @Parameter(name = "organization", dependsOn = {"login", "server", "username", "password"}, terminal = true)
     private String organization;
 
 }

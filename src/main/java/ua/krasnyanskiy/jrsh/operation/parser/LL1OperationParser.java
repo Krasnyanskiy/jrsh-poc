@@ -3,12 +3,14 @@ package ua.krasnyanskiy.jrsh.operation.parser;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import ua.krasnyanskiy.jrsh.common.NoSuchOperationException;
+import ua.krasnyanskiy.jrsh.common.OperationParametersParsingException;
 import ua.krasnyanskiy.jrsh.common.ReflectionUtil;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.TokenPreconditions;
 import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 import java.util.Collection;
@@ -18,37 +20,38 @@ import static java.lang.String.format;
 
 public class LL1OperationParser implements OperationParser {
 
-    private static final String PARSE_ERROR = "Cannot parse parameters for (\u001B[1m%s\u001B[0m)";
+    private static final String ERROR_MSG = "Cannot parse parameters for (\u001B[1m%s\u001B[0m)";
 
-    /**
-     * Parses operation.
-     *
-     * @param line pure operation with parameters
-     * @return configured operation
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Operation<? extends OperationParameters> parse(String line) {
-
         String[] tokens = line.split("\\s+"); // mini lexer
-
         String operationName = tokens[0];
-        Operation<OperationParameters> operation = (Operation<OperationParameters>) OperationFactory.getOperation(operationName);
+        Operation<OperationParameters> operation =
+                (Operation<OperationParameters>) OperationFactory.getOperation(operationName);
 
-        if (operation == null)
+        /** special case for login only **/
+        if ("login".equals(operationName)
+                && tokens.length == 2
+                && TokenPreconditions.isLoginToken(tokens[1])) {
+            operation.parseParameters(tokens[1]);
+            return operation;
+        }
+
+        if (operation == null) {
             throw new NoSuchOperationException();
+        }
 
-        OperationParameters parameters = getParameters(operation, tokens);
+        OperationParameters parameters = getOperationParameters(operation, tokens);
         operation.setOperationParameters(parameters);
         return operation;
     }
 
     @SneakyThrows
-    protected OperationParameters getParameters(@NonNull Operation operation, @NonNull String[] tokens) {
-        OperationParameters parameters = null; // empty
+    protected OperationParameters getOperationParameters(@NonNull Operation operation, @NonNull String[] tokens) {
+        OperationParameters parameters = null;
         Grammar grammar = operation.getGrammar();
         Collection<Rule> rules = grammar.getRules();
-
         for (Rule rule : rules) {
             List<Token> tokens_ = rule.getTokens();
             boolean isMatchingRule = true;
@@ -83,9 +86,8 @@ public class LL1OperationParser implements OperationParser {
             }
         }
         if (parameters == null) {
-            throw new RuntimeException(format(PARSE_ERROR, tokens[0]));
+            throw new OperationParametersParsingException(format(ERROR_MSG, tokens[0]));
         }
-
         return parameters;
     }
 }

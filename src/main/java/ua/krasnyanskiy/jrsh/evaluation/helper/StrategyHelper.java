@@ -18,22 +18,13 @@ import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenPreconditions.is
  * @since 1.0
  */
 public class StrategyHelper {
-
-    /**
-     * Parses tokens and return appropriate strategy.
-     *
-     * @param args tokens
-     * @return strategy
-     */
     public static EvaluationStrategy define(@NonNull String[] args) throws IOException {
         EvaluationStrategy strategy;
         switch (args.length) {
-
             case 0: {
                 strategy = new ToolEvaluationStrategy();
                 break;
             }
-
             case 1: {
                 if (isLoginToken(args[0])) {
                     strategy = new ShellEvaluationStrategy();
@@ -46,17 +37,14 @@ public class StrategyHelper {
                 strategy = new ToolEvaluationStrategy();
                 break;
             }
-
             case 2: {
-                if ("--script".equals(args[0]) || "eval".equals(args[0])
-                        && isScriptNameToken(args[1])) {
+                if ("--script".equals(args[0]) && isScriptNameToken(args[1])) {
                     strategy = new ScriptEvaluationStrategy();
                 } else {
                     strategy = new ToolEvaluationStrategy();
                 }
                 break;
             }
-
             default: {
                 strategy = new ToolEvaluationStrategy();
             }

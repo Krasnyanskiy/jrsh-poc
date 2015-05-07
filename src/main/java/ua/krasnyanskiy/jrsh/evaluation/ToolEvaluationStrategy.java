@@ -34,16 +34,13 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
     }
 
     public void eval(@NonNull String[] tokens) throws IOException {
-
         try {
             String operation;
             if (tokens.length == 0) {
-                // we didn't provide any input
-                console.println("use \u001B[1mhelp\u001B[0m <operation>"); //
+                console.println("use \u001B[1mhelp\u001B[0m <operation>");
                 console.flush();
                 exit(1);
             }
-
             if (tokens.length > 1) {
                 if (TokenPreconditions.isLoginToken(tokens[0])) {
                     String login = "login".concat(WHITE_SPACE).concat(tokens[0]);
@@ -53,7 +50,6 @@ public class ToolEvaluationStrategy implements EvaluationStrategy {
                         console.println(result.getMessage());
                         return;
                     }
-
                     String[] tkns = Arrays.copyOfRange(tokens, 1, tokens.length);
                     operation = StringUtils.join(tkns, WHITE_SPACE);
                 } else {

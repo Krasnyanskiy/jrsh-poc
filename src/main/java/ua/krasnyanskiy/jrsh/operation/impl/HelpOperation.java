@@ -8,7 +8,7 @@ import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
+import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
@@ -72,7 +72,7 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
 
         DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
 
-        Grammar grammar = new OperationSimpleGrammar();
+        Grammar grammar = new SimpleOperationGrammar();
         Rule rule = new Rule();
 
         Token v1 = new StringToken("help", true);
@@ -150,6 +150,11 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
     @Override
     public void setOperationParameters(HelpOperationParameters parameters) {
         this.parameters = parameters;
+    }
+
+    @Override
+    public void parseParameters(String line) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

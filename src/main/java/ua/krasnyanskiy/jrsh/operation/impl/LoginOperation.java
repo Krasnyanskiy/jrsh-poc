@@ -6,8 +6,8 @@ import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.OperationSimpleGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
+import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.SshLoginToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
@@ -23,45 +23,30 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
     private final static String LOGIN_OK = "You've successfully logged in as (\u001B[1m%s\u001B[0m)";
     private final static String LOGIN_FAIL = "Login failed (\u001B[1m%s\u001B[0m)";
 
-    private LoginOperationParameters parameters;
     private Grammar grammar;
+    private LoginOperationParameters parameters;
 
-    @Override
     public Callable<EvaluationResult> eval() {
-
         return new Callable<EvaluationResult>() {
-            @Override
             public EvaluationResult call() throws Exception {
                 try {
-                    SessionFactory.createSharedSession(
-                            parameters.getServer(),
-                            parameters.getUsername(),
-                            parameters.getPassword(),
-                            parameters.getOrganization());
+                    SessionFactory.createSharedSession(parameters.getServer(), parameters.getUsername(), parameters.getPassword(), parameters.getOrganization());
                     return new EvaluationResult(format(LOGIN_OK, parameters.getUsername()), ResultCode.SUCCESS);
                 } catch (Exception err) {
                     String message = err.getMessage();
-                    if (message.contains("UnknownHostException")) { // don't want to parse it
-                        message = "Wrong server URL";
-                    }
-                    return new EvaluationResult(format(LOGIN_FAIL,
-                            message.equals("Not Found") ? "Wrong parameters" : message),
-                            ResultCode.FAILED);
+                    return new EvaluationResult(format(LOGIN_FAIL, message.equals("Not Found") ? "Wrong parameters" : message), ResultCode.FAILED);
                 }
             }
         };
     }
 
-    @Override
     public Grammar getGrammar() {
         if (grammar != null) {
             return grammar;
         } else {
-            // fixme
-            Grammar grammar = new OperationSimpleGrammar();
+            grammar = /*fixme*/new SimpleOperationGrammar();
 
-            // hardcode
-
+            /** Hardcode **/
             Token sshLogin = new SshLoginToken("login-value", true);
             Token login = new StringToken("login", true);
             Token url = new StringToken("--server", true);
@@ -79,28 +64,61 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
             grammar.addRule(new Rule(login, password, passwordValue, username, usernameValue, url, urlValue));
             grammar.addRule(new Rule(login, password, passwordValue, url, urlValue, username, usernameValue));
 
-            this.grammar = grammar;
-            return this.grammar;
+            return grammar;
         }
     }
 
-    @Override
     public String getDescription() {
         return "\t\u001B[1mLogin\u001B[0m makes a JRS REST client session which is used for interaction wih server.\n\tUsage: \u001B[37mlogin\u001B[0m --server <url> --username <name> --password <pass>";
     }
 
-    @Override
     public Class<LoginOperationParameters> getParametersType() {
         return LoginOperationParameters.class;
     }
 
-    @Override
     public void setOperationParameters(LoginOperationParameters parameters) {
         this.parameters = parameters;
     }
 
     @Override
-    public void setConsole(ConsoleReader console) {
-        // ignored
+    public void parseParameters(String line) {
+        String[] parts = line.split("[@]");
+
+        String server = null;
+        String username = null;
+        String organization = null;
+        String password = null;
+
+        if (parts.length == 2) {
+            server = parts[1].trim();
+            parts = parts[0].split("[%]");
+            if (parts.length == 2) {
+                password = parts[1].trim();
+                parts = parts[0].split("[|]");
+                if (parts.length == 2) {
+                    username = parts[0].trim();
+                    organization = parts[1].trim();
+                } else if (parts.length == 1) {
+                    username = parts[0].trim();
+                }
+            } else if (parts.length == 1) {
+                parts = parts[0].split("[|]");
+                if (parts.length == 2) {
+                    username = parts[0].trim();
+                    organization = parts[1].trim();
+                } else {
+                    username = parts[0].trim();
+                }
+            }
+        }
+
+        parameters = new LoginOperationParameters();
+
+        parameters.setServer(server);
+        parameters.setUsername(username);
+        parameters.setPassword(password);
+        parameters.setOrganization(organization);
     }
+
+    public void setConsole(ConsoleReader console) {/*fixme*/}
 }

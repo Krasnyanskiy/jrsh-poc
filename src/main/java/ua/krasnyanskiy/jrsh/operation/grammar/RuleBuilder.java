@@ -6,7 +6,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
@@ -30,13 +29,15 @@ public class RuleBuilder {
     public Set<Rule> buildRules(OperationParameters param) throws Exception {
 
         Graph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
-        Map<String, Pair<Token, Token>> tokens = new HashMap<>();
+        Map<String, Pair<Token, Token>> tokens = new HashMap<>(); // (prefix, param)
         Class<? extends OperationParameters> clazz = param.getClass();
         Field[] fields = clazz.getDeclaredFields();
 
         Token root = null;
 
-        /*** Vertex building ***/
+        //
+        // Vertex building
+        //
         for (Field field : fields) {
             Parameter paramMeta = field.getAnnotation(Parameter.class);
             Prefix prefixMeta = field.getAnnotation(Prefix.class);
@@ -48,7 +49,7 @@ public class RuleBuilder {
                     graph.addVertex(tknPrefix);
                 }
                 for (String val : paramMeta.value()) {
-                    boolean isEndPoint = paramMeta.endPoint();
+                    boolean isEndPoint = paramMeta.terminal();
                     Token tknValue = paramMeta.token()
                             .getConstructor(String.class, boolean.class, boolean.class)
                             .newInstance(val, paramMeta.mandatory(), isEndPoint);
@@ -64,7 +65,9 @@ public class RuleBuilder {
             }
         }
 
-        /*** Dependencies resolving (Setup edges) ***/
+        //
+        // Dependencies resolving (Setup edges)
+        //
         for (Field field : fields) {
             Parameter paramMeta = field.getAnnotation(Parameter.class);
             if (paramMeta != null) {
@@ -89,10 +92,11 @@ public class RuleBuilder {
             }
         }
 
-        /** Rules building **/
-
+        //
+        // Rules building
+        //
         if (root == null) {
-            throw new RuntimeException("WTF?");
+            throw new RuntimeException("Oops!");
         }
 
         KShortestPaths<Token, TokenEdge<Token>> paths = new KShortestPaths<>(graph, root, 1000);
@@ -114,8 +118,6 @@ public class RuleBuilder {
                 }
             }
         }
-
-        //return graph;
         return rules;
     }
 

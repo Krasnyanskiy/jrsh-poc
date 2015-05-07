@@ -1,0 +1,20 @@
+# ----------------
+# my_simple_script
+# ----------------
+
+# transactional=true
+
+# LOGIN
+login superuser%superuser@localhost:8080/jasperserver-pro
+
+
+# EXPORT
+export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources/ex_.zip with-user-roles with-include-monitoring-events
+
+
+# HELP
+help export
+
+
+# HELP
+help login

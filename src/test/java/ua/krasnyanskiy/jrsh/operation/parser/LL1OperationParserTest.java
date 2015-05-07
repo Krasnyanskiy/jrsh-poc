@@ -14,7 +14,7 @@
 //    @Test
 //    public void shouldParseOperationParameters() {
 //        Operation export = new ExportOperation();
-//        OperationParameters params = parser.getParameters(export, new String[]{"export", "repository", "/public/Samples"});
+//        OperationParameters params = parser.getOperationParameters(export, new String[]{"export", "repository", "/public/Samples"});
 //        assertThat(params).isNotNull();
 //    }
 //}
