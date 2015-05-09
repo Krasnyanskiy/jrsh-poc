@@ -1,23 +1,26 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
+import lombok.EqualsAndHashCode;
 import ua.krasnyanskiy.jrsh.completion.CustomFileCompleter;
 
+@EqualsAndHashCode(exclude = {"mandatory", "terminal"})
 public class FileToken implements Token {
 
-    private String tokenName = "filePath";
+    private String name = "filePath";
+    //private String value;
     private boolean mandatory;
-    private boolean endPoint;
+    private boolean terminal;
 
-    public FileToken(String tokenName, boolean mandatory) {
-        this.tokenName = tokenName;
+    public FileToken(String name, boolean mandatory) {
+        this.name = name;
         this.mandatory = mandatory;
     }
 
-    public FileToken(String tokenName, boolean mandatory, boolean endPoint) {
-        this.tokenName = tokenName;
+    public FileToken(String name, boolean mandatory, boolean terminal) {
+        this.name = name;
         this.mandatory = mandatory;
-        this.endPoint = endPoint;
+        this.terminal = terminal;
     }
 
     @Override
@@ -32,7 +35,13 @@ public class FileToken implements Token {
 
     @Override
     public String getName() {
-        return tokenName;
+        return name;
+    }
+
+    @Override
+    public String getValue() {
+        //return value;
+        return "";
     }
 
     @Override
@@ -46,8 +55,8 @@ public class FileToken implements Token {
     }
 
     @Override
-    public boolean isEndPoint() {
-        return endPoint;
+    public boolean isTerminal() {
+        return terminal;
     }
 }
 

@@ -3,14 +3,14 @@ package ua.krasnyanskiy.jrsh.operation.grammar.token;
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
 
-public class SshLoginToken implements Token {
+public class ConnectionStringToken extends StringToken {
 
-    private String tknName;
-    private final boolean mandatory;
+    public ConnectionStringToken(String name, boolean mandatory, boolean terminal) {
+        super(name, mandatory, terminal);
+    }
 
-    public SshLoginToken(String tknName, boolean mandatory) {
-        this.tknName = tknName;
-        this.mandatory = mandatory;
+    public ConnectionStringToken(String name, String value, boolean mandatory, boolean terminal) {
+        super(name, value, mandatory, terminal);
     }
 
     @Override
@@ -25,7 +25,12 @@ public class SshLoginToken implements Token {
 
     @Override
     public String getName() {
-        return tknName;
+        return name;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -39,7 +44,7 @@ public class SshLoginToken implements Token {
     }
 
     @Override
-    public boolean isEndPoint() {
+    public boolean isTerminal() {
         return true;
     }
 }

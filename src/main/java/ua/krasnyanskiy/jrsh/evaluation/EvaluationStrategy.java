@@ -12,7 +12,7 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
  */
 public interface EvaluationStrategy {
 
-    void eval(String[] tokens) throws Exception;
+    void eval(String[] args) throws Exception;
 
     void setOperationParser(OperationParser parser);
 

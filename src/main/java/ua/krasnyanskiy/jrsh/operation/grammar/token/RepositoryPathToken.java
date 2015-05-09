@@ -3,39 +3,35 @@ package ua.krasnyanskiy.jrsh.operation.grammar.token;
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.completion.StaticRepositoryCompleter;
 
-public class RepositoryPathToken implements Token {
+public class RepositoryPathToken extends ValueToken {
 
-    private String tokenName = "repositoryPath";
-    private boolean mandatory;
-    private boolean endPoint;
-
-    public RepositoryPathToken(String tokenName, boolean mandatory) {
-        this.tokenName = tokenName;
-        this.mandatory = mandatory;
+    public RepositoryPathToken(String name, boolean mandatory, boolean terminal) {
+        super(name, mandatory, terminal);
     }
 
-    public RepositoryPathToken(String tknName, boolean mandatory, boolean endPoint) {
-        this.endPoint = endPoint;
-        this.tokenName = tknName;
-        this.mandatory = mandatory;
+    public RepositoryPathToken(String name, String value, boolean mandatory, boolean terminal) {
+        super(name, value, mandatory, terminal);
     }
 
     @Override
     public Completer getCompleter() {
-        //return new RepositoryCompleter();
-        //return new EmptyCompleter();
         //return new MockRepositoryCompleter();
         return new StaticRepositoryCompleter();
     }
 
     @Override
     public boolean match(String name) {
-        return /*name.startsWith("/") && (!name.endsWith("/"))*/true;
+        return true; // fixme
     }
 
     @Override
     public String getName() {
-        return tokenName;
+        return name;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -45,12 +41,12 @@ public class RepositoryPathToken implements Token {
 
     @Override
     public boolean isValueToken() {
-        return false;
+        return true;
     }
 
     @Override
-    public boolean isEndPoint() {
-        return endPoint;
+    public boolean isTerminal() {
+        return terminal;
     }
 }
 

@@ -54,10 +54,10 @@ public class RuleBuilderTest {
     @Data
     @Master("super")
     @EqualsAndHashCode(callSuper = false)
-    private class Fake1OperationParameters extends OperationParameters {
-        //@Parameter(value = "", mandatory = true, terminal = true)
+    private class Fake1OperationParameters extends AbstractOperationParameters {
+        //@Parameter(tokenValue = "", mandatory = true, terminal = true)
         //private String status;
-        @Prefix("--what?") @Parameter(value = "some", dependsOn = "super", mandatory = true, terminal = true)
+        @Prefix("--what?") @Parameter(tokenValue = "some", dependsOn = "super", mandatory = true, terminal = true)
         private String some;
     }
 }

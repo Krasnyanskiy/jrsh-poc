@@ -1,69 +1,55 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
-import jline.console.ConsoleReader;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.NonNull;
-import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
-import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.lang.String.format;
+import static java.lang.System.exit;
 
 /**
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
-public class ScriptEvaluationStrategy implements EvaluationStrategy {
+@SuppressFBWarnings({"DM_EXIT"})
+public class ScriptEvaluationStrategy extends AbstractEvaluationStrategy {
 
-    private static final String COMMON_ERROR_MSG = "error in line [\u001B[31m%s\u001B[0m] cause: [%s]";
-    private static final String IO_ERROR_MSG = "Cannot read script file";
-
-    private OperationParser parser;
-    private ConsoleReader console;
-
-    public ScriptEvaluationStrategy() {
-        this.console = new ConsoleBuilder().build();
-    }
+    private static final String ERROR_MSG = "error: line [\u001B[31m%s\u001B[0m], cause: [%s]";
+    private static final String IO_ERROR_MSG = "error: Cannot read script (\u001B[1m%s\u001B[0m)";
 
     @Override
-    public void eval(@NonNull String[] tokens) throws IOException {
-
-        int lineCounter = 1;
-        String scriptName = tokens[1];
-        File file = new File(scriptName);
-
+    public void eval(@NonNull String[] args) throws IOException {
+        String scriptName = args[1];
+        int counter = 1; // line counter
         try {
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                for (String line; (line = br.readLine()) != null; lineCounter++) {
-                    if (line.startsWith("#") || line.trim().isEmpty()) {
-                        continue; // skip comment
-                    }
-                    try {
-                        Operation<? extends OperationParameters> op = parser.parse(line);
-                        EvaluationResult res = op.eval().call();
-                        console.println(res.getMessage());
-                    } catch (Exception err) {
-                        console.println(format(COMMON_ERROR_MSG, lineCounter, err.getMessage()));
-                        console.flush();
-                        System.exit(1);
-                    } finally {
-                        console.flush();
+            Path path = Paths.get(scriptName);
+            try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                for (String line; (line = br.readLine()) != null; counter++) {
+                    if (!line.startsWith("#") && !line.trim().isEmpty()) {
+                        EvaluationResult res = parseAndEvaluate(line);
+                        if (res.getCode() == ResultCode.FAILED) {
+                            console.println(format(ERROR_MSG, counter, res.getMessage()));
+                            console.flush();
+                            // let VM die
+                            exit(1);
+                        } else {
+                            console.println(res.getMessage());
+                            console.flush();
+                        }
                     }
                 }
             }
-        } catch (IOException err) {
-            console.println(IO_ERROR_MSG);
+        } catch (IOException e) {
+            console.println(format(IO_ERROR_MSG, scriptName));
+            console.flush();
         }
-    }
-
-    @Override
-    public void setOperationParser(OperationParser parser) {
-        this.parser = parser;
     }
 }

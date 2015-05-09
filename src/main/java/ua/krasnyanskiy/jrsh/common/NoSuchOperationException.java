@@ -1,8 +1,9 @@
 package ua.krasnyanskiy.jrsh.common;
 
-public class NoSuchOperationException extends RuntimeException {
+import static java.lang.String.format;
 
-    public NoSuchOperationException() {
-        super("No such operation");
+public class NoSuchOperationException extends ParseOperationException {
+    public NoSuchOperationException(String name) {
+        super(format("No such operation (%s)", name));
     }
 }

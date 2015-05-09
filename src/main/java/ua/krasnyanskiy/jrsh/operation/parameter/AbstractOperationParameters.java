@@ -5,6 +5,6 @@ import lombok.Data;
 import ua.krasnyanskiy.jrsh.common.SessionFactory;
 
 @Data
-public abstract class OperationParameters {
+public abstract class AbstractOperationParameters {
     private Session session = SessionFactory.getSharedSession();
 }

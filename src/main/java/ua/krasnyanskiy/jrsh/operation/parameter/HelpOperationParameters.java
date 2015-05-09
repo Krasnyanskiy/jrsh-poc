@@ -6,12 +6,12 @@ import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class HelpOperationParameters extends OperationParameters {
+public class HelpOperationParameters extends AbstractOperationParameters {
 
-    @Parameter(value = "help", mandatory = true)
+    @Parameter(tokenName = "help", mandatory = true)
     private String operationName = "help";
 
-    @Parameter(dependsOn = "help", value = {"export", "login"})
+    @Parameter(tokenName = "context", tokenValue = {"export", "login"}, dependsOn = "help")
     private String context;
 
     // fixme (lombok doesn't work)

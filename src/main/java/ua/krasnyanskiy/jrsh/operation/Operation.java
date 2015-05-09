@@ -1,9 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation;
 
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
-
-import java.util.concurrent.Callable;
+import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 
 /**
  * Base interface for all operations in the application.
@@ -11,9 +9,9 @@ import java.util.concurrent.Callable;
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
-public interface Operation<P extends OperationParameters> extends ConsoleAware {
+public interface Operation<P extends AbstractOperationParameters> {
 
-    Callable<EvaluationResult> eval();
+    EvaluationResult eval();
 
     Grammar getGrammar();
 
@@ -22,7 +20,5 @@ public interface Operation<P extends OperationParameters> extends ConsoleAware {
     Class<P> getParametersType();
 
     void setOperationParameters(P parameters);
-
-    void parseParameters(String line);
 
 }

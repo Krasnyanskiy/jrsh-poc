@@ -10,7 +10,7 @@ import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
+import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Master;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Prefix;
@@ -26,11 +26,11 @@ import java.util.Set;
 public class RuleBuilder {
     private Set<Token> mandatoryTokens = new HashSet<>();
 
-    public Set<Rule> buildRules(OperationParameters param) throws Exception {
+    public Set<Rule> buildRules(AbstractOperationParameters param) throws Exception {
 
         Graph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
         Map<String, Pair<Token, Token>> tokens = new HashMap<>(); // (prefix, param)
-        Class<? extends OperationParameters> clazz = param.getClass();
+        Class<? extends AbstractOperationParameters> clazz = param.getClass();
         Field[] fields = clazz.getDeclaredFields();
 
         Token root = null;
@@ -48,7 +48,7 @@ public class RuleBuilder {
                     tknPrefix = new StringToken(prefixMeta.value(), paramMeta.mandatory());
                     graph.addVertex(tknPrefix);
                 }
-                for (String val : paramMeta.value()) {
+                for (String val : paramMeta.tokenValue()) {
                     boolean isEndPoint = paramMeta.terminal();
                     Token tknValue = paramMeta.token()
                             .getConstructor(String.class, boolean.class, boolean.class)
@@ -71,7 +71,7 @@ public class RuleBuilder {
         for (Field field : fields) {
             Parameter paramMeta = field.getAnnotation(Parameter.class);
             if (paramMeta != null) {
-                for (String val : paramMeta.value()) {
+                for (String val : paramMeta.tokenValue()) {
                     Pair<Token, Token> target = tokens.get(val);
                     Token targetTkn = target.getLeft();
                     Token prefixTargetTkn = target.getRight();
@@ -106,7 +106,7 @@ public class RuleBuilder {
 
         for (Token endPoint : vertexes) {
             if (!endPoint.equals(root)) {
-                if (endPoint.isEndPoint()) {
+                if (endPoint.isTerminal()) {
                     List<GraphPath<Token, TokenEdge<Token>>> paths_ = paths.getPaths(endPoint);
 
                     for (GraphPath<Token, TokenEdge<Token>> path : paths_) {

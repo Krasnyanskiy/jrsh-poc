@@ -2,7 +2,6 @@
 # my_simple_script
 # ----------------
 
-# transactional=true
 
 # LOGIN
 login superuser%superuser@localhost:8080/jasperserver-pro

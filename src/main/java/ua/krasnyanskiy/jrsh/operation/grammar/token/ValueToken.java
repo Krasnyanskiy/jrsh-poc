@@ -3,18 +3,29 @@ package ua.krasnyanskiy.jrsh.operation.grammar.token;
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
 
+/**
+ * Example: /public/Samples/abc - is a tokenValue token without any prefix of key
+ */
 public class ValueToken extends StringToken {
 
-    public ValueToken(String tknName) {
-        super(tknName);
+    public ValueToken(String name) {
+        super(name);
     }
 
-    public ValueToken(String tknName, boolean mandatory) {
-        super(tknName, mandatory);
+    public ValueToken(String name, boolean mandatory) {
+        super(name, mandatory);
     }
 
-    public ValueToken(String tknName, boolean mandatory, boolean endPoint) {
-        super(tknName, mandatory, endPoint);
+    public ValueToken(String name, String value, boolean mandatory) {
+        super(name, value, mandatory);
+    }
+
+    public ValueToken(String name, boolean mandatory, boolean terminal) {
+        super(name, mandatory, terminal);
+    }
+
+    public ValueToken(String name, String value, boolean mandatory, boolean terminal) {
+        super(name, value, mandatory, terminal);
     }
 
     @Override
@@ -33,6 +44,11 @@ public class ValueToken extends StringToken {
     }
 
     @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
     public boolean match(String tName) {
         return true;
     }
@@ -43,7 +59,7 @@ public class ValueToken extends StringToken {
     }
 
     @Override
-    public boolean isEndPoint() {
-        return super.isEndPoint();
+    public boolean isTerminal() {
+        return super.isTerminal();
     }
 }

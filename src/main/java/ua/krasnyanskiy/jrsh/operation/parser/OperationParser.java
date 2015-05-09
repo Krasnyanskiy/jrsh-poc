@@ -1,7 +1,8 @@
 package ua.krasnyanskiy.jrsh.operation.parser;
 
+import ua.krasnyanskiy.jrsh.common.ParseOperationException;
 import ua.krasnyanskiy.jrsh.operation.Operation;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
+import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -9,6 +10,6 @@ import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
  */
 public interface OperationParser {
 
-    Operation<? extends OperationParameters> parse(String line);
+    Operation<? extends AbstractOperationParameters> parse(String line) throws ParseOperationException;
 
 }

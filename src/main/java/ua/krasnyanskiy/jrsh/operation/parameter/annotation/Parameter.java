@@ -14,19 +14,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Parameter {
 
-    boolean mandatory() default false;
+    String tokenName() default "";
+
+    String[] tokenValue() default {};
 
     String[] dependsOn() default {};
 
+    boolean mandatory() default false;
+
     Class<? extends Token> token() default ValueToken.class;
-
-    Class<? extends ParameterConverter> converter() default ParameterConverter.DefaultParameterConverter.class;
-
-    String[] value() default {};
 
     boolean terminal() default false;
 
-    boolean interconnected() default false;
+    Class<? extends ParameterConverter> converter() default ParameterConverter.DefaultParameterConverter.class;
 
-    String name() default "";
+    //boolean interconnected() default false;
 }

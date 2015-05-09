@@ -1,11 +1,13 @@
 package ua.krasnyanskiy.jrsh;
 
 import org.junit.Test;
+import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.ExportOperationParameters;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
+import ua.krasnyanskiy.jrsh.operation.parameter.LoginOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,19 +35,27 @@ public class Reflection {
         assertThat(parameter.getContext()).isEqualTo("all");
     }
 
+    @Test
+    //@Ignore
+    public void shouldReturnProperSetter() {
+        Method[] methods = LoginOperationParameters.class.getMethods();
+        Method setter = ua.krasnyanskiy.jrsh.common.Reflection.findSetter(methods, "connectionstring");
+        assertThat(setter).isNotNull();
+    }
+
     /**
      * @param param     given parameter
-     * @param valueName annotation parameter `value`
-     * @param val       value of the field
+     * @param valueName annotation parameter `tokenValue`
+     * @param val       tokenValue of the field
      * @throws IllegalAccessException
      */
-    public void setField(OperationParameters param, String valueName, String val) throws IllegalAccessException {
-        Class<? extends OperationParameters> paramClass = param.getClass();
+    public void setField(AbstractOperationParameters param, String valueName, String val) throws IllegalAccessException {
+        Class<? extends AbstractOperationParameters> paramClass = param.getClass();
         Field[] fields = paramClass.getDeclaredFields();
         for (Field f : fields) {
             Parameter meta = f.getAnnotation(Parameter.class);
             if (meta != null) { // exclude $this
-                String[] tokens = meta.value();
+                String[] tokens = meta.tokenValue();
                 if (asList(tokens).contains(valueName)) {
                     f.setAccessible(true);
                     f.set(param, val);
@@ -63,7 +73,7 @@ public class Reflection {
         for (Field field : fields) {
             Parameter meta = field.getAnnotation(Parameter.class);
             if (meta != null) { // exclude $this
-                String[] tokens = meta.value();
+                String[] tokens = meta.tokenValue();
                 tokensSet.addAll(asList(tokens));
             }
         }

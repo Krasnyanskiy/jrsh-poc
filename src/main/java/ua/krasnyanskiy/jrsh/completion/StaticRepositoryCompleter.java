@@ -1,5 +1,6 @@
 package ua.krasnyanskiy.jrsh.completion;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jline.console.completer.Completer;
 import ua.krasnyanskiy.jrsh.common.RepositoryContentReceiver;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+@SuppressFBWarnings({"MS_PKGPROTECT"})
 public class StaticRepositoryCompleter implements Completer {
 
     public static List<String> resources;

@@ -4,41 +4,61 @@ import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"mandatory", "terminal"})
 public class StringToken implements Token {
 
-    private String tknName;
-    private boolean mandatory;
-    private boolean endPoint;
+    protected String name;
+    protected String value;
+    protected boolean mandatory;
+    protected boolean terminal;
 
-    public StringToken(String tknName) {
-        this.tknName = tknName;
+    public StringToken(String name) {
+        this.name = name;
     }
 
-    public StringToken(String tknName, boolean mandatory) {
-        this.tknName = tknName;
+    public StringToken(String name, boolean mandatory) {
+        this.name = name;
         this.mandatory = mandatory;
     }
 
-    public StringToken(String tknName, boolean mandatory, boolean endPoint) {
-        this.tknName = tknName;
+    public StringToken(String name, String value, boolean mandatory) {
+        this.name = name;
+        this.value = value;
         this.mandatory = mandatory;
-        this.endPoint = endPoint;
+    }
+
+    public StringToken(String name, boolean mandatory, boolean terminal) {
+        this.name = name;
+        this.mandatory = mandatory;
+        this.terminal = terminal;
+    }
+
+    public StringToken(String name, String value, boolean mandatory, boolean terminal) {
+        this.name = name;
+        this.value = value;
+        this.mandatory = mandatory;
+        this.terminal = terminal;
     }
 
     @Override
     public Completer getCompleter() {
-        return new StringsCompleter(tknName);
+        return new StringsCompleter(/*name*/value);
     }
 
     @Override
     public boolean match(String tName) {
-        return tknName.equals(tName);
+        //return name.equals(tName);
+        return value.equals(tName);
     }
 
     @Override
     public String getName() {
-        return tknName;
+        return name;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -52,12 +72,12 @@ public class StringToken implements Token {
     }
 
     @Override
-    public boolean isEndPoint() {
-        return endPoint;
+    public boolean isTerminal() {
+        return terminal;
     }
 
     @Override
     public String toString() {
-        return tknName;
+        return name;
     }
 }

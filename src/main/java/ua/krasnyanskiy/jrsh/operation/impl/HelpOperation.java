@@ -1,27 +1,24 @@
 package ua.krasnyanskiy.jrsh.operation.impl;
 
-import jline.console.ConsoleReader;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
+import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
-import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
+import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
 import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.HelpOperationParameters;
-import ua.krasnyanskiy.jrsh.operation.parameter.OperationParameters;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
-
-import static ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode.SUCCESS;
 
 public class HelpOperation implements Operation<HelpOperationParameters> {
 
@@ -29,55 +26,49 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
     private Grammar grammar;
 
     public HelpOperation() {
+        setGrammar();
     }
 
-    public HelpOperation(HelpOperationParameters parameters) {
-        this.parameters = parameters;
-    }
+//    public HelpOperation(HelpOperationParameters parameters) {
+//        this.parameters = parameters;
+//        setGrammar();
+//    }
 
     @Override
-    public Callable<EvaluationResult> eval() {
-        return new Callable<EvaluationResult>() {
-            @Override
-            public EvaluationResult call() throws Exception {
-                StringBuilder builder = new StringBuilder();
-                String context = parameters.getContext();
-                if (context != null) {
-                    Operation op = OperationFactory.getOperation(context);
-                    builder.append(op.getDescription()).append("\n");
-                } else {
-                    // fixme -> move to cfg file
-                    builder.append("\nUsage (Tool):   \u001B[37mjrsh\u001B[0m username%password@url <operation> <parameters>\n");
-                    builder.append("Usage (Shell):  \u001B[37mjrsh\u001B[0m username%password@url\n");
-                    builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m script.jrs\n");
-                    builder.append("\nAvailable operations: \n");
+    public EvaluationResult eval() {
+        StringBuilder builder = new StringBuilder();
+        String context = parameters.getContext();
 
-                    List<Operation<? extends OperationParameters>> operations =
-                            OperationFactory.getOperations();
-                    for (Operation op : operations) {
-                        builder.append(op.getDescription()).append("\n");
-                    }
-                }
-                return new EvaluationResult(builder.toString(), SUCCESS);
+        if (context != null) {
+            Operation op = OperationFactory.getOperation(context);
+            builder.append(op.getDescription()).append("\n");
+        } else {
+            builder.append("\nUsage (Tool):   \u001B[37mjrsh\u001B[0m username%password@url <operation> <parameters>\n");
+            builder.append("Usage (Shell):  \u001B[37mjrsh\u001B[0m username%password@url\n");
+            builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m script.jrs\n");
+            builder.append("\nAvailable operations: \n");
+            List<Operation<? extends AbstractOperationParameters>> operations = OperationFactory.getOperations();
+            for (Operation op : operations) {
+                builder.append(op.getDescription()).append("\n");
             }
-        };
+        }
+        return new EvaluationResult(builder.toString(), ResultCode.SUCCESS, this);
     }
 
     @Override
     public Grammar getGrammar() {
+        return grammar;
+    }
 
-        if (grammar != null) {
-            return grammar;
-        }
-
+    protected void setGrammar() {
         DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
 
         Grammar grammar = new SimpleOperationGrammar();
         Rule rule = new Rule();
 
-        Token v1 = new StringToken("help", true);
-        Token v2 = new StringToken("export", false);
-        Token v3 = new StringToken("login", false);
+        Token v1 = new StringToken("help", "help", true, true);
+        Token v2 = new StringToken("context", "export", false, true);
+        Token v3 = new StringToken("context", "login", false, true);
 
         // Vertexes
         graph.addVertex(v1);
@@ -86,6 +77,7 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
 
         // Edges
         // graph.addEdge(v1, v1);
+        grammar.addRule(new Rule(v1)); // <help>
         graph.addEdge(v1, v2);
         graph.addEdge(v1, v3);
 
@@ -134,12 +126,13 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
             }
         }
 
-        return this.grammar = grammar; // fixme
+        this.grammar = grammar;
     }
 
     @Override
     public String getDescription() {
-        return "\t\u001B[1mHelp\u001B[0m shows information about JRSH and its operations.\n\tUsage: \u001B[37mhelp\u001B[0m <operation>";
+        return "\t\u001B[1mHelp\u001B[0m shows information about JRSH and its operations." +
+                "\n\tUsage: \u001B[37mhelp\u001B[0m <operation>";
     }
 
     @Override
@@ -150,15 +143,5 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
     @Override
     public void setOperationParameters(HelpOperationParameters parameters) {
         this.parameters = parameters;
-    }
-
-    @Override
-    public void parseParameters(String line) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setConsole(ConsoleReader console) {
-        // ignored
     }
 }

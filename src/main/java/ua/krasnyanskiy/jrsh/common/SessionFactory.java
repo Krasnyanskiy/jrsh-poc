@@ -7,7 +7,7 @@ import com.jaspersoft.jasperserver.jaxrs.client.core.SessionStorage;
 import lombok.NonNull;
 
 /**
- * Used to build REST Client session.
+ * Used for REST Client session building.
  *
  * @author Alexander Krasnyanskiy
  * @since 1.0
@@ -22,6 +22,7 @@ public class SessionFactory {
      * @return session
      */
     public static Session getSharedSession() {
+        //checkState(SHARED_SESSION != null, "Session cannot be empty.");
         return SHARED_SESSION;
     }
 

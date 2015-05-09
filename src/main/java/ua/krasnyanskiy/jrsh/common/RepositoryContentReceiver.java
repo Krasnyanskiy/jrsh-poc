@@ -107,12 +107,12 @@ public class RepositoryContentReceiver {
     }
 
     @Data
-    public class Response {
+    public static class Response {
         private boolean success;
         private Map<String, Boolean> lookups;
     }
 
-    public class Connector {
+    public static class Connector {
         public Session connect() {
             return SessionFactory.getSharedSession();
         }

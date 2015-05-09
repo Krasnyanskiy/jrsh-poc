@@ -13,22 +13,61 @@ import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Prefix;
 @Data
 @Master("login")
 @EqualsAndHashCode(callSuper = false)
-public class LoginOperationParameters extends OperationParameters {
+public class LoginOperationParameters extends AbstractOperationParameters {
 
     @Prefix("--server")
-    @Parameter(name = "server", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "server", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
     private String server;
 
     @Prefix("--username")
-    @Parameter(name = "username", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "username", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
     private String username;
 
     @Prefix("--password")
-    @Parameter(name = "password", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "password", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
     private String password;
 
     @Prefix("--organization")
-    @Parameter(name = "organization", dependsOn = {"login", "server", "username", "password"}, terminal = true)
+    @Parameter(tokenName = "organization", dependsOn = {"login", "server", "username", "password"}, terminal = true)
     private String organization;
 
+    @Parameter(tokenName = "connectionString", dependsOn = "login", terminal = true)
+    private String connectionString;
+
+    public void setConnectionString(String line) {
+        String[] parts = line.split("[@]");
+
+        String server = null;
+        String username = null;
+        String organization = null;
+        String password = null;
+
+        if (parts.length == 2) {
+            server = parts[1].trim();
+            parts = parts[0].split("[%]");
+            if (parts.length == 2) {
+                password = parts[1].trim();
+                parts = parts[0].split("[|]");
+                if (parts.length == 2) {
+                    username = parts[0].trim();
+                    organization = parts[1].trim();
+                } else if (parts.length == 1) {
+                    username = parts[0].trim();
+                }
+            } else if (parts.length == 1) {
+                parts = parts[0].split("[|]");
+                if (parts.length == 2) {
+                    username = parts[0].trim();
+                    organization = parts[1].trim();
+                } else {
+                    username = parts[0].trim();
+                }
+            }
+        }
+
+        this.setServer(server);
+        this.setUsername(username);
+        this.setPassword(password);
+        this.setOrganization(organization);
+    }
 }

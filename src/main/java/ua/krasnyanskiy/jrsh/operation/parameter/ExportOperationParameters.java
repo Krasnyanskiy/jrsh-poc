@@ -7,8 +7,8 @@ import ua.krasnyanskiy.jrsh.operation.grammar.token.FileToken;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.RepositoryPathToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Master;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
-import ua.krasnyanskiy.jrsh.operation.parameter.converter.ExportParameterConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,26 +21,59 @@ import java.util.List;
 @Data
 @Master(value = "export")
 @EqualsAndHashCode(callSuper = false)
-public class ExportOperationParameters extends OperationParameters {
+public class ExportOperationParameters extends AbstractOperationParameters {
 
-    @Parameter(name = "ctx", value = {"all", "role", "user", "repository"}, dependsOn = "export", mandatory = true)
+    @Parameter(tokenName = "context", tokenValue = {"all", "role", "user", "repository"}, dependsOn = "export", mandatory = true)
     private String context;
 
-    @Parameter(name = "repo_path", dependsOn = "repository", token = RepositoryPathToken.class, terminal = true)
+    @Parameter(tokenName = "repositoryPath", dependsOn = "repository", token = RepositoryPathToken.class, terminal = true)
     private String repositoryPath;
 
-    @Parameter(name = "to", dependsOn = "repositoryPath")
+    @Parameter(tokenName = "to", dependsOn = "repositoryPath")
     private boolean to;
 
-    @Parameter(name = "file_path", dependsOn = "to", token = FileToken.class, terminal = true)
+    @Parameter(tokenName = "filePath", dependsOn = "to", token = FileToken.class, terminal = true)
     private String filePath;
 
-    @Parameter(dependsOn = "user")
-    private List<String> users;
+    @Parameter(tokenName = "withUserRoles", tokenValue = "with-user-roles", dependsOn = {"repository", "filePath"})
+    public String withUserRoles;
 
-    @Parameter(dependsOn = "role")
-    private List<String> roles;
+    @Parameter(tokenName = "withRepositoryPermissions", tokenValue = "with-repository-permissions", dependsOn = {"repository", "filePath"})
+    public String withRepositoryPermissions;
 
-    @Parameter(value = {"with-user-roles", "with-repository-permissions", "with-include-access-events", "with-include-audit-events", "with-include-monitoring-events"}, dependsOn = {"repository", "filePath"}, converter = ExportParameterConverter.class, terminal = true)
-    private List<ExportParameter> exportParameters;
+    @Parameter(tokenName = "withIncludeAccessEvents", tokenValue = "with-include-access-events", dependsOn = {"repository", "filePath"})
+    public String withIncludeAccessEvents;
+
+    @Parameter(tokenName = "withIncludeAuditEvents", tokenValue = "with-include-audit-events", dependsOn = {"repository", "filePath"})
+    public String withIncludeAuditEvents;
+
+    @Parameter(tokenName = "withIncludeMonitoringEvents", tokenValue = "with-include-monitoring-events", dependsOn = {"repository", "filePath"})
+    public String withIncludeMonitoringEvents;
+
+    private List<ExportParameter> exportParameters = new ArrayList<>();
+
+    public void setTo(String ignored) {
+        this.to = true;
+    }
+
+    public void setWithUserRoles(String ignored) {
+        exportParameters.add(ExportParameter.ROLE_USERS);
+    }
+
+    public void setWithRepositoryPermissions(String ignored) {
+        exportParameters.add(ExportParameter.REPOSITORY_PERMISSIONS);
+    }
+
+    public void setWithIncludeMonitoringEvents(String ignored) {
+        exportParameters.add(ExportParameter.INCLUDE_MONITORING_EVENTS);
+    }
+
+    public void setWithIncludeAccessEvents(String ignored) {
+        exportParameters.add(ExportParameter.INCLUDE_ACCESS_EVENTS);
+    }
+
+    public void setWithIncludeAuditEvents(String ignored) {
+        exportParameters.add(ExportParameter.INCLUDE_AUDIT_EVENTS);
+    }
+
 }

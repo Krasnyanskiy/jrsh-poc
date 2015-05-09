@@ -9,6 +9,7 @@ line_7_ok:    login --server http://localhost:8080/jasperserver-pro --username s
 line_8_ok:    login --password chechen --server http://localhost:8080/jasperserver-pro --username chechen
 line_9_fail:  login --server asdasd --password asdsa --username sdsds
 line_10_ok:   superuser%superuser@localhost:8080/jasperserver-pro export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources/ex_.zip with-user-roles with-include-monitoring-events
+line_11_ok:   --script /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/script/my_script.jrs
 
 login_token:  superuser%superuser@localhost:8080/jasperserver-pro
 
