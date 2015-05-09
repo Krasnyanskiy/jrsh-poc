@@ -2,9 +2,9 @@ package ua.krasnyanskiy.jrsh.operation.parser;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import ua.krasnyanskiy.jrsh.common.NoSuchOperationException;
-import ua.krasnyanskiy.jrsh.common.ParseOperationException;
-import ua.krasnyanskiy.jrsh.common.ParseParametersException;
+import ua.krasnyanskiy.jrsh.exception.NoSuchOperationException;
+import ua.krasnyanskiy.jrsh.exception.ParseOperationException;
+import ua.krasnyanskiy.jrsh.exception.ParseParametersException;
 import ua.krasnyanskiy.jrsh.common.Reflection;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;

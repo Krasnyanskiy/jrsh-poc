@@ -41,7 +41,6 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
         } catch (Exception err) {
             result = new EvaluationResult(format(LOGIN_FAIL, err.getMessage()), ResultCode.FAILED, this);
         }
-
         return result;
     }
 
@@ -61,14 +60,16 @@ public class LoginOperation implements Operation<LoginOperationParameters> {
         Token usernameValue = new ValueToken("username-tokenValue", true, true);
         Token password = new StringToken("--password", "--password", true, false);
         Token passwordValue = new ValueToken("password-tokenValue", true, true);
+        Token organization = new StringToken("--organization", "--organization", false, false);
+        Token organizationValue = new ValueToken("organization-tokenValue", false, true);
 
+        grammar.addRule(new Rule(login, url, urlValue, username, usernameValue, password, passwordValue, organization, organizationValue));
+        grammar.addRule(new Rule(login, url, urlValue, password, passwordValue, username, usernameValue, organization, organizationValue));
+        grammar.addRule(new Rule(login, username, usernameValue, url, urlValue, password, passwordValue, organization, organizationValue));
+        grammar.addRule(new Rule(login, username, usernameValue, password, passwordValue, url, urlValue, organization, organizationValue));
+        grammar.addRule(new Rule(login, password, passwordValue, username, usernameValue, url, urlValue, organization, organizationValue));
+        grammar.addRule(new Rule(login, password, passwordValue, url, urlValue, username, usernameValue, organization, organizationValue));
         grammar.addRule(new Rule(login, connectionString));
-        grammar.addRule(new Rule(login, url, urlValue, username, usernameValue, password, passwordValue));
-        grammar.addRule(new Rule(login, url, urlValue, password, passwordValue, username, usernameValue));
-        grammar.addRule(new Rule(login, username, usernameValue, url, urlValue, password, passwordValue));
-        grammar.addRule(new Rule(login, username, usernameValue, password, passwordValue, url, urlValue));
-        grammar.addRule(new Rule(login, password, passwordValue, username, usernameValue, url, urlValue));
-        grammar.addRule(new Rule(login, password, passwordValue, url, urlValue, username, usernameValue));
     }
 
     public String getDescription() {

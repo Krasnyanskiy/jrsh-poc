@@ -1,6 +1,6 @@
 package ua.krasnyanskiy.jrsh.operation.parser;
 
-import ua.krasnyanskiy.jrsh.common.ParseOperationException;
+import ua.krasnyanskiy.jrsh.exception.ParseOperationException;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 

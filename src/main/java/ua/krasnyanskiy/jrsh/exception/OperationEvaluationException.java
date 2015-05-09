@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.exception;
 
 public class OperationEvaluationException extends RuntimeException {
 }

@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.common;
+package ua.krasnyanskiy.jrsh.exception;
 
 public class ParseOperationException extends Exception {
     public ParseOperationException(String message) {

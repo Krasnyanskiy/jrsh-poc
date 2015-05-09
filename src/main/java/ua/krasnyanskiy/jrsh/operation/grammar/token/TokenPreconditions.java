@@ -7,7 +7,7 @@ import static java.util.regex.Pattern.compile;
 
 public class TokenPreconditions {
 
-    public static boolean isLoginToken(String token) {
+    public static boolean isConnectionStringToken(String token) {
         Pattern pattern = compile("(\\w+[|])?\\w+[%]\\w+[@]\\S+");
         Matcher matcher = pattern.matcher(token);
         return matcher.matches();
@@ -19,4 +19,10 @@ public class TokenPreconditions {
         return scriptMatcher.matches();
     }
 
+    public static boolean isLoginTokens(String token) {
+        return token.startsWith("login ")
+                && token.contains(" --server ")
+                && token.contains(" --username ")
+                && token.contains(" --password ");
+    }
 }

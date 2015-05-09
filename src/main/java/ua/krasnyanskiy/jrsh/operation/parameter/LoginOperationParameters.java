@@ -16,22 +16,22 @@ import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Prefix;
 public class LoginOperationParameters extends AbstractOperationParameters {
 
     @Prefix("--server")
-    @Parameter(tokenName = "server", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "server-tokenValue", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
     private String server;
 
     @Prefix("--username")
-    @Parameter(tokenName = "username", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "username-tokenValue", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
     private String username;
 
     @Prefix("--password")
-    @Parameter(tokenName = "password", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
+    @Parameter(tokenName = "password-tokenValue", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
     private String password;
 
     @Prefix("--organization")
-    @Parameter(tokenName = "organization", dependsOn = {"login", "server", "username", "password"}, terminal = true)
+    @Parameter(tokenName = "organization-tokenValue", dependsOn = {"login", "server", "username", "password"}, terminal = true)
     private String organization;
 
-    @Parameter(tokenName = "connectionString", dependsOn = "login", terminal = true)
+    @Parameter(tokenName = "connectionString-tokenValue", dependsOn = "login", terminal = true)
     private String connectionString;
 
     public void setConnectionString(String line) {

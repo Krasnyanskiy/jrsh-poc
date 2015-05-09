@@ -35,7 +35,7 @@ public class ToolEvaluationStrategy extends AbstractEvaluationStrategy {
 
             default:
                 operation = args[0];
-                if (TokenPreconditions.isLoginToken(operation)) {
+                if (TokenPreconditions.isConnectionStringToken(operation)) {
                     operation = "login ".concat(operation);
                     res = parseAndEvaluate(operation);
                     if (res.getCode() == ResultCode.FAILED) {

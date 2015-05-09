@@ -17,6 +17,7 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
     public void eval(@NonNull String[] args) throws Exception {
         int loginTimes = 0;
         String line = "login".concat(WHITE_SPACE).concat(args[0]);
+
         while (true) {
             if (line == null) {
                 line = console.readLine();
@@ -34,7 +35,6 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                         console.println(res.getMessage());
                         break;
                     }
-                    /*case FAILED*/
                     default: {
                         if (res.getContext() instanceof LoginOperation && loginTimes == 0) {
                             console.println(res.getMessage());

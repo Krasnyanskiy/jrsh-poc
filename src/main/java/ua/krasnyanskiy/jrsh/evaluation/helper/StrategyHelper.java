@@ -8,7 +8,7 @@ import ua.krasnyanskiy.jrsh.evaluation.ToolEvaluationStrategy;
 
 import java.io.IOException;
 
-import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenPreconditions.isLoginToken;
+import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenPreconditions.isConnectionStringToken;
 import static ua.krasnyanskiy.jrsh.operation.grammar.token.TokenPreconditions.isScriptNameToken;
 
 /**
@@ -26,7 +26,7 @@ public class StrategyHelper {
                 break;
             }
             case 1: {
-                if (isLoginToken(args[0])) {
+                if (isConnectionStringToken(args[0])) {
                     strategy = new ShellEvaluationStrategy();
                     break;
                 }
@@ -46,7 +46,11 @@ public class StrategyHelper {
                 break;
             }
             default: {
-                strategy = new ToolEvaluationStrategy();
+                //if (isLoginTokens(StringUtils.join(args, WHITE_SPACE))) {
+                //    strategy = new ShellEvaluationStrategy();
+                //} else {
+                    strategy = new ToolEvaluationStrategy();
+                //}
             }
         }
         return strategy;

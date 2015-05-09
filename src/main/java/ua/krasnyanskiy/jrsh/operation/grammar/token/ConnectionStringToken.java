@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
+import jline.console.completer.NullCompleter;
 
 public class ConnectionStringToken extends StringToken {
 
@@ -15,12 +15,13 @@ public class ConnectionStringToken extends StringToken {
 
     @Override
     public Completer getCompleter() {
-        return new EmptyCompleter();
+        //return new EmptyCompleter();
+        return new NullCompleter();
     }
 
     @Override
     public boolean match(String name) {
-        return TokenPreconditions.isLoginToken(name);
+        return TokenPreconditions.isConnectionStringToken(name);
     }
 
     @Override

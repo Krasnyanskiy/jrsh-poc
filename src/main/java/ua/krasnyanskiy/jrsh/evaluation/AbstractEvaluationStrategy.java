@@ -4,7 +4,7 @@ import jline.console.ConsoleReader;
 import jline.console.completer.Completer;
 import lombok.NonNull;
 import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
-import ua.krasnyanskiy.jrsh.common.ParseOperationException;
+import ua.krasnyanskiy.jrsh.exception.ParseOperationException;
 import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
