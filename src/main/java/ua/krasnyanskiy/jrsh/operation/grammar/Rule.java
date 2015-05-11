@@ -1,5 +1,6 @@
 package ua.krasnyanskiy.jrsh.operation.grammar;
 
+import lombok.EqualsAndHashCode;
 import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import static java.util.Arrays.asList;
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
+@EqualsAndHashCode
 public class Rule {
 
     private List<Token> tokens = new ArrayList<>();
