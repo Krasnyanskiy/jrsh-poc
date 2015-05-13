@@ -1,7 +1,6 @@
 package ua.krasnyanskiy.jrsh.operation;
 
-import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParameters;
 
 /**
  * Base interface for all operations in the application.
@@ -9,16 +8,16 @@ import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
-public interface Operation<P extends AbstractOperationParameters> {
+public interface Operation<P extends OperationParameters> {
 
-    EvaluationResult eval();
+    EvaluationResult eval(P parameters);
 
-    Grammar getGrammar();
+    //Grammar getGrammar();
 
-    String getDescription();
+    //String getDescription();
 
-    Class<P> getParametersType();
+    //Class<P> getParametersType();
 
-    void setOperationParameters(P parameters);
+    //void setOperationParameters(P parameters);
 
 }

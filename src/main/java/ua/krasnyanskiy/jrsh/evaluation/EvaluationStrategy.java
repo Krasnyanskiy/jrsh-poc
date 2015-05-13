@@ -1,6 +1,6 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
 
 /**
  * All plug-in execution strategy classes should implement
@@ -14,6 +14,6 @@ public interface EvaluationStrategy {
 
     void eval(String[] args) throws Exception;
 
-    void setOperationParser(OperationParser parser);
+    void setOperationParser(OperationParametersParser parser);
 
 }

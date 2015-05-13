@@ -1,4 +1,4 @@
-package sandbox;
+package ua.krasnyanskiy.jrsh.exception;
 
 public class NoGrammarFoundException extends RuntimeException {
     public NoGrammarFoundException() {

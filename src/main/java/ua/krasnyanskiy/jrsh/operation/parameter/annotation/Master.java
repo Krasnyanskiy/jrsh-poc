@@ -12,11 +12,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface Master {
-    String value(); // tokenName
+
+    String name() default "";
 
     boolean terminal() default false;
-
-    boolean mandatory() default true;
 
     Class<? extends Token> token() default StringToken.class;
 }

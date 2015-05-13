@@ -12,27 +12,6 @@ public class StringToken implements Token {
     protected boolean mandatory;
     protected boolean terminal;
 
-    public StringToken(String name) {
-        this.name = name;
-    }
-
-    public StringToken(String name, boolean mandatory) {
-        this.name = name;
-        this.mandatory = mandatory;
-    }
-
-    public StringToken(String name, String value, boolean mandatory) {
-        this.name = name;
-        this.value = value;
-        this.mandatory = mandatory;
-    }
-
-    public StringToken(String name, boolean mandatory, boolean terminal) {
-        this.name = name;
-        this.mandatory = mandatory;
-        this.terminal = terminal;
-    }
-
     public StringToken(String name, String value, boolean mandatory, boolean terminal) {
         this.name = name;
         this.value = value;
@@ -64,11 +43,6 @@ public class StringToken implements Token {
     @Override
     public boolean isMandatory() {
         return mandatory;
-    }
-
-    @Override
-    public boolean isValueToken() {
-        return false;
     }
 
     @Override

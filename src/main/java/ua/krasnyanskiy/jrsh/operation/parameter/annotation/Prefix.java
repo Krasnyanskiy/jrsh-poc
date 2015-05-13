@@ -9,12 +9,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface Prefix {
 
     String value() default "";
 
-    Class<? extends Token> token() default StringToken.class;
+    Class<? extends Token> tokenClass() default StringToken.class;
 
 }

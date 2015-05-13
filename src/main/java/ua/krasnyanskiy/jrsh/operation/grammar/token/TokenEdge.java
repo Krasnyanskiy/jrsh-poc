@@ -1,12 +1,11 @@
-package ua.krasnyanskiy.jrsh.operation.grammar.edge;
+package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import org.jgrapht.graph.DefaultEdge;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 
 /**
  * Simple Token Edge implementation.
  *
- * @param <T> token type
+ * @param <T> tokenClass type
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */

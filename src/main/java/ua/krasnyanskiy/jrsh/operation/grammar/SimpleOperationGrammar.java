@@ -24,16 +24,16 @@ public class SimpleOperationGrammar implements Grammar {
     public SimpleOperationGrammar() {
     }
 
-    public SimpleOperationGrammar(Collection<Rule> rules, Completer cmt){
+    public SimpleOperationGrammar(Collection<Rule> rules, Completer cmt) {
         this.rules = rules;
         this.cmt = cmt;
     }
 
-    public SimpleOperationGrammar(Completer cmt){
+    public SimpleOperationGrammar(Completer cmt) {
         this.cmt = cmt;
     }
 
-    public SimpleOperationGrammar(Rule... rules){
+    public SimpleOperationGrammar(Rule... rules) {
         Collections.addAll(this.rules, rules);
     }
 
@@ -42,14 +42,17 @@ public class SimpleOperationGrammar implements Grammar {
         return rules;
     }
 
-    @Override
     public void addRule(Rule rule) {
         rules.add(rule);
     }
 
+    public void addRules(Collection<Rule> rules) {
+        this.rules.addAll(rules);
+    }
+
     @Override
     public Completer getCompleter() {
-        if (cmt == null){
+        if (cmt == null) {
             cmt = new CompleterBuilder().withRules(rules).build();
         }
         return cmt;

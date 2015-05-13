@@ -1,31 +1,19 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ua.krasnyanskiy.jrsh.completion.EmptyCompleter;
 
-/**
- * Example: /public/Samples/abc - is a tokenValue token without any prefix of key
- */
-public class ValueToken extends StringToken {
-
-    public ValueToken(String name) {
-        super(name);
-    }
-
-    public ValueToken(String name, boolean mandatory) {
-        super(name, mandatory);
-    }
-
-    public ValueToken(String name, String value, boolean mandatory) {
-        super(name, value, mandatory);
-    }
-
-    public ValueToken(String name, boolean mandatory, boolean terminal) {
-        super(name, mandatory, terminal);
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ValueToken extends AbstractToken {
 
     public ValueToken(String name, String value, boolean mandatory, boolean terminal) {
-        super(name, value, mandatory, terminal);
+        super.name = name;
+        super.value = value;
+        super.mandatory = mandatory;
+        super.terminal = terminal;
     }
 
     @Override
@@ -34,32 +22,12 @@ public class ValueToken extends StringToken {
     }
 
     @Override
-    public boolean isMandatory() {
-        return super.isMandatory();
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
-    }
-
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean match(String tName) {
+    public boolean match(String name) {
         return true;
     }
 
     @Override
-    public boolean isValueToken() {
-        return true;
-    }
-
-    @Override
-    public boolean isTerminal() {
-        return super.isTerminal();
+    public String toString() {
+        return super.toString();
     }
 }

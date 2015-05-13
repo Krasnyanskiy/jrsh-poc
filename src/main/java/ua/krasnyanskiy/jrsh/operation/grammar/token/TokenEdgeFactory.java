@@ -1,7 +1,6 @@
-package ua.krasnyanskiy.jrsh.operation.grammar.edge;
+package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import org.jgrapht.EdgeFactory;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
 
 /**
  * @author Alexander Krasnyanskiy

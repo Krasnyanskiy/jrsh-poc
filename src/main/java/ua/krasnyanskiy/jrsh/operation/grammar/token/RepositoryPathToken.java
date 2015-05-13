@@ -5,23 +5,18 @@ import ua.krasnyanskiy.jrsh.completion.StaticRepositoryCompleter;
 
 public class RepositoryPathToken extends ValueToken {
 
-    public RepositoryPathToken(String name, boolean mandatory, boolean terminal) {
-        super(name, mandatory, terminal);
-    }
-
     public RepositoryPathToken(String name, String value, boolean mandatory, boolean terminal) {
         super(name, value, mandatory, terminal);
     }
 
     @Override
     public Completer getCompleter() {
-        //return new MockRepositoryCompleter();
         return new StaticRepositoryCompleter();
     }
 
     @Override
     public boolean match(String name) {
-        return true; // fixme
+        return true;
     }
 
     @Override
@@ -37,11 +32,6 @@ public class RepositoryPathToken extends ValueToken {
     @Override
     public boolean isMandatory() {
         return mandatory;
-    }
-
-    @Override
-    public boolean isValueToken() {
-        return true;
     }
 
     @Override

@@ -2,6 +2,7 @@ package ua.krasnyanskiy.jrsh.evaluation;
 
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
+import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
@@ -19,20 +20,21 @@ import static ua.krasnyanskiy.jrsh.common.Separator.WHITE_SPACE;
  */
 public class ToolEvaluationStrategy extends AbstractEvaluationStrategy {
 
+    public ToolEvaluationStrategy() {
+        super.console = new ConsoleBuilder().build();
+    }
+
     public void eval(@NonNull String[] args) throws IOException {
         EvaluationResult res;
         String operation;
 
         switch (args.length) {
-
             case 0:
                 res = OperationFactory.getOperation("help").eval();
                 break;
-
             case 1:
                 res = parseAndEvaluate(args[0]);
                 break;
-
             default:
                 operation = args[0];
                 if (TokenPreconditions.isConnectionStringToken(operation)) {
@@ -43,11 +45,9 @@ public class ToolEvaluationStrategy extends AbstractEvaluationStrategy {
                         console.flush();
                         exit(1);
                     }
-                    // next operation
                     String[] __args = Arrays.copyOfRange(args, 1, args.length);
                     operation = StringUtils.join(__args, WHITE_SPACE);
                 } else {
-                    // without login
                     operation = StringUtils.join(args, WHITE_SPACE);
                 }
                 res = parseAndEvaluate(operation);

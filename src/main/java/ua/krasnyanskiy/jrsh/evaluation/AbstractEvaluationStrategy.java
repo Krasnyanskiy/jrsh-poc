@@ -3,15 +3,13 @@ package ua.krasnyanskiy.jrsh.evaluation;
 import jline.console.ConsoleReader;
 import jline.console.completer.Completer;
 import lombok.NonNull;
-import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
 import ua.krasnyanskiy.jrsh.exception.ParseOperationException;
-import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParser;
+import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +18,10 @@ import java.util.logging.LogManager;
 public abstract class AbstractEvaluationStrategy implements EvaluationStrategy {
 
     protected ConsoleReader console;
-    protected OperationParser parser;
+    protected OperationParametersParser parser;
 
     public AbstractEvaluationStrategy() {
-        this.console = new ConsoleBuilder()
-                .withPrompt("\u001B[1m>>> \u001B[0m")
-                .withHandler(new JrshCompletionHandler())
-                .withCompleters(getCompleters())
-                .build();
-        // Reset Jersey Logger
-        LogManager.getLogManager().reset();
+        LogManager.getLogManager().reset(); // reset Jersey Client logger
     }
 
     /**
@@ -43,14 +35,13 @@ public abstract class AbstractEvaluationStrategy implements EvaluationStrategy {
             Operation<? extends AbstractOperationParameters> operation = parser.parse(line);
             res = operation.eval();
         } catch (ParseOperationException err) {
-            // handle parsing errors
-            res = new EvaluationResult(err.getMessage(), ResultCode.FAILED, /*no_context*/null);
+            res = new EvaluationResult(err.getMessage(), ResultCode.FAILED, null);
         }
         return res;
     }
 
     @Override
-    public void setOperationParser(OperationParser parser) {
+    public void setOperationParser(OperationParametersParser parser) {
         this.parser = parser;
     }
 

@@ -12,7 +12,9 @@ public interface Grammar {
 
     Collection<Rule> getRules();
 
-    void addRule(Rule rule);
+    //void addRule(Rule rule);
 
-    Completer getCompleter();
+    //void addRules(Collection<Rule> rules);
+
+    Completer getCompleter(); // move to separate interface (?)
 }

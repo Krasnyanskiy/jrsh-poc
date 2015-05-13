@@ -1,38 +1,26 @@
 package ua.krasnyanskiy.jrsh.operation.impl;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.KShortestPaths;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import lombok.SneakyThrows;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult.ResultCode;
 import ua.krasnyanskiy.jrsh.operation.Operation;
 import ua.krasnyanskiy.jrsh.operation.OperationFactory;
 import ua.krasnyanskiy.jrsh.operation.grammar.Grammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.Rule;
-import ua.krasnyanskiy.jrsh.operation.grammar.SimpleOperationGrammar;
-import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdge;
-import ua.krasnyanskiy.jrsh.operation.grammar.edge.TokenEdgeFactory;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.StringToken;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
+import ua.krasnyanskiy.jrsh.operation.grammar.OperationGrammarFactory;
 import ua.krasnyanskiy.jrsh.operation.parameter.AbstractOperationParameters;
 import ua.krasnyanskiy.jrsh.operation.parameter.HelpOperationParameters;
 
 import java.util.List;
-import java.util.Set;
 
 public class HelpOperation implements Operation<HelpOperationParameters> {
 
     private HelpOperationParameters parameters;
     private Grammar grammar;
 
+    @SneakyThrows
     public HelpOperation() {
-        setGrammar();
+        this.grammar = OperationGrammarFactory.getGrammar(getParametersType());
     }
-
-//    public HelpOperation(HelpOperationParameters parameters) {
-//        this.parameters = parameters;
-//        setGrammar();
-//    }
 
     @Override
     public EvaluationResult eval() {
@@ -58,75 +46,6 @@ public class HelpOperation implements Operation<HelpOperationParameters> {
     @Override
     public Grammar getGrammar() {
         return grammar;
-    }
-
-    protected void setGrammar() {
-        DefaultDirectedGraph<Token, TokenEdge<Token>> graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
-
-        Grammar grammar = new SimpleOperationGrammar();
-        Rule rule = new Rule();
-
-        Token v1 = new StringToken("help", "help", true, true);
-        Token v2 = new StringToken("context", "export", false, true);
-        Token v3 = new StringToken("context", "login", false, true);
-
-        // Vertexes
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
-
-        // Edges
-        // graph.addEdge(v1, v1);
-        grammar.addRule(new Rule(v1)); // <help>
-        graph.addEdge(v1, v2);
-        graph.addEdge(v1, v3);
-
-        KShortestPaths<Token, TokenEdge<Token>> paths = new KShortestPaths<>(graph, v1, 1000);
-        Set<Token> vertexes = graph.vertexSet();
-
-        for (Token endPoint : vertexes) {
-            if (!endPoint.equals(v1)) {
-
-                Set<TokenEdge<Token>> edgesOfEndPoint = graph.edgesOf(endPoint);
-                boolean hasMandatoryNeighbours = false;
-
-                for (TokenEdge<Token> edge : edgesOfEndPoint) {
-                    if (edge.getSource().equals(endPoint)) {
-                        if (edge.getTarget().isMandatory()) {
-                            hasMandatoryNeighbours = true;
-                        }
-                    }
-                }
-
-                if (hasMandatoryNeighbours) continue;
-
-                List<GraphPath<Token, TokenEdge<Token>>> list = paths.getPaths(endPoint);
-                for (GraphPath<Token, TokenEdge<Token>> path : list) {
-                    List<TokenEdge<Token>> edges = path.getEdgeList();
-                    boolean isSourceTokenNeeded = true;
-                    for (TokenEdge<Token> edge : edges) {
-                        if (isSourceTokenNeeded) {
-                            Token src = edge.getSource();
-                            rule.addToken(src);
-                            isSourceTokenNeeded = false;
-                        }
-                        Token target = edge.getTarget();
-                        rule.addToken(target);
-                    }
-                    grammar.addRule(rule);
-                    rule = new Rule();
-                }
-            } else {
-
-                // help -> help
-
-                rule.addToken(v1);
-                grammar.addRule(rule);
-                rule = new Rule();
-            }
-        }
-
-        this.grammar = grammar;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
 import lombok.NonNull;
+import ua.krasnyanskiy.jrsh.common.ConsoleBuilder;
+import ua.krasnyanskiy.jrsh.completion.JrshCompletionHandler;
 import ua.krasnyanskiy.jrsh.operation.EvaluationResult;
 import ua.krasnyanskiy.jrsh.operation.impl.LoginOperation;
 
@@ -12,6 +14,14 @@ import static ua.krasnyanskiy.jrsh.common.Separator.WHITE_SPACE;
  * @since 1.0
  */
 public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
+
+    public ShellEvaluationStrategy() {
+        super.console = new ConsoleBuilder()
+                .withPrompt("\u001B[1m>>> \u001B[0m")
+                .withHandler(new JrshCompletionHandler())
+                .withCompleters(getCompleters())
+                .build();
+    }
 
     @Override
     public void eval(@NonNull String[] args) throws Exception {
@@ -26,7 +36,13 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                 console.print("");
                 console.flush();
             } else {
+                /*
+                 * Parsing and evaluation
+                 */
                 EvaluationResult res = parseAndEvaluate(line);
+                /*
+                 * Check the result and print it
+                 */
                 switch (res.getCode()) {
                     case SUCCESS: {
                         if (res.getContext() instanceof LoginOperation) {
@@ -39,7 +55,6 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                         if (res.getContext() instanceof LoginOperation && loginTimes == 0) {
                             console.println(res.getMessage());
                             console.flush();
-                            // say goodbye to VM
                             exit(1);
                         } else {
                             console.println(res.getMessage());

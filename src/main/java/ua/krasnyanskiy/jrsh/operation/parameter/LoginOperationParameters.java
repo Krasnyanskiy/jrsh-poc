@@ -2,52 +2,52 @@ package ua.krasnyanskiy.jrsh.operation.parameter;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ua.krasnyanskiy.jrsh.operation.grammar.token.ConnectionStringToken;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Master;
 import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Parameter;
-import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Prefix;
+import ua.krasnyanskiy.jrsh.operation.parameter.annotation.Value;
 
 /**
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
 @Data
-@Master("login")
+@Master(name = "login")
 @EqualsAndHashCode(callSuper = false)
 public class LoginOperationParameters extends AbstractOperationParameters {
 
-    @Prefix("--server")
-    @Parameter(tokenName = "server-tokenValue", dependsOn = {"login", "username", "password", "organization"}, mandatory = true, terminal = true)
-    private String server;
+    //@Prefix("--server")
+    //@Parameter(mandatoryGroup = "U", mandatory = true, dependsOn = {"login", "name", "pass", "org"}, values = @Value(tokenName = "url", terminal = true, tokenClass = ValueToken.class))
+    private String url;
 
-    @Prefix("--username")
-    @Parameter(tokenName = "username-tokenValue", dependsOn = {"login", "server", "password", "organization"}, mandatory = true, terminal = true)
+    //@Prefix("--username")
+    //@Parameter(mandatoryGroup = "N", mandatory = true, dependsOn = {"login", "url", "pass", "org"}, values = @Value(tokenName = "name", terminal = true, tokenClass = ValueToken.class))
     private String username;
 
-    @Prefix("--password")
-    @Parameter(tokenName = "password-tokenValue", dependsOn = {"login", "server", "username", "organization"}, mandatory = true, terminal = true)
+    //@Prefix("--password")
+    //@Parameter(mandatoryGroup = "P", mandatory = true, dependsOn = {"login", "url", "name", "org"}, values = @Value(tokenName = "pass", terminal = true, tokenClass = ValueToken.class))
     private String password;
 
-    @Prefix("--organization")
-    @Parameter(tokenName = "organization-tokenValue", dependsOn = {"login", "server", "username", "password"}, terminal = true)
+    //@Prefix("--organization")
+    //@Parameter(mandatory = false, dependsOn = {"login", "url", "name", "org", "pass"}, values = @Value(tokenName = "org", terminal = true, tokenClass = ValueToken.class))
     private String organization;
 
-    @Parameter(tokenName = "connectionString-tokenValue", dependsOn = "login", terminal = true)
+    @Parameter(mandatory = false, dependsOn = "login", values = @Value(tokenName = "CS", tokenClass = ConnectionStringToken.class, terminal = true))
     private String connectionString;
 
     public void setConnectionString(String line) {
+        this.connectionString = line;
         String[] parts = line.split("[@]");
-
-        String server = null;
-        String username = null;
-        String organization = null;
-        String password = null;
+        String url = null, username = null, organization = null, password = null;
 
         if (parts.length == 2) {
-            server = parts[1].trim();
+            url = parts[1].trim();
             parts = parts[0].split("[%]");
+
             if (parts.length == 2) {
                 password = parts[1].trim();
                 parts = parts[0].split("[|]");
+
                 if (parts.length == 2) {
                     username = parts[0].trim();
                     organization = parts[1].trim();
@@ -56,6 +56,7 @@ public class LoginOperationParameters extends AbstractOperationParameters {
                 }
             } else if (parts.length == 1) {
                 parts = parts[0].split("[|]");
+
                 if (parts.length == 2) {
                     username = parts[0].trim();
                     organization = parts[1].trim();
@@ -65,7 +66,7 @@ public class LoginOperationParameters extends AbstractOperationParameters {
             }
         }
 
-        this.setServer(server);
+        this.setUrl(url);
         this.setUsername(username);
         this.setPassword(password);
         this.setOrganization(organization);

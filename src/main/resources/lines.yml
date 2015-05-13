@@ -14,3 +14,5 @@ line_11_?:    login --server localhost:8080/jasperserver-pro --username superuse
 
 login_token:  superuser%superuser@localhost:8080/jasperserver-pro
 
+
+export repository /public/Samples/Reports/06g.ProfitDetailReport

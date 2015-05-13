@@ -1,9 +1,5 @@
 package ua.krasnyanskiy.jrsh.operation.parameter.annotation;
 
-import ua.krasnyanskiy.jrsh.operation.grammar.token.Token;
-import ua.krasnyanskiy.jrsh.operation.grammar.token.ValueToken;
-import ua.krasnyanskiy.jrsh.operation.parameter.converter.ParameterConverter;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -14,19 +10,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Parameter {
 
-    String tokenName() default "";
+    Value[] values() default {};        // the value
 
-    String[] tokenValue() default {};
+    String[] dependsOn() default {};    // dependencies
 
-    String[] dependsOn() default {};
+    boolean mandatory() default false;  // is mandatory for all rules of grammar: Rule(1*, 2, 3), Rule(1*, 3)
 
-    boolean mandatory() default false;
-
-    Class<? extends Token> token() default ValueToken.class;
-
-    boolean terminal() default false;
-
-    Class<? extends ParameterConverter> converter() default ParameterConverter.DefaultParameterConverter.class;
-
-    //boolean interconnected() default false;
+    String mandatoryGroup() default ""; // mandatoryGroup of parameter
 }
+
