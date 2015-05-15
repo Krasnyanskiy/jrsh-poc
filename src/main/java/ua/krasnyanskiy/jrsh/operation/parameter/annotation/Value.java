@@ -13,8 +13,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Value {
 
-    String tokenName() default "";                                  // token name (or use field name by default)
-
     String tokenValue() default "";                                 // token value
 
     boolean terminal() default false;                               // terminalis

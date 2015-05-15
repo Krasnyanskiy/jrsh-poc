@@ -1,12 +1,10 @@
 package ua.krasnyanskiy.jrsh.common;
 
 import jline.console.ConsoleReader;
-import jline.console.completer.AggregateCompleter;
 import jline.console.completer.Completer;
 import jline.console.completer.CompletionHandler;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ConsoleBuilder {
 
@@ -20,8 +18,8 @@ public class ConsoleBuilder {
         }
     }
 
-    public ConsoleBuilder withCompleters(List<Completer> completers) {
-        console.addCompleter(new AggregateCompleter(completers));
+    public ConsoleBuilder withCompleter(Completer completer) {
+        console.addCompleter(completer);
         return this;
     }
 

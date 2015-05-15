@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.completion;
+package ua.krasnyanskiy.jrsh.completion.completer;
 
 import jline.console.completer.Completer;
 import jline.internal.Configuration;
@@ -82,7 +82,6 @@ public class CustomFileCompleter implements Completer {
             }
         }
 
-        // TODO: think 'bout ending (/Users/alex/file.zip[Tab] => should add space and go to the next available completer
         if (matches == 0 && candidates.isEmpty()){
             candidates.add(""); // was " " wait for space from user
             return buffer.length();

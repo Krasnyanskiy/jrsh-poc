@@ -3,7 +3,7 @@ package ua.krasnyanskiy.jrsh.common;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class SessionFactoryTest {
+public class SessionOperationFactoryTest {
 
     @Test(expected = IllegalStateException.class)
     @Ignore

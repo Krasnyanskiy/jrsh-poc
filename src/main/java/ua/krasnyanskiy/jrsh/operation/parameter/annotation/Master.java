@@ -17,5 +17,7 @@ public @interface Master {
 
     boolean terminal() default false;
 
+    String description() default "description not found";
+
     Class<? extends Token> token() default StringToken.class;
 }

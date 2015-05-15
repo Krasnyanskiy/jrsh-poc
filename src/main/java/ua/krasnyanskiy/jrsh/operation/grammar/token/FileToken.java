@@ -3,7 +3,7 @@ package ua.krasnyanskiy.jrsh.operation.grammar.token;
 import jline.console.completer.Completer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ua.krasnyanskiy.jrsh.completion.CustomFileCompleter;
+import ua.krasnyanskiy.jrsh.completion.completer.CustomFileCompleter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

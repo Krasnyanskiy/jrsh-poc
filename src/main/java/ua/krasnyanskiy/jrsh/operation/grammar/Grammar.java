@@ -1,8 +1,6 @@
 package ua.krasnyanskiy.jrsh.operation.grammar;
 
-import jline.console.completer.Completer;
-
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author Alexander Krasnyanskiy
@@ -10,11 +8,6 @@ import java.util.Collection;
  */
 public interface Grammar {
 
-    Collection<Rule> getRules();
+    Set<Rule> getRules();
 
-    //void addRule(Rule rule);
-
-    //void addRules(Collection<Rule> rules);
-
-    Completer getCompleter(); // move to separate interface (?)
 }

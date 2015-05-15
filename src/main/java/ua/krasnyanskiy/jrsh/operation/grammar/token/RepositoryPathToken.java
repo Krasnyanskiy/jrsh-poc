@@ -1,7 +1,7 @@
 package ua.krasnyanskiy.jrsh.operation.grammar.token;
 
 import jline.console.completer.Completer;
-import ua.krasnyanskiy.jrsh.completion.StaticRepositoryCompleter;
+import ua.krasnyanskiy.jrsh.completion.completer.RepositoryStaticCompleter;
 
 public class RepositoryPathToken extends ValueToken {
 
@@ -11,7 +11,7 @@ public class RepositoryPathToken extends ValueToken {
 
     @Override
     public Completer getCompleter() {
-        return new StaticRepositoryCompleter();
+        return new RepositoryStaticCompleter();
     }
 
     @Override

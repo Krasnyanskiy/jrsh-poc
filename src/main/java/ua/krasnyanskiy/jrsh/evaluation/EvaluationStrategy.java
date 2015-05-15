@@ -1,6 +1,8 @@
 package ua.krasnyanskiy.jrsh.evaluation;
 
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
+import ua.krasnyanskiy.jrsh.exception.ParseOperationParametersException;
+
+import java.io.IOException;
 
 /**
  * All plug-in execution strategy classes should implement
@@ -12,8 +14,9 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
  */
 public interface EvaluationStrategy {
 
-    void eval(String[] args) throws Exception;
-
-    void setOperationParser(OperationParametersParser parser);
+    /**
+     * Evaluates an expression.
+     */
+    void eval(String[] appArgs) throws IOException, ParseOperationParametersException;
 
 }

@@ -10,12 +10,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Parameter {
 
-    Value[] values() default {};        // the value
+    Value[] values() default {};        // the values
 
     String[] dependsOn() default {};    // dependencies
 
-    boolean mandatory() default false;  // is mandatory for all rules of grammar: Rule(1*, 2, 3), Rule(1*, 3)
+    boolean mandatory() default false;  // define if parameter is mandatory for whole chain of tokens:
+                                        // 1 - Rule(1*, 2, 3),
+                                        // 2 - Rule(1*, 3)
+                                        // Chain {1 -> 2 -> 3}
 
-    String mandatoryGroup() default ""; // mandatoryGroup of parameter
+
 }
 

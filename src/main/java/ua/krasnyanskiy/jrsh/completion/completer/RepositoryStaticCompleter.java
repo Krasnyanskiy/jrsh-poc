@@ -1,4 +1,4 @@
-package ua.krasnyanskiy.jrsh.completion;
+package ua.krasnyanskiy.jrsh.completion.completer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jline.console.completer.Completer;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressFBWarnings({"MS_PKGPROTECT"})
-public class StaticRepositoryCompleter implements Completer {
+public class RepositoryStaticCompleter implements Completer {
 
     public static List<String> resources;
 

@@ -1,10 +1,10 @@
-package ua.krasnyanskiy.jrsh.completion;
+package ua.krasnyanskiy.jrsh.completion.completer;
 
 import jline.console.completer.Completer;
 
 import java.util.List;
 
-public class MockRepositoryCompleter implements Completer {
+public class RepositoryMockCompleter implements Completer {
 
     @Override
     public int complete(String buffer, int cursor, List<CharSequence> candidates) {

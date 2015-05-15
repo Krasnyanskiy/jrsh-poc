@@ -67,10 +67,10 @@
 //        final String USER_EXPORT_INPUT = "export repository /public/Samples";
 //        final String EXPORT_RESULT_MESSAGE = "I'm fine too, thanks!";
 //
-//        Mockito.when(parserMock.parse(USER_LOGIN_INPUT)).thenReturn(loginMock);
-//        Mockito.when(parserMock.parse(USER_EXPORT_INPUT)).thenReturn(exportMock);
-//        Mockito.when(loginMock.parseAndEvaluate()).thenReturn(loginTaskMock);
-//        Mockito.when(exportMock.parseAndEvaluate()).thenReturn(exportTaskMock);
+//        Mockito.when(parserMock.parseParameters(USER_LOGIN_INPUT)).thenReturn(loginMock);
+//        Mockito.when(parserMock.parseParameters(USER_EXPORT_INPUT)).thenReturn(exportMock);
+//        Mockito.when(loginMock.parseParameters()).thenReturn(loginTaskMock);
+//        Mockito.when(exportMock.parseParameters()).thenReturn(exportTaskMock);
 //        Mockito.when(loginTaskMock.call()).thenReturn(loginResultMock);
 //        Mockito.when(exportTaskMock.call()).thenReturn(exportResultMock);
 //        Mockito.when(loginResultMock.getCode()).thenReturn(ResultCode.SUCCESS);
@@ -81,7 +81,7 @@
 //
 //        /** When **/
 //        try {
-//            strategySpy.parseAndEvaluate(new String[]{USER_LOGIN_INPUT});
+//            strategySpy.parseParameters(new String[]{USER_LOGIN_INPUT});
 //        } catch (Exception e) {
 //            // Then
 //            // (we should use the exit flag to stop infinite loop and verify result)
@@ -89,10 +89,10 @@
 //        }
 //
 //        /** Then **/
-//        Mockito.verify(parserMock, times(1)).parse(USER_LOGIN_INPUT);
-//        Mockito.verify(parserMock, times(1)).parse(USER_EXPORT_INPUT);
-//        Mockito.verify(loginMock, times(1)).parseAndEvaluate();
-//        Mockito.verify(exportMock, times(1)).parseAndEvaluate();
+//        Mockito.verify(parserMock, times(1)).parseParameters(USER_LOGIN_INPUT);
+//        Mockito.verify(parserMock, times(1)).parseParameters(USER_EXPORT_INPUT);
+//        Mockito.verify(loginMock, times(1)).parseParameters();
+//        Mockito.verify(exportMock, times(1)).parseParameters();
 //        Mockito.verify(loginTaskMock, times(1)).call();
 //        Mockito.verify(exportTaskMock, times(1)).call();
 //        Mockito.verify(loginResultMock, times(1)).getCode();

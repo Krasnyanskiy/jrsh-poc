@@ -1,9 +1,7 @@
 package ua.krasnyanskiy.jrsh;
 
 import ua.krasnyanskiy.jrsh.evaluation.EvaluationStrategy;
-import ua.krasnyanskiy.jrsh.evaluation.helper.StrategyHelper;
-import ua.krasnyanskiy.jrsh.operation.parser.LL1OperationParser;
-import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
+import ua.krasnyanskiy.jrsh.evaluation.StrategyHelper;
 
 /**
  * Main class of the application. It defines the finest
@@ -14,10 +12,8 @@ import ua.krasnyanskiy.jrsh.operation.parser.OperationParametersParser;
  * @since 1.0
  */
 public class App {
-    public static void main(String[] args) throws Exception {
-        EvaluationStrategy strategy = StrategyHelper.define(args);
-        OperationParametersParser operationParser = new LL1OperationParser();
-        strategy.setOperationParser(operationParser);
-        strategy.eval(args);
+    public static void main(String[] appArgs) throws Exception {
+        EvaluationStrategy strategy = StrategyHelper.define(appArgs);
+        strategy.eval(appArgs);
     }
 }

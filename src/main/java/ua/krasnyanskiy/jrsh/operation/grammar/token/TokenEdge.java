@@ -5,7 +5,7 @@ import org.jgrapht.graph.DefaultEdge;
 /**
  * Simple Token Edge implementation.
  *
- * @param <T> tokenClass type
+ * @param <T> tokenClass parametersType
  * @author Alexander Krasnyanskiy
  * @since 1.0
  */
