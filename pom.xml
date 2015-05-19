@@ -94,6 +94,13 @@
             <artifactId>reflections</artifactId>
             <version>0.9.9</version>
         </dependency>
+
+        <!-- collection -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -136,9 +143,6 @@
                 <version>2.0.1</version>
                 <configuration>
                     <skip>true</skip>
-                    <!--<effort>Max</effort>-->
-                    <!--<threshold>Low</threshold>-->
-                    <!--<xmlOutput>true</xmlOutput>-->
                 </configuration>
                 <executions>
                     <execution>
