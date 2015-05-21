@@ -7,7 +7,9 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoOperat
 import lombok.NonNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class OperationFactory {
 
@@ -21,20 +23,30 @@ public class OperationFactory {
 
     @NonNull
     public static Operation getOperationByName(String operationName) {
-        Operation instance = null;
-        Class<? extends Operation> operationClass = AVAILABLE_OPERATIONS.get(operationName);
-
-        if (operationClass == null) {
+        Class<? extends Operation> operationType = AVAILABLE_OPERATIONS.get(operationName);
+        if (operationType == null) {
             throw new NoOperationFoundException();
-        } else {
-            try {
-                instance = operationClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace(); // don't forget to add default constructor to your new operation
-            }
         }
+        return create(operationType);
+    }
 
+
+    private static Operation create(Class<? extends Operation> operationType) {
+        Operation instance = null;
+        try {
+            // don't forget to provide a default constructor to the operation
+            instance = operationType.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return instance;
+    }
 
+    public static Set<Operation> getAvailableOperations() {
+        Set<Operation> set = new HashSet<>();
+        for (Class<? extends Operation> type : AVAILABLE_OPERATIONS.values()) {
+            set.add(create(type));
+        }
+        return set;
     }
 }

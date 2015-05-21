@@ -1,7 +1,14 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
 
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportService;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportTaskAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
+import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Parameter;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Value;
@@ -9,9 +16,15 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.FileNa
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.RepositoryPathToken;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.StringToken;
 import lombok.Data;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-@Master(name = "export", description = "none")
+@Master(name = "export", description = "This is an export operation.")
 public class ExportOperation implements Operation {
 
     @Parameter(mandatory = true, dependsOn = "export", values = {
@@ -56,6 +69,62 @@ public class ExportOperation implements Operation {
 
     @Override
     public OperationResult eval() {
-        return new OperationResult("Test", OperationResult.ResultCode.SUCCESS, this, null);
+        OperationResult result;
+        try {
+            Session session = SessionFactory.getSharedSession();
+            ExportService exportService = session.exportService();
+            ExportTaskAdapter task = exportService.newTask();
+
+            if ("repository".equals(context)) {
+                if (repositoryPath != null) {
+                    task.uri(repositoryPath);
+                }
+            }
+
+            StateDto state = task
+                    .parameters(convertExportParameters())
+                    .create()
+                    .getEntity();
+
+            InputStream entity = session.exportService()
+                    .task(state.getId())
+                    .fetch()
+                    .getEntity();
+
+            if (to != null) {
+                if (fileUri != null) {
+                    File target = new File(fileUri);
+                    FileUtils.copyInputStreamToFile(entity, target);
+                }
+            } else {
+                File target = new File("export.zip");
+                FileUtils.copyInputStreamToFile(entity, target);
+            }
+            result = new OperationResult("\033[1;94m✓ export done\033[0m", ResultCode.SUCCESS, this, null);
+        } catch (Exception err) {
+            result = new OperationResult("\033[1;31m✗ export failed\033[0m", ResultCode.FAILED, this, null);
+        }
+
+        return result;
+    }
+
+    protected List<ExportParameter> convertExportParameters() {
+        List<ExportParameter> parameters = new ArrayList<>();
+        if (withIncludeAccessEvents != null) {
+            parameters.add(ExportParameter.INCLUDE_AUDIT_EVENTS);
+        }
+        if (withIncludeAuditEvents != null) {
+            parameters.add(ExportParameter.INCLUDE_AUDIT_EVENTS);
+        }
+        if (withRepositoryPermissions != null) {
+            parameters.add(ExportParameter.REPOSITORY_PERMISSIONS);
+        }
+        if (withUserRoles != null) {
+            parameters.add(ExportParameter.ROLE_USERS);
+        }
+        if (withIncludeMonitoringEvents != null) {
+            parameters.add(ExportParameter.INCLUDE_MONITORING_EVENTS);
+        }
+        return parameters;
     }
 }

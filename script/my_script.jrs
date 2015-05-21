@@ -4,11 +4,11 @@
 
 
 # LOGIN
-login superuser%superuser@localhost:8080/jasperserver-pro
+login superuser%superuser@http://50.19.168.209/jasperserver-pro
 
 
 # EXPORT
-export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/alexkrasnyaskiy/IdeaProjects/jrsh-poc/src/main/resources/ex_.zip with-user-roles with-include-monitoring-events
+export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/akrasnyanskiy/IdeaProjects/jrsh-poc/jrsh-poc/src/main/resources/ex_.zip with-user-roles with-include-monitoring-events
 
 
 # HELP
@@ -16,4 +16,4 @@ help export
 
 
 # HELP
-help login
+help log in

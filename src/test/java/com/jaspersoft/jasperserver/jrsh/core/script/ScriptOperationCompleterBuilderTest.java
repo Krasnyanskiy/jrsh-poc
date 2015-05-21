@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class ScriptBuilderTest {
+public class ScriptOperationCompleterBuilderTest {
 
     @Test
     public void shouldReturnToolScriptInstance() {

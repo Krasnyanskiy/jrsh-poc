@@ -2,14 +2,20 @@ package com.jaspersoft.jasperserver.jrsh.core.evaluation.impl;
 
 import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
+import com.jaspersoft.jasperserver.jrsh.core.completion.OperationCompleterBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.evaluation.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
+import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Grammar;
+import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.GrammarMetadataParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import com.jaspersoft.jasperserver.jrsh.core.script.impl.ShellOperationScript;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
+import jline.console.completer.Completer;
 import lombok.experimental.NonFinal;
 
 import java.io.IOException;
@@ -20,9 +26,10 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
 
     public ShellEvaluationStrategy() {
         this.console = new ConsoleBuilder()
-                .withPrompt("$> ")
+                .withPrompt("\u001B[1m$> \u001B[0m")
                 .withHandler(new JrshCompletionHandler())
                 .withInterruptHandling()
+                .withCompleter(getCompleter())
                 .build();
     }
 
@@ -48,6 +55,9 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
                 console.flush();
                 line = null;
             } catch (OperationParseException | IOException err) {
+                if (operation instanceof LoginOperation && LoginOperation.counter <= 1) {
+                    System.exit(1);
+                }
                 try {
                     history = new OperationResult(err.getMessage(), ResultCode.FAILED, operation, history);
                     console.println(err.getMessage());
@@ -76,4 +86,15 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
         }
         return resultHistory;
     }
+
+
+    protected Completer getCompleter() {
+        OperationCompleterBuilder completerBuilder = new OperationCompleterBuilder();
+        for (Operation operation : OperationFactory.getAvailableOperations()) {
+            Grammar grammar = GrammarMetadataParser.parseGrammar(operation);
+            completerBuilder.withOperationGrammar(grammar);
+        }
+        return completerBuilder.build();
+    }
+
 }

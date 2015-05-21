@@ -11,4 +11,5 @@ public abstract class AbstractEvaluationStrategy<T extends Script> implements Ev
     public AbstractEvaluationStrategy() {
         this.parser = new LL1OperationParser();
     }
+
 }

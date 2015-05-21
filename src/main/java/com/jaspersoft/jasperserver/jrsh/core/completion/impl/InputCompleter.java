@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core.completion;
+package com.jaspersoft.jasperserver.jrsh.core.completion.impl;
 
 import jline.console.completer.Completer;
 

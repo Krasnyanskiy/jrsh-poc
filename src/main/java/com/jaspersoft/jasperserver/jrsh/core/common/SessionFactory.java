@@ -15,7 +15,6 @@ public class SessionFactory {
      * @return session
      */
     public static Session getSharedSession() {
-        //checkState(SHARED_SESSION != null, "Session cannot be empty.");
         return SHARED_SESSION;
     }
 

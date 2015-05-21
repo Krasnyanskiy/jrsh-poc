@@ -1,6 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl;
 
-import com.jaspersoft.jasperserver.jrsh.core.completion.InputCompleter;
+import com.jaspersoft.jasperserver.jrsh.core.completion.impl.InputCompleter;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.AbstractToken;
 import jline.console.completer.Completer;
 import lombok.EqualsAndHashCode;

@@ -1,5 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
 
+import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
@@ -15,6 +16,8 @@ import static com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Toke
 @Data
 @Master(name = "login", description = "This is a login operation.")
 public class LoginOperation implements Operation {
+
+    public static int counter = 0;
 
     @Prefix("--server")
     @Parameter(
@@ -57,7 +60,18 @@ public class LoginOperation implements Operation {
 
     @Override
     public OperationResult eval() {
-        return new OperationResult("OK", ResultCode.SUCCESS, this, null);
+        OperationResult result;
+        try {
+            SessionFactory.createSharedSession(server, username, password, organization);
+            result = new OperationResult(String.format("You have logged in as \u001B[1m%s\u001B[0m", username),
+                    ResultCode.SUCCESS, this, null);
+        } catch (Exception err) {
+            result = new OperationResult(String.format("Session isn't established (%s)", err.getMessage()),
+                    ResultCode.FAILED, this, null);
+        } finally {
+            counter++;
+        }
+        return result;
     }
 
     public void setConnectionString(String connectionString) {
@@ -101,5 +115,7 @@ public class LoginOperation implements Operation {
         }
     }
 
-
+    public String getConnectionString() {
+        return connectionString;
+    }
 }

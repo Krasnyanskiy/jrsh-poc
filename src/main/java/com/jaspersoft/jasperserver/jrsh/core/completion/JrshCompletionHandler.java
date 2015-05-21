@@ -70,7 +70,7 @@ public class JrshCompletionHandler implements CompletionHandler {
         if (candidates.size() > 1) {
             reader.println();
             reader.printColumns(candidates);
-            reader.println();
+            //reader.println();
         } else {
             reader.print("\r");
         }

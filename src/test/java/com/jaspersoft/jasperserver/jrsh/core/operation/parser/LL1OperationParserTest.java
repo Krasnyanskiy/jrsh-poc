@@ -24,10 +24,10 @@ public class LL1OperationParserTest {
         ExportOperation retrieved = (ExportOperation) parser.parse(line);
         /* Then */
         Assert.assertNotNull(retrieved);
-        Assert.assertEquals(retrieved.getContext(), "repository");
-        Assert.assertEquals(retrieved.getRepositoryPath(), "/public/Samples/blah");
-        Assert.assertEquals(retrieved.getTo(), "to");
-        Assert.assertEquals(retrieved.getFileUri(), "/Users/file.zip");
+        Assert.assertEquals("repository", retrieved.getContext());
+        Assert.assertEquals("/public/Samples/blah", retrieved.getRepositoryPath());
+        Assert.assertEquals("to", retrieved.getTo());
+        Assert.assertEquals("/Users/file.zip", retrieved.getFileUri());
         Assert.assertEquals(null, retrieved.getWithUserRoles());
         Assert.assertEquals(null, retrieved.getWithIncludeAuditEvents());
         Assert.assertEquals(null, retrieved.getWithIncludeAccessEvents());
@@ -62,8 +62,7 @@ public class LL1OperationParserTest {
         parser.parse(line);
     }
 
-    @Test
-    public void shouldParseLoginOperation() {
+    @Test public void shouldParseLoginOperation() {
         /* Given */
         String line = "login " + "--server " + "http://localhost:8080/jasperserver-pro " + "--username " + "superuser " + "--password " + "superuser";
         /* When */
@@ -76,24 +75,22 @@ public class LL1OperationParserTest {
         Assert.assertEquals("http://localhost:8080/jasperserver-pro", operation.getServer());
     }
 
-    @Test
-    public void shouldThrowAnExceptionIfThePassedParametersAreInvalid() {
+    @Test public void shouldThrowAnExceptionIfMissedMandatoryParameter() {
         /* Given */
         String line = "export " + "repository " + "with-include-monitoring-events " + "with-repository-permissions";
         /* When */
         thrown.expect(NoGrammarRulesFoundException.class);
-        thrown.expectMessage("Can't find any rule for given operation.");
+        thrown.expectMessage("Cannot find a rule for given operation.");
         /* Then */
         parser.parse(line);
     }
 
-    @Test
-    public void shouldThrowAnExceptionWhenThereIsNoOperationWithGivenName() {
+    @Test public void shouldThrowAnExceptionWhenThereIsNoOperationWithGivenName() {
         /* Given */
         String line = "wrong " + "repository " + "with-include-monitoring-events " + "with-repository-permissions";
         /* When */
         thrown.expect(NoOperationFoundException.class);
-        thrown.expectMessage("No operation found.");
+        thrown.expectMessage("Operation not found.");
         /* Then */
         parser.parse(line);
     }
