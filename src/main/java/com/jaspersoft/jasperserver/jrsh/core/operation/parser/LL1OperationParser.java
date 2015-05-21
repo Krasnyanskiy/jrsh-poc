@@ -6,6 +6,7 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Lexer;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Lexer.DefaultLexer;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Rule;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Token;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import lombok.NonNull;
 import lombok.Setter;
 
@@ -23,22 +24,34 @@ public class LL1OperationParser implements OperationParser {
         lexer = new DefaultLexer();
     }
 
-    @Override @NonNull public Operation parse(String line) throws OperationParseException {
+    /**
+     * Parses a line to operation.
+     *
+     * @param line input
+     * @return operation
+     * @throws OperationParseException
+     */
+    @NonNull @Override public Operation parse(String line) throws OperationParseException {
 
         List<String> inputTokens = lexer.getTokens(line);
         String operationName = inputTokens.get(0);
 
         Operation operation = OperationFactory.getOperationByName(operationName);
-        Grammar grammar = OperationGrammarFactory.getOperationGrammar(operation);
+        Conditions.checkOperation(operation);
+
+        Grammar grammar = GrammarMetadataParser.parseGrammar(operation);
         List<Rule> grammarRules = grammar.getRules();
+
+        boolean matchedRuleExist = false;
 
         for (Rule rule : grammarRules) {
             List<Token> ruleTokens = rule.getTokens();
             if (match(ruleTokens, inputTokens)) {
-                Reflector.set(operation, ruleTokens, inputTokens);
+                OperationReflector.set(operation, ruleTokens, inputTokens);
+                matchedRuleExist = true;
             }
         }
-        Postconditions.checkOperation(operation);
+        Conditions.checkMatchedRules(matchedRuleExist);
         return operation;
     }
 
@@ -54,7 +67,7 @@ public class LL1OperationParser implements OperationParser {
             return false;
         }
         for (int i = 0; i < ruleTokens.size(); i++) {
-            if (ruleTokens.get(i).match(inputTokens.get(i))) {
+            if (!ruleTokens.get(i).match(inputTokens.get(i))) {
                 return false;
             }
         }

@@ -1,11 +1,12 @@
 package com.jaspersoft.jasperserver.jrsh.core.evaluation.impl;
 
-import com.jaspersoft.jasperserver.jrsh.core.ConsoleBuilder;
+import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
+import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
 import com.jaspersoft.jasperserver.jrsh.core.evaluation.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationParseException;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import com.jaspersoft.jasperserver.jrsh.core.script.impl.ShellOperationScript;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
@@ -18,7 +19,11 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
     private ConsoleReader console;
 
     public ShellEvaluationStrategy() {
-        this.console = new ConsoleBuilder().withPrompt("$> ").withInterruptHandling().build();
+        this.console = new ConsoleBuilder()
+                .withPrompt("$> ")
+                .withHandler(new JrshCompletionHandler())
+                .withInterruptHandling()
+                .build();
     }
 
     @Override
@@ -47,15 +52,17 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
                     history = new OperationResult(err.getMessage(), ResultCode.FAILED, operation, history);
                     console.println(err.getMessage());
                     console.flush();
+                    line = null;
                 } catch (IOException ignored) {
-                    // NOP
+                    line = null;
                 }
             } catch (UserInterruptException unimportant) {
                 // Ctrl+C handling
-                //if (historyAvailable) {
+                // if (isHistoryOn) {
                 return new OperationResult("Interrupted by user", ResultCode.INTERRUPTED, operation, history);
-                //} else
-                //System.exit(1);
+                // } else {
+                //     System.exit(1);
+                // }
             }
         }
     }

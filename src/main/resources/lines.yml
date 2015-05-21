@@ -14,3 +14,5 @@ line_11_?:    login --server localhost:8080/jasperserver-pro --username superuse
 
 login_token:  superuser%superuser@localhost:8080/jasperserver-pro
 
+
+line_12_ok:   superuser%superuser@http://172.28.146.4:8080/jasperserver-pro-dev

@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core;
+package com.jaspersoft.jasperserver.jrsh.core.common;
 
 import com.jaspersoft.jasperserver.jaxrs.client.core.AuthenticationCredentials;
 import com.jaspersoft.jasperserver.jaxrs.client.core.RestClientConfiguration;

@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core;
+package com.jaspersoft.jasperserver.jrsh.core.common;
 
 import jline.console.ConsoleReader;
 import jline.console.completer.Completer;

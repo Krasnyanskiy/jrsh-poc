@@ -19,7 +19,7 @@ public class RepositoryPathToken extends AbstractToken {
 
     @Override
     public boolean match(String input) {
-        return true;
+        return input.startsWith("/") && !input.endsWith("/");
     }
 
     @Override

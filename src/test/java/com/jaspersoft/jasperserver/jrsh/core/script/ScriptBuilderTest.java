@@ -13,7 +13,8 @@ public class ScriptBuilderTest {
     @Test
     public void shouldReturnToolScriptInstance() {
         Script script = new ScriptBuilder(new String[]{
-                "any", "wrong", "operation", "should", "be", "processed", "in", "the", "Tool", "mode"
+                "any", "wrong", "operation", "should", "be",
+                "processed", "in", "the", "Tool", "mode"
         }).build();
         Assertions.assertThat(script).isInstanceOf(ToolOperationScript.class);
     }

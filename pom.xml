@@ -130,7 +130,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ua.krasnyanskiy.jrsh.App</mainClass>
+                            <mainClass>com.jaspersoft.jasperserver.jrsh.runner.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

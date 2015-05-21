@@ -11,6 +11,9 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Rule.DefaultRule;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.graph.TokenEdge;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.graph.TokenEdgeFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Token;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.CannotCreateTokenException;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoGrammarRulesFoundException;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -22,6 +25,7 @@ import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedGraph;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Log4j
@@ -32,7 +36,7 @@ public class GrammarMetadataParser {
     private static Map<String, RuleGroup> groups;
     private static Token root;
 
-    public static Grammar parseGrammar(final Operation operation) throws Exception {
+    public static Grammar parseGrammar(final Operation operation) throws OperationParseException {
         graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
         dependencies = new HashMap<>();
         groups = new HashMap<>();
@@ -58,10 +62,10 @@ public class GrammarMetadataParser {
 
             for (Field field : fields) {
                 Prefix prefix = field.getAnnotation(Prefix.class);
-                Parameter parameter = field.getAnnotation(Parameter.class);
+                Parameter param = field.getAnnotation(Parameter.class);
 
 
-                if (parameter != null) {
+                if (param != null) {
                     OperationParameter p1 = new OperationParameter();
                     p1.getTokens().add(root);
 
@@ -71,8 +75,8 @@ public class GrammarMetadataParser {
                     }
 
 
-                    boolean isMandatory = parameter.mandatory();
-                    Value[] values = parameter.values();
+                    boolean isMandatory = param.mandatory();
+                    Value[] values = param.values();
                     OperationParameter p2 = new OperationParameter();
 
 
@@ -80,32 +84,44 @@ public class GrammarMetadataParser {
                         Token token = createToken(v.tokenClass(), v.tokenAlias(), v.tokenValue(), isMandatory, v.tail());
                         graph.addVertex(token);
 
+
                         if (prefix != null) {
-                            Token prefixTkn = createToken(prefix.tokenClass(), prefix.value(), prefix.value(), isMandatory, false);
-                            dependencies.put(prefixTkn.getName(), new ImmutablePair<>(prefixTkn, parameter.dependsOn()));
-                            dependencies.put(token.getName(), new ImmutablePair<>(token, new String[]{prefix.value()}));
+
+
+                            Token prefixTkn = createToken(prefix.tokenClass(), prefix.value(),
+                                                          prefix.value(), isMandatory, false);
+
+
+                            dependencies.put(prefixTkn.getName(), new ImmutablePair<>(prefixTkn, param.dependsOn()));
+                            dependencies.put(token.getName(), new ImmutablePair<>(token, new String[]{
+                                    prefix.value()
+                            }));
+
+
                             p2.getTokens().add(prefixTkn);
                             graph.addVertex(prefixTkn);
+
+
                         } else {
-                            dependencies.put(token.getName(), new ImmutablePair<>(token, parameter.dependsOn()));
+                            dependencies.put(token.getName(), new ImmutablePair<>(token, param.dependsOn()));
                         }
 
 
                         p2.getTokens().add(token);
-                        String[] __groups = parameter.ruleGroups();
+                        String[] ruleGroups = param.ruleGroups();
 
 
-                        for (String group : __groups) {
-                            RuleGroup g1 = groups.get(group);
+                        for (String group : ruleGroups) {
+                            RuleGroup ruleGroup = groups.get(group);
 
 
-                            if (g1 != null) {
-                                g1.getParameters().add(p2);
+                            if (ruleGroup != null) {
+                                ruleGroup.getParameters().add(p2);
                             } else {
-                                RuleGroup g2 = new RuleGroup();
-                                g2.getParameters().add(p1);
-                                g2.getParameters().add(p2);
-                                groups.put(group, g2);
+                                RuleGroup newRuleGroup = new RuleGroup();
+                                newRuleGroup.getParameters().add(p1);
+                                newRuleGroup.getParameters().add(p2);
+                                groups.put(group, newRuleGroup);
                             }
                         }
                     }
@@ -118,18 +134,20 @@ public class GrammarMetadataParser {
 
 
         if (!(graph.vertexSet().size() == 1 && graph.vertexSet().contains(root))) {
-            rules = buildRules();
+            rules.addAll(buildRules());
         }
 
         if (!rules.isEmpty()) {
             grammar.addRules(rules);
+        } else {
+            throw new NoGrammarRulesFoundException();
         }
 
         return grammar;
     }
 
     protected static Set<Rule> buildRules() {
-        KShortestPaths<Token, TokenEdge<Token>> paths = new KShortestPaths<>(graph, root, 2500); // 2500 is a magic number
+        KShortestPaths<Token, TokenEdge<Token>> paths = new KShortestPaths<>(graph, root, 2500);
         Set<Token> vertexes = graph.vertexSet();
         Set<Rule> rules = new LinkedHashSet<>();
 
@@ -152,7 +170,7 @@ public class GrammarMetadataParser {
         return rules;
     }
 
-    protected static boolean isValidRule(Rule rule) {
+    protected static boolean isValidRule(final Rule rule) {
         List<Token> tokens = rule.getTokens();
         for (RuleGroup group : groups.values()) {
             if (group.getGroupTokens().containsAll(tokens)) {
@@ -201,8 +219,12 @@ public class GrammarMetadataParser {
         }
     }
 
-    protected static Token createToken(Class<? extends Token> tokenType, String tokenName, String tokenValue, boolean mandatory, boolean tail) throws Exception {
-        return tokenType.getConstructor(String.class, String.class, boolean.class, boolean.class).newInstance(tokenName, tokenValue, mandatory, tail);
+    protected static Token createToken(final Class<? extends Token> tokenType, final String tokenName, final String tokenValue, final boolean mandatory, final boolean tail) throws CannotCreateTokenException {
+        try {
+            return tokenType.getConstructor(String.class, String.class, boolean.class, boolean.class).newInstance(tokenName, tokenValue, mandatory, tail);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new CannotCreateTokenException(tokenType);
+        }
     }
 
     protected static class SimpleGrammar implements Grammar {
