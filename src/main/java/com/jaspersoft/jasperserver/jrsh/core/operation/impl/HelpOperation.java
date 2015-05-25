@@ -1,13 +1,14 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
 
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Parameter;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Value;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.StringToken;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import lombok.Data;
 
 @Data
@@ -21,11 +22,11 @@ public class HelpOperation implements Operation {
     private String context;
 
     @Override
-    public OperationResult eval() {
+    public OperationResult eval(Session unimportant) {
         StringBuilder builder = new StringBuilder();
         if (context != null) {
             Operation operation = OperationFactory.getOperationByName(context);
-            builder.append(getDescription(operation)).append("\n");
+            builder.append(getDescription(operation))/*.append("\n")*/;
         } else {
             builder.append("\nUsage (Tool):   \u001B[37mjrsh\u001B[0m username%password@url <operation> <parameters>\n");
             builder.append("Usage (Shell):  \u001B[37mjrsh\u001B[0m username%password@url\n");
@@ -40,7 +41,7 @@ public class HelpOperation implements Operation {
         return new OperationResult(builder.toString(), ResultCode.SUCCESS, this, null);
     }
 
-    String getDescription(Operation operation) {
+    protected String getDescription(Operation operation) {
         Master master = operation.getClass().getAnnotation(Master.class);
         return master.description();
     }

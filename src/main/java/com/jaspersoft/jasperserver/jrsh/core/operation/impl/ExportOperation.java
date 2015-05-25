@@ -5,7 +5,6 @@ import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exports
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportTaskAdapter;
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
-import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
@@ -68,10 +67,9 @@ public class ExportOperation implements Operation {
     private String withIncludeAccessEvents;
 
     @Override
-    public OperationResult eval() {
+    public OperationResult eval(Session session) {
         OperationResult result;
         try {
-            Session session = SessionFactory.getSharedSession();
             ExportService exportService = session.exportService();
             ExportTaskAdapter task = exportService.newTask();
 

@@ -1,12 +1,12 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
 
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Parameter;
-import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Prefix;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Value;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.WrongConnectionStringFormatException;
 import lombok.Data;
@@ -19,47 +19,47 @@ public class LoginOperation implements Operation {
 
     public static int counter = 0;
 
-    @Prefix("--server")
-    @Parameter(
-            mandatory = true,
-            ruleGroups = {"SIMPLE_LOGIN_TOKENS_GROUP"},
-            dependsOn = {"login", "U", "P", "O"},
-            values = @Value(tokenAlias = "S", tail = true))
+//    @Prefix("--server")
+//    @Parameter(
+//            mandatory = true,
+//            ruleGroups = {"SIMPLE_LOGIN_TOKENS_GROUP"},
+//            dependsOn = {"login", "U", "P", "O"},
+//            values = @Value(tokenAlias = "S", tail = true))
     private String server;
 
-    @Prefix("--username")
-    @Parameter(
-            mandatory = true,
-            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-            dependsOn = {"login", "S", "O", "P"},
-            values = @Value(tokenAlias = "U", tail = true))
+//    @Prefix("--username")
+//    @Parameter(
+//            mandatory = true,
+//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
+//            dependsOn = {"login", "S", "O", "P"},
+//            values = @Value(tokenAlias = "U", tail = true))
     private String username;
 
-    @Prefix("--password")
-    @Parameter(
-            mandatory = true,
-            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-            dependsOn = {"login", "S", "U", "O"},
-            values = @Value(tokenAlias = "P", tail = true))
+//    @Prefix("--password")
+//    @Parameter(
+//            mandatory = true,
+//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
+//            dependsOn = {"login", "S", "U", "O"},
+//            values = @Value(tokenAlias = "P", tail = true))
     private String password;
 
-    @Prefix("--organization")
-    @Parameter(
-            mandatory = false,
-            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-            dependsOn = {"login", "S", "U", "P"},
-            values = @Value(tokenAlias = "O", tail = true))
+//    @Prefix("--organization")
+//    @Parameter(
+//            mandatory = false,
+//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
+//            dependsOn = {"login", "S", "U", "P"},
+//            values = @Value(tokenAlias = "O", tail = true))
     private String organization;
 
     @Parameter(
             mandatory = true,
-            ruleGroups = "COMPLEX_LOGIN_TOKENS_GROUP",
+            //ruleGroups = "COMPLEX_LOGIN_TOKENS_GROUP",
             dependsOn = "login",
             values = @Value(tokenAlias = "CS", tail = true))
     private String connectionString;
 
     @Override
-    public OperationResult eval() {
+    public OperationResult eval(Session ignored) {
         OperationResult result;
         try {
             SessionFactory.createSharedSession(server, username, password, organization);

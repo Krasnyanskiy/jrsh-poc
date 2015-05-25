@@ -1,7 +1,13 @@
 package com.jaspersoft.jasperserver.jrsh.core.script;
 
-public interface Script<T> {
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.EvaluationStrategy;
 
-    T getSource();
+import java.util.List;
+
+public interface Script {
+
+    List<String> getSource();
+
+    Class<? extends EvaluationStrategy> getEvaluationStrategyType();
 
 }

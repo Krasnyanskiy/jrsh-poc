@@ -10,15 +10,15 @@ import jline.console.completer.NullCompleter;
 
 import java.util.List;
 
-public class OperationCompleterBuilder {
+public class CompleterBuilder {
 
     private AggregateCompleter aggregator;
 
-    public OperationCompleterBuilder() {
+    public CompleterBuilder() {
         this.aggregator = new AggregateCompleter();
     }
 
-    public OperationCompleterBuilder withOperationGrammar(Grammar grammar) {
+    public CompleterBuilder withOperationGrammar(Grammar grammar) {
         List<Rule> rules = grammar.getRules();
         ArgumentCompleter ruleCompleter = new ArgumentCompleter();
         for (Rule rule : rules) {

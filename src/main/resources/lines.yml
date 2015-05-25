@@ -16,3 +16,9 @@ login_token:  superuser%superuser@localhost:8080/jasperserver-pro
 
 
 line_12_ok:   superuser%superuser@http://172.28.146.4:8080/jasperserver-pro-dev
+
+
+url:          http://54.147.131.63/jasperserver-pro
+
+
+script:       --script /Users/akrasnyanskiy/IdeaProjects/jrsh-poc/jrsh-poc/script/jrs/my_script.jrs

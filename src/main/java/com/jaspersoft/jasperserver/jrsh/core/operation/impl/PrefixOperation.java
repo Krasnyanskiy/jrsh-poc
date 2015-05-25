@@ -1,5 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
 
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
@@ -42,7 +43,7 @@ public class PrefixOperation implements Operation {
     private String abc;
 
     @Override
-    public OperationResult eval() {
+    public OperationResult eval(Session session) {
         return new OperationResult("Test", OperationResult.ResultCode.SUCCESS, this, null);
     }
 }

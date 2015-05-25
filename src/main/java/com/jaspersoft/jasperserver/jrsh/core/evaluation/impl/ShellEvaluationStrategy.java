@@ -1,95 +1,121 @@
 package com.jaspersoft.jasperserver.jrsh.core.evaluation.impl;
 
+import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
+import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
-import com.jaspersoft.jasperserver.jrsh.core.completion.OperationCompleterBuilder;
+import com.jaspersoft.jasperserver.jrsh.core.completion.CompleterBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.evaluation.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Grammar;
 import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.GrammarMetadataParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
-import com.jaspersoft.jasperserver.jrsh.core.script.impl.ShellOperationScript;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
+import com.jaspersoft.jasperserver.jrsh.core.script.Script;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
 import jline.console.completer.Completer;
-import lombok.experimental.NonFinal;
+import jline.console.history.FileHistory;
+import jline.console.history.History;
 
+import java.io.File;
 import java.io.IOException;
 
-public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOperationScript> {
+import static com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode.FAILED;
+import static com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode.INTERRUPTED;
+
+public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
 
     private ConsoleReader console;
 
     public ShellEvaluationStrategy() {
-        this.console = new ConsoleBuilder()
-                .withPrompt("\u001B[1m$> \u001B[0m")
-                .withHandler(new JrshCompletionHandler())
-                .withInterruptHandling()
-                .withCompleter(getCompleter())
-                .build();
+        try {
+            FileHistory history = new FileHistory(new File("history/.jrshhistory"));
+            this.console = new ConsoleBuilder()
+                    .withPrompt("\u001B[1m$> \u001B[0m")
+                    .withHandler(new JrshCompletionHandler())
+                    .withInterruptHandling()
+                    .withCompleter(getCompleter())
+                    .withHistory(history)
+                    .build();
+
+        } catch (IOException e) {
+            System.err.println("WARNING: Failed to write operation history file: " + e.getMessage());
+        }
     }
 
     @Override
-    public OperationResult eval(@NonFinal ShellOperationScript script) {
-        String line = script.getSource();
-        OperationResult history = null;
+    public OperationResult eval(final Script script) {
+        String line = script.getSource().get(0);
         Operation operation = null;
+
+        /*
+        Signal interruptSignal = new Signal("INT");
+        Signal.handle(interruptSignal, new SignalHandler() {
+            @Override
+            public void handle(Signal signal) {
+                logout();
+                System.exit(1);
+            }
+        });
+        */
+
+        // Hook
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                History h = console.getHistory();
+                if (h instanceof FileHistory) {
+                    try {
+                        ((FileHistory) h).flush();
+                    } catch (IOException e) {
+                        System.err.println("WARNING: Failed to write command history file: " + e.getMessage());
+                    }
+                }
+            }
+        }));
 
         while (true) {
             try {
+                Session session = SessionFactory.getSharedSession();
                 if (line == null) {
                     line = console.readLine();
                 }
                 if (line.isEmpty()) {
-                    console.println("");
+                    print("");
                 } else {
                     operation = parser.parse(line);
-                    OperationResult current = operation.eval();
-                    history = updateHistory(history, current);
-                    console.println(current.getResultMessage());
+                    OperationResult res = operation.eval(session);
+                    print(res.getResultMessage());
                 }
-                console.flush();
                 line = null;
             } catch (OperationParseException | IOException err) {
                 if (operation instanceof LoginOperation && LoginOperation.counter <= 1) {
-                    System.exit(1);
+                    return new OperationResult("Login failed.", FAILED, operation, null);
                 }
                 try {
-                    history = new OperationResult(err.getMessage(), ResultCode.FAILED, operation, history);
-                    console.println(err.getMessage());
-                    console.flush();
-                    line = null;
-                } catch (IOException ignored) {
+                    print(err.getMessage());
+                }
+                catch (IOException ignored) {}
+                finally {
                     line = null;
                 }
             } catch (UserInterruptException unimportant) {
-                // Ctrl+C handling
-                // if (isHistoryOn) {
-                return new OperationResult("Interrupted by user", ResultCode.INTERRUPTED, operation, history);
-                // } else {
-                //     System.exit(1);
-                // }
+                logout();
+                return new OperationResult("Interrupted by user.", INTERRUPTED, operation, null);
             }
         }
     }
 
-    protected OperationResult updateHistory(OperationResult resultHistory, OperationResult currentResult) {
-        if (resultHistory != null) {
-            resultHistory.setPrevious(currentResult);
-            resultHistory = currentResult;
-        } else {
-            resultHistory = currentResult;
-        }
-        return resultHistory;
+    protected void print(String message) throws IOException {
+        console.println(message);
+        console.flush();
     }
 
-
     protected Completer getCompleter() {
-        OperationCompleterBuilder completerBuilder = new OperationCompleterBuilder();
+        CompleterBuilder completerBuilder = new CompleterBuilder();
         for (Operation operation : OperationFactory.getAvailableOperations()) {
             Grammar grammar = GrammarMetadataParser.parseGrammar(operation);
             completerBuilder.withOperationGrammar(grammar);
@@ -97,4 +123,7 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy<ShellOpe
         return completerBuilder.build();
     }
 
+    protected void logout() {
+        SessionFactory.getSharedSession().logout();
+    }
 }

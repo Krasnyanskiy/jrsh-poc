@@ -2,9 +2,11 @@
 # my_simple_script
 # ----------------
 
+# > local-gl-server
+# login superuser%superuser@http://172.28.146.4:8080/jasperserver-pro-dev
 
 # LOGIN
-login superuser%superuser@http://50.19.168.209/jasperserver-pro
+login superuser%superuser@http://54.147.131.63/jasperserver-pro
 
 
 # EXPORT
@@ -16,4 +18,4 @@ help export
 
 
 # HELP
-help log in
+help login

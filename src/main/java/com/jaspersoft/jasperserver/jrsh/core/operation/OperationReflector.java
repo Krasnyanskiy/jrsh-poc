@@ -20,18 +20,26 @@ public class OperationReflector {
         Field[] fields = clazz.getDeclaredFields();
 
         for (Field field : fields) {
+
+            // Get @parameter
             Parameter param = field.getAnnotation(Parameter.class);
             if (param != null) {
+
+                // Get @values
                 Value[] values = param.values();
+
                 for (Value value : values) {
                     String alias = value.tokenAlias();
                     int index = getIndex(ruleTokens, alias);
+
                     if (index >= 0) {
                         field.setAccessible(true);
                         Method setter = findSetter(clazz.getMethods(), field.getName());
+
                         if (setter == null) {
                             throw new CannotFindGetterException(field.getName());
                         }
+
                         try {
                             setter.invoke(operation, inputTokens.get(index));
                         } catch (IllegalAccessException | InvocationTargetException err) {
@@ -42,12 +50,13 @@ public class OperationReflector {
                                 throw (RuntimeException) cause;
                             }
                         }
+
                         field.setAccessible(false);
                     }
                 }
             }
         }
-        log.info(operation);
+        //log.info(operation);
     }
 
     protected static int getIndex(List<Token> tokens, String tokenName) {

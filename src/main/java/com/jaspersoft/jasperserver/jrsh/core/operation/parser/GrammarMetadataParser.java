@@ -26,7 +26,15 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Log4j
 public class GrammarMetadataParser {
@@ -159,9 +167,9 @@ public class GrammarMetadataParser {
                         Rule rule = convertPathToRule(path);
                         if (isValidRule(rule)) {
                             rules.add(rule);
-                            log.info("OK " + rule);
+                            //log.info("OK " + rule);
                         } else {
-                            log.info("FAIL " + rule);
+                            //log.info("FAIL " + rule);
                         }
                     }
                 }

@@ -1,21 +1,13 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation;
 
-/**
- * @author Alex Krasnyanskiy
- * @version 1.0
- */
 public class OperationResult {
 
     private String resultMessage;
     private ResultCode resultCode;
     private Operation context;
-    //private Object entity;
     private OperationResult previous;
 
-    public OperationResult(final String resultMessage,
-                           final ResultCode resultCode,
-                           final Operation context,
-                           final OperationResult previous) {
+    public OperationResult(String resultMessage, ResultCode resultCode, Operation context, OperationResult previous) {
         this.resultMessage = resultMessage;
         this.resultCode = resultCode;
         this.context = context;
