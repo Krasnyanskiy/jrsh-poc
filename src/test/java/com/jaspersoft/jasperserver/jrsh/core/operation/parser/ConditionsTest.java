@@ -1,6 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.parser;
 
-import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.LoginOperation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoGrammarRulesFoundException;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoOperationFoundException;
 import org.junit.Rule;

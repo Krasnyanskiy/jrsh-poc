@@ -1,18 +1,20 @@
 package com.jaspersoft.jasperserver.jrsh.core.script;
 
+import com.jaspersoft.jasperserver.jrsh.core.common.ParameterConverter;
+import com.jaspersoft.jasperserver.jrsh.core.common.Script;
 import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.List;
 
-public class ScriptConverterTest {
+public class ParameterConverterTest {
 
     @Test
     public void shouldReturnProperScriptWhichContainOnlyOneHelpOperation() {
         /* Given */
         String[] parameters = new String[]{};
         /* When */
-        Script script = ScriptConverter.convertToScript(parameters);
+        Script script = ParameterConverter.convertToScript(parameters);
         List<String> source = script.getSource();
         /* Then */
         Assert.assertTrue(source.size() == 1);
@@ -24,7 +26,7 @@ public class ScriptConverterTest {
         /* Given */
         String[] parameters = new String[]{"help", "login"};
         /* When */
-        Script script = ScriptConverter.convertToScript(parameters);
+        Script script = ParameterConverter.convertToScript(parameters);
         List<String> source = script.getSource();
         /* Then */
         Assert.assertEquals("help login", source.get(0));
@@ -35,7 +37,7 @@ public class ScriptConverterTest {
         /* Given */
         String[] parameters = new String[]{"user|org%password@localhost", "export", "all"};
         /* When */
-        Script script = ScriptConverter.convertToScript(parameters);
+        Script script = ParameterConverter.convertToScript(parameters);
         List<String> source = script.getSource();
         /* Then */
         Assert.assertEquals("login user|org%password@localhost", source.get(0));
@@ -48,7 +50,7 @@ public class ScriptConverterTest {
         /* Given */
         String[] parameters = new String[]{"user|org%password@localhost"};
         /* When */
-        Script script = ScriptConverter.convertToScript(parameters);
+        Script script = ParameterConverter.convertToScript(parameters);
         List<String> source = script.getSource();
         /* Then */
         Assert.assertEquals("login user|org%password@localhost", source.get(0));
@@ -60,7 +62,7 @@ public class ScriptConverterTest {
         /* Given */
         String[] parameters = new String[]{"dummy_operation", "-p1", "-4", "-p2", "xy"};
         /* When */
-        Script script = ScriptConverter.convertToScript(parameters);
+        Script script = ParameterConverter.convertToScript(parameters);
         List<String> source = script.getSource();
         /* Then */
         Assert.assertEquals("dummy_operation -p1 -4 -p2 xy", source.get(0));

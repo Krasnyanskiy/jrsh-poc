@@ -1,19 +1,18 @@
-package com.jaspersoft.jasperserver.jrsh.core.evaluation.impl;
+package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy;
 
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
 import com.jaspersoft.jasperserver.jrsh.core.completion.CompleterBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Grammar;
-import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.LoginOperation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.GrammarMetadataParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
-import com.jaspersoft.jasperserver.jrsh.core.script.Script;
+import com.jaspersoft.jasperserver.jrsh.core.common.Script;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
 import jline.console.completer.Completer;

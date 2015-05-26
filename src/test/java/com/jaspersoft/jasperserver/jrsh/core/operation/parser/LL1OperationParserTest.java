@@ -1,6 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation.parser;
 
-import com.jaspersoft.jasperserver.jrsh.core.operation.impl.ExportOperation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.ExportOperation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoGrammarRulesFoundException;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoOperationFoundException;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.WrongConnectionStringFormatException;

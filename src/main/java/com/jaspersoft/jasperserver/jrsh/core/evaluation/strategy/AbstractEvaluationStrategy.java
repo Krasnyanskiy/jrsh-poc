@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core.evaluation;
+package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy;
 
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.LL1OperationParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.OperationParser;

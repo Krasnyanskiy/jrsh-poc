@@ -1,8 +1,10 @@
 package com.jaspersoft.jasperserver.jrsh.core.evaluation;
 
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ScriptEvaluationStrategy;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ShellEvaluationStrategy;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ToolEvaluationStrategy;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.EvaluationStrategyTypeIdentifier;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.ScriptEvaluationStrategy;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.ShellEvaluationStrategy;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.ToolEvaluationStrategy;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.EvaluationStrategy;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

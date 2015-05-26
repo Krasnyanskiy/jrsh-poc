@@ -5,7 +5,7 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Rule;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Token;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.InputToken;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.impl.StringToken;
-import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.LoginOperation;
 import org.junit.Assert;
 import org.junit.Test;
 

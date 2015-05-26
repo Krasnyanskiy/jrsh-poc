@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core.script;
+package com.jaspersoft.jasperserver.jrsh.core.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * @author Alexander Krasnyanskiy
  * @version 1.0
  */
-public class ScriptConverter { // ScriptFormatter ?
+public class ParameterConverter {
 
     /**
      * Format source into the script.
@@ -28,7 +28,7 @@ public class ScriptConverter { // ScriptFormatter ?
      * @param source app parameters
      * @return script
      */
-    public static Script convertToScript(String[] source) { // format
+    public static Script convertToScript(String[] source) {
         Script script;
         switch (source.length) {
             case 0:

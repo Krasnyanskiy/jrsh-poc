@@ -1,12 +1,10 @@
-package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
+package com.jaspersoft.jasperserver.jrsh.core.operation;
 
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportParameter;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportService;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.importexport.exportservice.ExportTaskAdapter;
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
-import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Parameter;

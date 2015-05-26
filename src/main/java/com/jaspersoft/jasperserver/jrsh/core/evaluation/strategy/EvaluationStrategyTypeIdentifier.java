@@ -1,8 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core.evaluation;
-
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ScriptEvaluationStrategy;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ShellEvaluationStrategy;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.impl.ToolEvaluationStrategy;
+package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy;
 
 import static com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.TokenPreconditions.isConnectionString;
 import static com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.TokenPreconditions.isScriptFileName;

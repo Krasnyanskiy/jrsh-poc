@@ -1,4 +1,4 @@
-package com.jaspersoft.jasperserver.jrsh.core.operation.impl;
+package com.jaspersoft.jasperserver.jrsh.core.operation;
 
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
