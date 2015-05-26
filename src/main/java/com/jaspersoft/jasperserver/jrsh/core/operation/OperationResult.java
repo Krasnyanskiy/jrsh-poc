@@ -1,18 +1,18 @@
 package com.jaspersoft.jasperserver.jrsh.core.operation;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@AllArgsConstructor
+@Accessors(chain = true)
 public class OperationResult {
 
     private String resultMessage;
     private ResultCode resultCode;
     private Operation context;
     private OperationResult previous;
-
-    public OperationResult(String resultMessage, ResultCode resultCode, Operation context, OperationResult previous) {
-        this.resultMessage = resultMessage;
-        this.resultCode = resultCode;
-        this.context = context;
-        this.previous = previous;
-    }
 
     public enum ResultCode {
         SUCCESS(0),
@@ -28,41 +28,5 @@ public class OperationResult {
         public int getValue() {
             return value;
         }
-    }
-
-    public String getResultMessage() {
-        return resultMessage;
-    }
-
-    public OperationResult setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
-        return this;
-    }
-
-    public ResultCode getResultCode() {
-        return resultCode;
-    }
-
-    public OperationResult setResultCode(ResultCode resultCode) {
-        this.resultCode = resultCode;
-        return this;
-    }
-
-    public Operation getContext() {
-        return context;
-    }
-
-    public OperationResult setContext(Operation context) {
-        this.context = context;
-        return this;
-    }
-
-    public OperationResult getPrevious() {
-        return previous;
-    }
-
-    public OperationResult setPrevious(OperationResult previous) {
-        this.previous = previous;
-        return this;
     }
 }

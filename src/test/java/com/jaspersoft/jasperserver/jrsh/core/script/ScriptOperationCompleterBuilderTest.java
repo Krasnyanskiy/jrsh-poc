@@ -1,8 +1,5 @@
 //package com.jaspersoft.jasperserver.jrsh.core.script;
 //
-//import com.jaspersoft.jasperserver.jrsh.core.script.impl.FileScript;
-//import com.jaspersoft.jasperserver.jrsh.core.script.impl.ShellOperationScript;
-//import com.jaspersoft.jasperserver.jrsh.core.script.impl.ToolOperationScript;
 //import org.assertj.core.api.Assertions;
 //import org.junit.Test;
 //
@@ -15,26 +12,26 @@
 //        Script script = new ScriptBuilder(new String[]{
 //                "any", "wrong", "operation", "should", "be",
 //                "processed", "in", "the", "Tool", "mode"
-//        }).build();
+//        }).convertToScript();
 //        Assertions.assertThat(script).isInstanceOf(ToolOperationScript.class);
 //    }
 //
 //    @Test
 //    public void shouldReturnFileScript() {
-//        Script script = new ScriptBuilder(new String[]{"--script", "my_script.jrs"}).build();
+//        Script script = new ScriptBuilder(new String[]{"--script", "my_script.jrs"}).convertToScript();
 //        Assertions.assertThat(script).isInstanceOf(FileScript.class);
 //    }
 //
 //    @Test
 //    public void shouldReturnShellScript() {
-//        Script script = new ScriptBuilder(new String[]{"joe%pass@localhost"}).build();
+//        Script script = new ScriptBuilder(new String[]{"joe%pass@localhost"}).convertToScript();
 //        Assertions.assertThat(script).isInstanceOf(ShellOperationScript.class);
 //    }
 //
 //    @Test
 //    @SuppressWarnings("unchecked")
 //    public void shouldContainJoinedOperationString() {
-//        Script script = new ScriptBuilder(new String[]{"help", "login"}).build();
+//        Script script = new ScriptBuilder(new String[]{"help", "login"}).convertToScript();
 //        Object source = script.getSource();
 //        Assertions.assertThat(source).isInstanceOf(List.class);
 //        List<String> lines = (List<String>) source;

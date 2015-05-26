@@ -2,6 +2,7 @@ package com.jaspersoft.jasperserver.jrsh.core.operation;
 
 import com.jaspersoft.jasperserver.jrsh.core.operation.annotation.Master;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.NoOperationFoundException;
+import lombok.extern.log4j.Log4j;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Log4j
+@SuppressWarnings("unchecked")
 public class OperationFactory {
 
     private static Map<String, Class<? extends Operation>> AVAILABLE_OPERATIONS = new HashMap<>();
@@ -57,13 +60,12 @@ public class OperationFactory {
         return set;
     }
 
-    @SuppressWarnings("unchecked")
     protected static Set<Class<? extends Operation>> getOperationTypes() {
-        Set<Class<? extends Operation>> operationTypes = new HashSet<>();
-
         Map<String, Object> config = getConfig();
         List<String> packages = (List<String>) config.get("packages-to-scan");
         List<String> classes = (List<String>) config.get("classes");
+        Set<Class<? extends Operation>> operationTypes = new HashSet<>();
+
 
         // default package
         FilterBuilder filter = new FilterBuilder()
@@ -100,7 +102,6 @@ public class OperationFactory {
         return operationTypes;
     }
 
-    @SuppressWarnings("unchecked")
     protected static Map<String, Object> getConfig() {
         Yaml yaml = new Yaml();
         InputStream stream = OperationFactory.class.getClassLoader()

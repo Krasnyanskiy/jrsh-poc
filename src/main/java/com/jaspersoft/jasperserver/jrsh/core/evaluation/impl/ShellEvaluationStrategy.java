@@ -3,24 +3,21 @@ package com.jaspersoft.jasperserver.jrsh.core.evaluation.impl;
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
-import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
 import com.jaspersoft.jasperserver.jrsh.core.completion.CompleterBuilder;
+import com.jaspersoft.jasperserver.jrsh.core.completion.JrshCompletionHandler;
 import com.jaspersoft.jasperserver.jrsh.core.evaluation.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Grammar;
 import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.GrammarMetadataParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
-import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import com.jaspersoft.jasperserver.jrsh.core.script.Script;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
 import jline.console.completer.Completer;
-import jline.console.history.FileHistory;
-import jline.console.history.History;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode.FAILED;
@@ -31,23 +28,23 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
     private ConsoleReader console;
 
     public ShellEvaluationStrategy() {
-        try {
-            FileHistory history = new FileHistory(new File("history/.jrshhistory"));
-            this.console = new ConsoleBuilder()
-                    .withPrompt("\u001B[1m$> \u001B[0m")
-                    .withHandler(new JrshCompletionHandler())
-                    .withInterruptHandling()
-                    .withCompleter(getCompleter())
-                    .withHistory(history)
-                    .build();
+        //try {
+        //FileHistory history = new FileHistory(new File("history/.jrshhistory"));
+        this.console = new ConsoleBuilder()
+                .withPrompt("$> ")
+                .withHandler(new JrshCompletionHandler())
+                .withInterruptHandling()
+                .withCompleter(getCompleter())
+              //.withHistory(history)
+                .build();
 
-        } catch (IOException e) {
-            System.err.println("WARNING: Failed to write operation history file: " + e.getMessage());
-        }
+        //} catch (IOException e) {
+        //    System.err.println("WARNING: Failed to write operation history file: " + e.getMessage());
+        //}
     }
 
     @Override
-    public OperationResult eval(final Script script) {
+    public OperationResult eval(Script script) {
         String line = script.getSource().get(0);
         Operation operation = null;
 
@@ -62,6 +59,7 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
         });
         */
 
+        /*
         // Hook
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
@@ -76,7 +74,9 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                 }
             }
         }));
+        */
 
+        OperationResult result = null;
         while (true) {
             try {
                 Session session = SessionFactory.getSharedSession();
@@ -87,8 +87,10 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                     print("");
                 } else {
                     operation = parser.parse(line);
-                    OperationResult res = operation.eval(session);
-                    print(res.getResultMessage());
+                    OperationResult temp = result;
+                    result = operation.eval(session);
+                    result.setPrevious(temp);
+                    print(result.getResultMessage());
                 }
                 line = null;
             } catch (OperationParseException | IOException err) {
@@ -97,9 +99,8 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
                 }
                 try {
                     print(err.getMessage());
-                }
-                catch (IOException ignored) {}
-                finally {
+                } catch (IOException ignored) {
+                } finally {
                     line = null;
                 }
             } catch (UserInterruptException unimportant) {

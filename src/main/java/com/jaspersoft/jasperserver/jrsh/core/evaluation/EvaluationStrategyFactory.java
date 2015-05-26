@@ -1,7 +1,6 @@
 package com.jaspersoft.jasperserver.jrsh.core.evaluation;
 
 public class EvaluationStrategyFactory {
-
     public static EvaluationStrategy getStrategy(Class<? extends EvaluationStrategy> strategyType) {
         try {
             return strategyType.newInstance();

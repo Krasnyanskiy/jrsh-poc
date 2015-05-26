@@ -12,7 +12,9 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory;
 import lombok.Data;
 
 @Data
-@Master(name = "help", tail = true, description = "This is a help operation.")
+@Master(name = "help",
+        tail = true,
+        description = "Provide operation help information.\nUsage: help [operation]")
 public class HelpOperation implements Operation {
 
     @Parameter(dependsOn = "help", values = {
@@ -22,15 +24,15 @@ public class HelpOperation implements Operation {
     private String context;
 
     @Override
-    public OperationResult eval(Session unimportant) {
+    public OperationResult eval(Session session) {
         StringBuilder builder = new StringBuilder();
         if (context != null) {
             Operation operation = OperationFactory.getOperationByName(context);
-            builder.append(getDescription(operation))/*.append("\n")*/;
+            builder.append(getDescription(operation));
         } else {
-            builder.append("\nUsage (Tool):   \u001B[37mjrsh\u001B[0m username%password@url <operation> <parameters>\n");
-            builder.append("Usage (Shell):  \u001B[37mjrsh\u001B[0m username%password@url\n");
-            builder.append("Usage (Script): \u001B[37mjrsh\u001B[0m script.jrs\n");
+            builder.append("\nUsage (Tool):   jrsh username%password@url <operation> <parameters>\n");
+            builder.append("Usage (Shell):  jrsh username%password@url\n");
+            builder.append("Usage (Script): jrsh script.jrs\n");
             builder.append("\nAvailable operations: \n");
 
             for (Operation operation : OperationFactory.getAvailableOperations()) {

@@ -13,21 +13,22 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode.*;
+import static java.lang.String.format;
 
-public class MultilineScriptEvaluationStrategy extends AbstractEvaluationStrategy {
+public class ScriptEvaluationStrategy extends AbstractEvaluationStrategy {
 
-    public static final String ERROR_MSG = "error on line: \033[4;31m%s\u001B[0m (%s)";
+    public static final String ERROR_MSG = "error on line: %s (%s)";
     private int lineCounter = 1;
     private ConsoleReader console;
 
-    public MultilineScriptEvaluationStrategy() {
+    public ScriptEvaluationStrategy() {
         console = new ConsoleBuilder().build();
     }
 
     @Override
     public OperationResult eval(Script script) {
         List<String> source = script.getSource();
-        OperationResult last = null;
+        OperationResult result = null;
         Operation operation = null;
 
         try {
@@ -35,23 +36,23 @@ public class MultilineScriptEvaluationStrategy extends AbstractEvaluationStrateg
                 if (!line.startsWith("#") && !line.isEmpty()) {
                     Session session = SessionFactory.getSharedSession();
                     operation = parser.parse(line);
-                    OperationResult result = operation.eval(session);
+                    OperationResult temp = result;
+                    result = operation.eval(session);
                     console.println(" → " + result.getResultMessage());
                     console.flush();
-                    last = (last != null) ? result.setPrevious(last) : result;
+                    result.setPrevious(temp);
                 }
                 lineCounter++;
             }
         } catch (Exception err) {
-            String message = String.format(ERROR_MSG, lineCounter, err.getMessage());
+            String message = format(ERROR_MSG, lineCounter, err.getMessage());
             try {
                 console.print(message);
                 console.flush();
-            } catch (IOException ignored) {}
-            return (last != null)
-                    ? new OperationResult(message, FAILED, operation, last)
-                    : new OperationResult(message, FAILED, operation, null);
+            } catch (IOException ignored) {
+            }
+            result = new OperationResult(message, FAILED, operation, result);
         }
-        return last;
+        return result;
     }
 }

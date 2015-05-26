@@ -20,12 +20,9 @@ public class OperationReflector {
         Field[] fields = clazz.getDeclaredFields();
 
         for (Field field : fields) {
-
-            // Get @parameter
             Parameter param = field.getAnnotation(Parameter.class);
-            if (param != null) {
 
-                // Get @values
+            if (param != null) {
                 Value[] values = param.values();
 
                 for (Value value : values) {
@@ -50,7 +47,6 @@ public class OperationReflector {
                                 throw (RuntimeException) cause;
                             }
                         }
-
                         field.setAccessible(false);
                     }
                 }

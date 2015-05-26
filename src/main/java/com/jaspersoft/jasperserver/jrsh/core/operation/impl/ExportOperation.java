@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Master(name = "export", description = "This is an export operation.")
+@Master(name = "export",
+        description = "This is an export operation.")
 public class ExportOperation implements Operation {
 
     @Parameter(mandatory = true, dependsOn = "export", values = {
@@ -98,9 +99,9 @@ public class ExportOperation implements Operation {
                 File target = new File("export.zip");
                 FileUtils.copyInputStreamToFile(entity, target);
             }
-            result = new OperationResult("\033[1;94m✓ export done\033[0m", ResultCode.SUCCESS, this, null);
+            result = new OperationResult("Export status: Success", ResultCode.SUCCESS, this, null);
         } catch (Exception err) {
-            result = new OperationResult("\033[1;31m✗ export failed\033[0m", ResultCode.FAILED, this, null);
+            result = new OperationResult("Export status: Failed", ResultCode.FAILED, this, null);
         }
 
         return result;

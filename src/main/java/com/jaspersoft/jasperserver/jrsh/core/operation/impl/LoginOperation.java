@@ -14,46 +14,19 @@ import lombok.Data;
 import static com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.TokenPreconditions.isConnectionString;
 
 @Data
-@Master(name = "login", description = "This is a login operation.")
+@Master(name = "login",
+        description = "This is a login operation.")
 public class LoginOperation implements Operation {
 
     public static int counter = 0;
 
-//    @Prefix("--server")
-//    @Parameter(
-//            mandatory = true,
-//            ruleGroups = {"SIMPLE_LOGIN_TOKENS_GROUP"},
-//            dependsOn = {"login", "U", "P", "O"},
-//            values = @Value(tokenAlias = "S", tail = true))
     private String server;
-
-//    @Prefix("--username")
-//    @Parameter(
-//            mandatory = true,
-//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-//            dependsOn = {"login", "S", "O", "P"},
-//            values = @Value(tokenAlias = "U", tail = true))
     private String username;
-
-//    @Prefix("--password")
-//    @Parameter(
-//            mandatory = true,
-//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-//            dependsOn = {"login", "S", "U", "O"},
-//            values = @Value(tokenAlias = "P", tail = true))
     private String password;
-
-//    @Prefix("--organization")
-//    @Parameter(
-//            mandatory = false,
-//            ruleGroups = "SIMPLE_LOGIN_TOKENS_GROUP",
-//            dependsOn = {"login", "S", "U", "P"},
-//            values = @Value(tokenAlias = "O", tail = true))
     private String organization;
 
     @Parameter(
             mandatory = true,
-            //ruleGroups = "COMPLEX_LOGIN_TOKENS_GROUP",
             dependsOn = "login",
             values = @Value(tokenAlias = "CS", tail = true))
     private String connectionString;
@@ -63,7 +36,7 @@ public class LoginOperation implements Operation {
         OperationResult result;
         try {
             SessionFactory.createSharedSession(server, username, password, organization);
-            result = new OperationResult(String.format("You have logged in as \u001B[1m%s\u001B[0m", username),
+            result = new OperationResult(String.format("You have logged in as [%s]", username),
                     ResultCode.SUCCESS, this, null);
         } catch (Exception err) {
             result = new OperationResult(String.format("Session isn't established (%s)", err.getMessage()),

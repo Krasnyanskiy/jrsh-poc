@@ -10,9 +10,11 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Rule;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Token;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 import java.util.List;
 
+@Log4j
 public class LL1OperationParser implements OperationParser {
 
     @Setter

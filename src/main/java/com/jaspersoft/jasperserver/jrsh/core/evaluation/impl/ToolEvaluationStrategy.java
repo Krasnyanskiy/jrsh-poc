@@ -17,27 +17,28 @@ public class ToolEvaluationStrategy extends AbstractEvaluationStrategy {
     public OperationResult eval(Script script) {
         Collection<String> operations = script.getSource();
         Operation operationInstance = null;
-        OperationResult last = null;
+        OperationResult result = null;
 
         try {
             for (String operation : operations) {
                 Session session = SessionFactory.getSharedSession();
                 operationInstance = parser.parse(operation);
-                OperationResult current = operationInstance.eval(session);
+                OperationResult temp = result;
+                result = operationInstance.eval(session);
 
                 // fixme
                 // use ConsoleReader to print result
                 // and save a history to .jrshhistory file
 
-                System.out.println(current.getResultMessage());
-                last = (last != null) ? current.setPrevious(last) : current;
+                System.out.println(result.getResultMessage());
+                result.setPrevious(temp);
             }
         } catch (Exception error) {
-            last = (last != null)
-                    ? new OperationResult(error.getMessage(), FAILED, operationInstance, last)
+            result = (result != null)
+                    ? new OperationResult(error.getMessage(), FAILED, operationInstance, result)
                     : new OperationResult(error.getMessage(), FAILED, operationInstance, null);
         }
-        return last;
+        return result;
     }
 
 }

@@ -1,13 +1,16 @@
 package com.jaspersoft.jasperserver.jrsh.core.script;
 
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.EvaluationStrategy;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.List;
 
-public interface Script {
+@Data
+@AllArgsConstructor
+public class Script {
+    private List<String> source;
 
-    List<String> getSource();
-
-    Class<? extends EvaluationStrategy> getEvaluationStrategyType();
-
+//    public List<String> getSource(){
+//        return source;
+//    }
 }
