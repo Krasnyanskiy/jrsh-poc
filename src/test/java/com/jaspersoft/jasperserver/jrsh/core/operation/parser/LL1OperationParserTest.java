@@ -61,20 +61,6 @@ public class LL1OperationParserTest {
         parser.parse(line);
     }
 
-//    @Test
-//    public void shouldParseLoginOperation() {
-//        /* Given */
-//        String line = "login " + "--server " + "http://localhost:8080/jasperserver-pro " + "--username " + "superuser " + "--password " + "superuser";
-//        /* When */
-//        LoginOperation operation = (LoginOperation) parser.parse(line);
-//        /* Then */
-//        Assert.assertNotNull(operation);
-//        Assert.assertEquals(null, operation.getConnectionString());
-//        Assert.assertEquals("superuser", operation.getUsername());
-//        Assert.assertEquals("superuser", operation.getPassword());
-//        Assert.assertEquals("http://localhost:8080/jasperserver-pro", operation.getServer());
-//    }
-
     @Test
     public void shouldThrowAnExceptionIfMissedMandatoryParameter() {
         /* Given */
