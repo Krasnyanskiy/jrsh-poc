@@ -1,9 +1,7 @@
-# ----------------
-# my_simple_script
-# ----------------
+# ==================================
+# === This is a test JRSH script ===
+# ==================================
 
-# > local-gl-server
-# login superuser%superuser@http://172.28.146.4:8080/jasperserver-pro-dev
 
 # LOGIN
 login superuser%superuser@http://54.147.131.63/jasperserver-pro
@@ -15,7 +13,3 @@ export repository /public/Samples/Reports/06g.ProfitDetailReport to /Users/akras
 
 # HELP
 help export
-
-
-# HELP
-help login
