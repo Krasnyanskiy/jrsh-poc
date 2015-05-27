@@ -12,7 +12,7 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.Grammar;
 import com.jaspersoft.jasperserver.jrsh.core.operation.impl.LoginOperation;
-import com.jaspersoft.jasperserver.jrsh.core.operation.parser.GrammarMetadataParser;
+import com.jaspersoft.jasperserver.jrsh.core.operation.parser.OperationGrammarParser;
 import com.jaspersoft.jasperserver.jrsh.core.operation.parser.exception.OperationParseException;
 import jline.console.ConsoleReader;
 import jline.console.UserInterruptException;
@@ -127,7 +127,7 @@ public class ShellEvaluationStrategy extends AbstractEvaluationStrategy {
         // Collect grammar from the operations
         //
         for (Operation operation : OperationFactory.createOperationsByAvailableTypes()) {
-            Grammar grammar = GrammarMetadataParser.parse(operation);
+            Grammar grammar = OperationGrammarParser.parse(operation);
             //
             // And use it in builder to get general aggregated
             // completer

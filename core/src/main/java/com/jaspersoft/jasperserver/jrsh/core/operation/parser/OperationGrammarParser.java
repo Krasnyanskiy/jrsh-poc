@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Log4j
-public class GrammarMetadataParser {
+public class OperationGrammarParser {
 
     private static Graph<Token, TokenEdge<Token>> graph;
     private static Map<String, Pair<Token, String[]>> dependencies;

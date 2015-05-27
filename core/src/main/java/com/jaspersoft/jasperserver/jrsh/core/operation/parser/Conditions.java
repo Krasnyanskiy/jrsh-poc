@@ -9,7 +9,7 @@ public class Conditions {
         if (operation == null) throw new NoOperationFoundException();
     }
 
-    public static void checkMatchedRules(boolean matchedRuleExist) {
+    public static void checkMatchedRulesFlag(boolean matchedRuleExist) {
         if (!matchedRuleExist) {
             throw new NoGrammarRulesFoundException();
         }

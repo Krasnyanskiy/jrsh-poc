@@ -30,7 +30,7 @@ public class LL1OperationParser implements OperationParser {
 
         Operation operation = OperationFactory.createOperationByName(operationName);
         Conditions.checkOperation(operation);
-        Grammar grammar = GrammarMetadataParser.parse(operation);
+        Grammar grammar = OperationGrammarParser.parse(operation);
         List<Rule> grammarRules = grammar.getRules();
 
         boolean matchedRuleExist = false;
@@ -42,7 +42,7 @@ public class LL1OperationParser implements OperationParser {
                 matchedRuleExist = true;
             }
         }
-        Conditions.checkMatchedRules(matchedRuleExist);
+        Conditions.checkMatchedRulesFlag(matchedRuleExist);
         return operation;
     }
 

@@ -28,7 +28,6 @@ import static org.mockito.Matchers.any;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Yaml.class, OperationFactory.class})
-//@SuppressStaticInitializationFor("com.jaspersoft.jasperserver.jrsh.core.operation.OperationFactory")
 public class OperationFactoryTest {
 
     @Rule
@@ -49,7 +48,7 @@ public class OperationFactoryTest {
     @Test
     public void shouldReturnAllAvailableNonCustomOperation() {
         Set<Operation> operations = OperationFactory.createOperationsByAvailableTypes();
-        Assert.assertEquals(operations.size(), 3);
+        Assert.assertEquals(3, operations.size());
         Assert.assertTrue(operations.contains(new LoginOperation()));
         Assert.assertTrue(operations.contains(new ExportOperation()));
         Assert.assertTrue(operations.contains(new HelpOperation()));
@@ -58,7 +57,7 @@ public class OperationFactoryTest {
     @Test
     public void shouldReturnAllAvailableNonCustomOperationTypes() {
         Set<Class<? extends Operation>> operationTypes = OperationFactory.getOperationTypes();
-        Assert.assertEquals(operationTypes.size(), 3);
+        Assert.assertEquals(3, operationTypes.size());
         Assert.assertTrue(operationTypes.contains(LoginOperation.class));
         Assert.assertTrue(operationTypes.contains(ExportOperation.class));
         Assert.assertTrue(operationTypes.contains(HelpOperation.class));
@@ -78,7 +77,7 @@ public class OperationFactoryTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void shouldReadConfigFileAndReturnConfigInstance() throws Exception {
+    public void shouldReadConfigFileAndReturnConfigMap() throws Exception {
         /* Given */
         Map<String, List<String>> dummyConfig = new HashMap<String, List<String>>() {{
             put("packages-to-scan", Arrays.<String>asList("com.test.action.*", "org.app.operation.*"));
