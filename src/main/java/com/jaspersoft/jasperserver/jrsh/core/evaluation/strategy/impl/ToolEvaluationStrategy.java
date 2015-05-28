@@ -1,7 +1,8 @@
-package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy;
+package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.impl;
 
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
+import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.common.Script;

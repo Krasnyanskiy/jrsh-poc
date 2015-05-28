@@ -18,26 +18,15 @@ import static org.apache.commons.io.FileUtils.readLines;
  */
 public class ArgumentConverter {
 
-    /**
-     * Converts arguments into the more convenient data
-     * structure - a script.
-     *
-     * @param args application arguments
-     * @return script
-     */
     public static Script convertToScript(String[] args) {
         Script script;
+        // Parse arguments and convert data into the
+        // script, which consists of ordered data.
         switch (args.length) {
-            //
-            // with no arguments
-            //
             case 0: {
                 script = new Script(singletonList("help"));
                 break;
             }
-            //
-            // with only one argument
-            //
             case 1: {
                 String line = args[0];
                 if (isConnectionString(line)) {
@@ -47,9 +36,6 @@ public class ArgumentConverter {
                 }
                 break;
             }
-            //
-            // with more then one argument
-            //
             default: {
                 if ("--script".equals(args[0]) && isScriptFileName(args[1])) {
                     try {

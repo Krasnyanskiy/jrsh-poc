@@ -19,7 +19,9 @@ public class HelpOperation implements Operation {
 
     @Parameter(dependsOn = "help", values = {
             @Value(tokenAlias = "E", tokenClass = StringToken.class, tail = true, tokenValue = "export"),
-            @Value(tokenAlias = "L", tokenClass = StringToken.class, tail = true, tokenValue = "login")
+            @Value(tokenAlias = "L", tokenClass = StringToken.class, tail = true, tokenValue = "login"),
+            @Value(tokenAlias = "M", tokenClass = StringToken.class, tail = true, tokenValue = "move"),
+            @Value(tokenAlias = "MRES", tokenClass = StringToken.class, tail = true, tokenValue = "mv-res")
     })
     private String context;
 
