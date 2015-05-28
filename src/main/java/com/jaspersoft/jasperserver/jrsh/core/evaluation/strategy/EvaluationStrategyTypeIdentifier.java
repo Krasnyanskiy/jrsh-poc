@@ -15,15 +15,15 @@ public class EvaluationStrategyTypeIdentifier {
     /**
      * Identifies a suitable strategy
      *
-     * @param parameters initial app arguments
+     * @param args app arguments
      * @return strategy
      */
-    public static Class<? extends EvaluationStrategy> identifyType(String[] parameters) {
+    public static Class<? extends EvaluationStrategy> identifyType(String[] args) {
         Class<? extends EvaluationStrategy> strategyType;
-        if (parameters.length == 1 && isConnectionString(parameters[0])) {
+        if (args.length == 1 && isConnectionString(args[0])) {
             strategyType = ShellEvaluationStrategy.class;
-        } else if (parameters.length == 2 && "--script".equals(parameters[0])
-                && isScriptFileName(parameters[1])) {
+        } else if (args.length == 2 && "--script".equals(args[0])
+                && isScriptFileName(args[1])) {
             strategyType = ScriptEvaluationStrategy.class;
         } else {
             strategyType = ToolEvaluationStrategy.class;

@@ -2,6 +2,9 @@ package com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token;
 
 import jline.console.completer.Completer;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 public interface Token {
 
     String getName();

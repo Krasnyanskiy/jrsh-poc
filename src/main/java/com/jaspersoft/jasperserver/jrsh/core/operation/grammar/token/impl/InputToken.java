@@ -24,7 +24,6 @@ public class InputToken extends AbstractToken {
 
     @Override
     public boolean match(String input) {
-        // any user input is valid
         return true;
     }
 

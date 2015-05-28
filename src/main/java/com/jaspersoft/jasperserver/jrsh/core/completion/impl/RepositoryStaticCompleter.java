@@ -7,10 +7,10 @@ import jline.console.completer.Completer;
 
 import java.util.*;
 
+@Deprecated
 public class RepositoryStaticCompleter implements Completer {
 
     public static List<String> resources;
-
 
     @Override
     public int complete(String buffer, int cursor, List<CharSequence> candidates) {
@@ -105,7 +105,7 @@ public class RepositoryStaticCompleter implements Completer {
                             .resourcesService()
                             .resources()
                             .parameter(ResourceSearchParameter.FOLDER_URI, "/")
-                            .parameter(ResourceSearchParameter.LIMIT, "2500")
+                            .parameter(ResourceSearchParameter.LIMIT, "500")
                             .search()
                             .getEntity()
                             .getResourceLookups();

@@ -5,12 +5,18 @@ import com.jaspersoft.jasperserver.jrsh.core.operation.grammar.token.Token;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 public interface Rule {
 
     List<Token> getTokens();
 
     void addToken(Token token);
 
+    /**
+     * Default implementation of {@link Rule} interface.
+     */
     class DefaultRule implements Rule {
         private List<Token> tokens;
 
@@ -33,5 +39,4 @@ public interface Rule {
             return tokens.toString();
         }
     }
-
 }

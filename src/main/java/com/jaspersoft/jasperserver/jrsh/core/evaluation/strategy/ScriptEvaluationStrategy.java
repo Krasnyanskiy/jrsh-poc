@@ -3,16 +3,15 @@ package com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy;
 import com.jaspersoft.jasperserver.jaxrs.client.core.Session;
 import com.jaspersoft.jasperserver.jrsh.core.common.ConsoleBuilder;
 import com.jaspersoft.jasperserver.jrsh.core.common.SessionFactory;
-import com.jaspersoft.jasperserver.jrsh.core.evaluation.strategy.AbstractEvaluationStrategy;
 import com.jaspersoft.jasperserver.jrsh.core.operation.Operation;
 import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult;
 import com.jaspersoft.jasperserver.jrsh.core.common.Script;
+import com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode;
 import jline.console.ConsoleReader;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.jaspersoft.jasperserver.jrsh.core.operation.OperationResult.ResultCode.*;
 import static java.lang.String.format;
 
 public class ScriptEvaluationStrategy extends AbstractEvaluationStrategy {
@@ -51,7 +50,7 @@ public class ScriptEvaluationStrategy extends AbstractEvaluationStrategy {
                 console.flush();
             } catch (IOException ignored) {
             }
-            result = new OperationResult(message, FAILED, operation, result);
+            result = new OperationResult(message, ResultCode.FAILED, operation, result);
         }
         return result;
     }

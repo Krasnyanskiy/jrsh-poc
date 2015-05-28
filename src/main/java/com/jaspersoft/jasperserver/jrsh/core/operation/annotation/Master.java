@@ -9,17 +9,24 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface Master {
 
-    String name() default "";
+    String name()
+    default "";
 
-    boolean tail() default false;
+    boolean tail()
+    default false;
 
-    String description() default "Not specified.";
+    String description()
+    default "Not specified.";
 
-    Class<? extends Token> tokenClass() default StringToken.class;
+    Class<? extends Token> tokenClass()
+    default StringToken.class;
 
 }
 

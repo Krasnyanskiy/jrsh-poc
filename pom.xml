@@ -138,7 +138,6 @@
                     <archive>
                         <manifest>
                             <mainClass>com.jaspersoft.jasperserver.jrsh.runner.App</mainClass>
-                            <!--<mainClass>com.jaspersoft.jasperserver.jrsh.runner.Go</mainClass>-->
                         </manifest>
                     </archive>
                 </configuration>

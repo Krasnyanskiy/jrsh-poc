@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor

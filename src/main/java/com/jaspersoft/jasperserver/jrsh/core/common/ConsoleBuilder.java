@@ -18,13 +18,13 @@ public class ConsoleBuilder {
         }
     }
 
-    public ConsoleBuilder withCompleter(Completer completer) {
-        console.addCompleter(completer);
+    public ConsoleBuilder withPrompt(String prompt) {
+        console.setPrompt(prompt);
         return this;
     }
 
-    public ConsoleBuilder withPrompt(String prompt) {
-        console.setPrompt(prompt);
+    public ConsoleBuilder withCompleter(Completer completer) {
+        console.addCompleter(completer);
         return this;
     }
 

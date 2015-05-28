@@ -9,16 +9,23 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface Value {
 
-    String tokenAlias() default "";
+    String tokenAlias()
+    default "";
 
-    String tokenValue() default "";
+    String tokenValue()
+    default "";
 
-    boolean tail() default false;
+    boolean tail()
+    default false;
 
-    Class<? extends Token> tokenClass() default InputToken.class;
+    Class<? extends Token> tokenClass()
+    default InputToken.class;
 
 }

@@ -40,8 +40,10 @@ public class OperationReflector {
                         try {
                             setter.invoke(operation, inputTokens.get(index));
                         } catch (IllegalAccessException | InvocationTargetException err) {
+                            //
                             // Reflection wraps our custom exceptions, but we can get them
                             // through the cause.
+                            //
                             Throwable cause = err.getCause();
                             if (OperationParseException.class.isAssignableFrom(cause.getClass())){
                                 throw (RuntimeException) cause;
