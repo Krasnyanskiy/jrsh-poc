@@ -36,6 +36,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author Alex Krasnyanskiy
+ */
 @Log4j
 public class OperationGrammarParser {
 
@@ -44,17 +47,26 @@ public class OperationGrammarParser {
     private static Map<String, RuleGroup> groups;
     private static Token root;
 
+    /**
+     * Parses operation into a grammar.
+     *
+     * @param operation operation instance
+     * @return grammar
+     * @throws OperationParseException
+     */
     public static Grammar parse(final Operation operation) throws OperationParseException {
         graph = new DefaultDirectedGraph<>(new TokenEdgeFactory());
         dependencies = new HashMap<>();
         groups = new HashMap<>();
 
-        Grammar grammar = new SimpleGrammar();
+        Grammar grammar = new DefaultGrammar();
         Set<Rule> rules = new HashSet<>();
         Class<?> clazz = operation.getClass();
         Master master = clazz.getAnnotation(Master.class);
 
-
+        //
+        // Read annotation metadata and parse it to dependencies
+        //
         if (master != null) {
             root = createToken(master.tokenClass(), master.name(), master.name(), true, true);
             if (master.tail()) {
@@ -97,7 +109,7 @@ public class OperationGrammarParser {
 
 
                             Token prefixTkn = createToken(prefix.tokenClass(), prefix.value(),
-                                                          prefix.value(), isMandatory, false);
+                                    prefix.value(), isMandatory, false);
 
 
                             dependencies.put(prefixTkn.getName(), new ImmutablePair<>(prefixTkn, param.dependsOn()));
@@ -137,14 +149,21 @@ public class OperationGrammarParser {
             }
         }
 
-
+        //
+        // Build token graph
+        //
         buildEdgesInGraph();
 
-
+        //
+        // For tailed @Master
+        //
         if (!(graph.vertexSet().size() == 1 && graph.vertexSet().contains(root))) {
             rules.addAll(buildRules());
         }
 
+        //
+        // Configure grammar
+        //
         if (!rules.isEmpty()) {
             grammar.addRules(rules);
         } else {
@@ -159,17 +178,26 @@ public class OperationGrammarParser {
         Set<Token> vertexes = graph.vertexSet();
         Set<Rule> rules = new LinkedHashSet<>();
 
+        //
+        // Use graph token vertexes to get all available
+        // paths and convert each path into a rule
+        //
         for (Token vertex : vertexes) {
             if (!vertex.equals(root)) {
                 if (vertex.isTailOfRule()) {
+
+                    //
+                    // Get all available paths in graph
+                    //
                     List<GraphPath<Token, TokenEdge<Token>>> ps = paths.getPaths(vertex);
                     for (GraphPath<Token, TokenEdge<Token>> path : ps) {
                         Rule rule = convertPathToRule(path);
+
+                        //
+                        // Check if rule is valid
+                        //
                         if (isValidRule(rule)) {
                             rules.add(rule);
-                            //log.info("OK " + rule);
-                        } else {
-                            //log.info("FAIL " + rule);
                         }
                     }
                 }
@@ -202,7 +230,7 @@ public class OperationGrammarParser {
         return true;
     }
 
-    protected static Rule convertPathToRule(final GraphPath<Token, TokenEdge<Token>> path) {
+    protected static Rule convertPathToRule(GraphPath<Token, TokenEdge<Token>> path) {
         List<TokenEdge<Token>> list = path.getEdgeList();
         Rule rule = new DefaultRule();
         Set<Token> set = new LinkedHashSet<>();
@@ -227,7 +255,7 @@ public class OperationGrammarParser {
         }
     }
 
-    protected static Token createToken(final Class<? extends Token> tokenType, final String tokenName, final String tokenValue, final boolean mandatory, final boolean tail) throws CannotCreateTokenException {
+    protected static Token createToken(Class<? extends Token> tokenType, String tokenName, String tokenValue, boolean mandatory, boolean tail) throws CannotCreateTokenException {
         try {
             return tokenType.getConstructor(String.class, String.class, boolean.class, boolean.class).newInstance(tokenName, tokenValue, mandatory, tail);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
@@ -235,11 +263,10 @@ public class OperationGrammarParser {
         }
     }
 
-    protected static class SimpleGrammar implements Grammar {
-
+    protected static class DefaultGrammar implements Grammar {
         private List<Rule> rules = new ArrayList<>();
 
-        public SimpleGrammar(Rule... rules) {
+        public DefaultGrammar(Rule... rules) {
             Collections.addAll(this.rules, rules);
         }
 

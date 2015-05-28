@@ -39,6 +39,14 @@ public class OperationFactory {
         }
     }
 
+
+    /**
+     * Creates an operation by operation name. You should specify
+     * the name in annotation @Master(name = [operation_name]).
+     *
+     * @param operationName operation name
+     * @return operation
+     */
     public static Operation createOperationByName(String operationName) {
         Class<? extends Operation> operationType = AVAILABLE_OPERATIONS.get(operationName);
         if (operationType == null) {
@@ -47,6 +55,12 @@ public class OperationFactory {
         return createInstance(operationType);
     }
 
+
+    /**
+     * Creates operation set.
+     *
+     * @return available operation
+     */
     public static Set<Operation> createOperationsByAvailableTypes() {
         Set<Operation> set = new HashSet<>();
         for (Class<? extends Operation> type : AVAILABLE_OPERATIONS.values()) {
@@ -54,6 +68,8 @@ public class OperationFactory {
         }
         return set;
     }
+
+
 
     // Protected behaviour:
 
